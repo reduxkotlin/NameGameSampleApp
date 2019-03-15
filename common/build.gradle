@@ -1,0 +1,87 @@
+apply plugin: 'kotlin-multiplatform'
+apply plugin: 'kotlinx-serialization'
+
+kotlin {
+    targets {
+        fromPreset(presets.jvm, 'jvm')
+
+        // Change to `presets.iosArm64` to deploy the app to iPhone
+        fromPreset(presets.iosX64, 'ios') {
+            compilations.main.outputKinds('FRAMEWORK')
+        }
+    }
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion"
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serializationVersion"
+                implementation "io.ktor:ktor-client-logging:$ktorVersion"
+
+
+                implementation "io.ktor:ktor-client-core:$ktorVersion"
+                implementation "io.ktor:ktor-client-json:$ktorVersion"
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-test-common"
+                implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
+            }
+        }
+        jvmMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serializationVersion"
+
+                implementation "io.ktor:ktor-client-core-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-json-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-logging-jvm:$ktorVersion"
+            }
+        }
+        jvmTest {
+            dependencies {
+                implementation 'org.jetbrains.kotlin:kotlin-test'
+                implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+            }
+        }
+        iosMain {
+            dependencies {
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutinesVersion"
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serializationVersion"
+                implementation "io.ktor:ktor-client-logging-native:$ktorVersion"
+
+                implementation "io.ktor:ktor-client-ios:$ktorVersion"
+                implementation "io.ktor:ktor-client-core-native:$ktorVersion"
+                implementation "io.ktor:ktor-client-json-native:$ktorVersion"
+            }
+        }
+    }
+}
+// This task attaches native framework built from ios module to Xcode project
+// Don't run this task directly,
+// Xcode runs this task itself during its build process when we configure it.
+// make sure all Gradle infrastructure exists (gradle.wrapper, gradlew)
+//and gradlw is in executable mode (chmod +x gradlew)
+
+task packForXCode(type: Sync) {
+    final File frameworkDir = new File(buildDir, "xcode-frameworks")
+    final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
+
+    inputs.property "mode", mode
+    dependsOn kotlin.targets.ios.compilations.main.linkTaskName("FRAMEWORK", mode)
+
+    from { kotlin.targets.ios.compilations.main.getBinary("FRAMEWORK", mode).parentFile }
+    into frameworkDir
+
+    doLast {
+        new File(frameworkDir, 'gradlew').with {
+            text = "#!/bin/bash\nexport 'JAVA_HOME=${System.getProperty("java.home")}'\ncd '${rootProject.rootDir}'\n./gradlew \$@\n"
+            setExecutable(true)
+        }
+    }
+}
+
+tasks.build.dependsOn packForXCode

@@ -1,0 +1,6 @@
+framework module Pods_NameGame {
+  umbrella header "Pods-NameGame-umbrella.h"
+
+  export *
+  module * { export * }
+}
