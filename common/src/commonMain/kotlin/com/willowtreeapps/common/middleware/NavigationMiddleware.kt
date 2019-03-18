@@ -13,8 +13,6 @@ class NavigationMiddleware(val navigator: Navigator) {
         }
         return result
     }
-
-
 }
 
 enum class Screen {

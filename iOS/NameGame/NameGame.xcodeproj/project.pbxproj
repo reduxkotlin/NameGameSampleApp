@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1E19EEA6224019610094EA01 /* StartScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E19EEA5224019610094EA01 /* StartScreenViewController.swift */; };
+		1E43892D224013860034263E /* IosNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E43892C224013860034263E /* IosNavigator.swift */; };
+		1E43892F224015A80034263E /* QuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E43892E224015A80034263E /* QuestionViewController.swift */; };
 		1EB9EA7F2238071A008AF004 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9EA7E2238071A008AF004 /* AppDelegate.swift */; };
-		1EB9EA812238071A008AF004 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9EA802238071A008AF004 /* ViewController.swift */; };
 		1EB9EA842238071A008AF004 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9EA822238071A008AF004 /* Main.storyboard */; };
 		1EB9EA862238071B008AF004 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9EA852238071B008AF004 /* Assets.xcassets */; };
 		1EB9EA892238071B008AF004 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9EA872238071B008AF004 /* LaunchScreen.storyboard */; };
@@ -52,9 +54,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1E19EEA5224019610094EA01 /* StartScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreenViewController.swift; sourceTree = "<group>"; };
+		1E43892C224013860034263E /* IosNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosNavigator.swift; sourceTree = "<group>"; };
+		1E43892E224015A80034263E /* QuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionViewController.swift; sourceTree = "<group>"; };
 		1EB9EA7B2238071A008AF004 /* NameGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NameGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EB9EA7E2238071A008AF004 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		1EB9EA802238071A008AF004 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		1EB9EA832238071A008AF004 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1EB9EA852238071B008AF004 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1EB9EA882238071B008AF004 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -127,11 +131,13 @@
 			isa = PBXGroup;
 			children = (
 				1EB9EA7E2238071A008AF004 /* AppDelegate.swift */,
-				1EB9EA802238071A008AF004 /* ViewController.swift */,
 				1EB9EA822238071A008AF004 /* Main.storyboard */,
 				1EB9EA852238071B008AF004 /* Assets.xcassets */,
 				1EB9EA872238071B008AF004 /* LaunchScreen.storyboard */,
 				1EB9EA8A2238071B008AF004 /* Info.plist */,
+				1E43892C224013860034263E /* IosNavigator.swift */,
+				1E43892E224015A80034263E /* QuestionViewController.swift */,
+				1E19EEA5224019610094EA01 /* StartScreenViewController.swift */,
 			);
 			path = NameGame;
 			sourceTree = "<group>";
@@ -365,8 +371,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EB9EA812238071A008AF004 /* ViewController.swift in Sources */,
+				1E43892D224013860034263E /* IosNavigator.swift in Sources */,
+				1E43892F224015A80034263E /* QuestionViewController.swift in Sources */,
 				1EB9EA7F2238071A008AF004 /* AppDelegate.swift in Sources */,
+				1E19EEA6224019610094EA01 /* StartScreenViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

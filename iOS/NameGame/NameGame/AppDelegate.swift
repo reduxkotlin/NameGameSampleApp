@@ -1,21 +1,18 @@
-//
-//  AppDelegate.swift
-//  NameGame
-//
-//  Created by Patrick Jackson on 3/12/19.
-//  Copyright © 2019 Willowtree. All rights reserved.
-//
-
 import UIKit
+import main
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var game: Game?
+    var presenter: Presenter?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let navi: Navigator = IosNavigator()
+        game = Game(navigator: navi)
+        presenter = Presenter(game: game!, networkContext: UI())
         return true
     }
 
@@ -42,5 +39,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 
+}
+
+extension UIApplication {
+    /*
+     *  Returns the currently visible ViewController
+     */
+    class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        
+        if let nav = base as? UINavigationController {
+            return topViewController(base: nav.visibleViewController)
+        }
+        
+        if let tab = base as? UITabBarController {
+            let moreNavigationController = tab.moreNavigationController
+            
+            if let top = moreNavigationController.topViewController, top.view.window != nil {
+                return topViewController(base: top)
+            } else if let selected = tab.selectedViewController {
+                return topViewController(base: selected)
+            }
+        }
+        
+        if let presented = base?.presentedViewController {
+            return topViewController(base: presented)
+        }
+        
+        return base
+    }
 }
 
