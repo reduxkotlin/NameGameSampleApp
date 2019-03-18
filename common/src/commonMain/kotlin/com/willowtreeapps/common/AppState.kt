@@ -11,11 +11,17 @@ import com.willowtreeapps.common.repo.Profile
 data class AppState(val isLoadingProfiles: Boolean,
                     val profiles: List<Profile> = listOf(),
                     val errorLoadingProfiles: Boolean = false,
-                    val errorMsg: String = "") {
+                    val errorMsg: String = "",
+                    val currentRound: Int = 0,
+                    val rounds: List<Round> = listOf()) {
     companion object {
         val INITIAL_STATE = AppState(false)
     }
 }
+
+inline class ProfileId(val id: String)
+
+data class Round(val profileId: ProfileId, val choices: List<String>, val answerProfileId: ProfileId? = null)
 
 class Game(navigator: Navigator) {
     val navigationMiddleware = NavigationMiddleware(navigator)
