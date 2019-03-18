@@ -1,6 +1,6 @@
 package com.willowtreeapps.namegame
 
-import com.willowtreeapps.common.repo.KtorStoreRepository
+import com.willowtreeapps.common.repo.KtorProfilesRepository
 import kotlinx.coroutines.*
 import org.junit.Assert.*
 import org.junit.Test
@@ -12,7 +12,7 @@ import org.junit.Test
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
-    private val repo = KtorStoreRepository()
+    private val repo = KtorProfilesRepository()
 
     @Test
     fun fetchProfiles() {

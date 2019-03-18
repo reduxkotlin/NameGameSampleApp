@@ -12,12 +12,11 @@ import io.ktor.client.request.get
 import io.ktor.client.request.header
 import io.ktor.http.HttpHeaders
 import io.ktor.http.takeFrom
-import kotlinx.coroutines.withTimeout
 import kotlinx.serialization.*
 import kotlinx.serialization.internal.SerialClassDescImpl
 import kotlinx.serialization.json.Json
 
-class KtorStoreRepository : StoreRepository {
+class KtorProfilesRepository : ProfilesRepository {
     private val baseUrl = "https://willowtreeapps.com"
 
     override suspend fun profiles(): GatewayResponse<List<Profile>, GenericError> {

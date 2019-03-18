@@ -1,7 +1,7 @@
 package com.willowtreeapps.common
 
 import com.beyondeye.reduks.*
-import com.willowtreeapps.common.repo.KtorStoreRepository
+import com.willowtreeapps.common.repo.KtorProfilesRepository
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -14,7 +14,7 @@ class NetworkThunks(private val uiContext: CoroutineContext) : CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = uiContext + job
 
-    private val repo = KtorStoreRepository()
+    private val repo = KtorProfilesRepository()
 
     fun fetchProfiles(): ThunkImpl<AppState> = ThunkFn<AppState> { dispatcher, state ->
         Logger.d("Fetching StoreInfo and Feed")

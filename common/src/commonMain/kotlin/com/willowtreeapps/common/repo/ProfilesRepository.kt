@@ -4,7 +4,7 @@ import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
 
-interface StoreRepository {
+interface ProfilesRepository {
     suspend fun profiles(): GatewayResponse<List<Profile>, GenericError>
 }
 
