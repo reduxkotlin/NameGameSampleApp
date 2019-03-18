@@ -1,7 +1,11 @@
 package com.willowtreeapps.namegame
 
-import com.willowtreeapps.common.repo.KtorProfilesRepository
+import com.willowtreeapps.common.repo.*
+import com.willowtreeapps.common.repo.MockRepositoryFactory.Companion.VALID_RESPONSE_JSON
+import io.ktor.client.features.json.serializer.KotlinxSerializer
 import kotlinx.coroutines.*
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.parse
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -28,6 +32,12 @@ class ExampleUnitTest {
             }.await()
         }
         Thread.sleep(5000)
+    }
+
+    @Test
+    fun deserializeProfilesResponse() {
+        val response = Json.nonstrict.parse(ProfileListHolderSerializer(), MockRepositoryFactory.VALID_RESPONSE_JSON)
+        assertNotNull(response.profiles)
     }
 }
 

@@ -16,7 +16,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.internal.SerialClassDescImpl
 import kotlinx.serialization.json.Json
 
-class KtorProfilesRepository : ProfilesRepository {
+open class KtorProfilesRepository : ProfilesRepository {
     private val baseUrl = "https://willowtreeapps.com"
 
     override suspend fun profiles(): GatewayResponse<List<Profile>, GenericError> {

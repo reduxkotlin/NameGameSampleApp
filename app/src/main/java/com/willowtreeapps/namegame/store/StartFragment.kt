@@ -8,41 +8,46 @@ import androidx.fragment.app.Fragment
 import com.beyondeye.reduks.StoreSubscriber
 import com.beyondeye.reduks.StoreSubscription
 import com.willowtreeapps.common.AppState
-import com.willowtreeapps.common.NetworkThunks
-import com.willowtreeapps.common.appStore
+import com.willowtreeapps.common.view.StartScreen
 import com.willowtreeapps.namegame.*
+import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
-class StoreFragment : Fragment(), CoroutineScope, StoreSubscriber<AppState> {
+class StartFragment : Fragment(), CoroutineScope, StartScreen {
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main
 
-    private var subscription: StoreSubscription? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.content_main, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-
-        subscription = appStore.subscribe(this)
-
-        appStore.dispatch(NetworkThunks(Dispatchers.IO).fetchProfiles())
+        NameGameApp.instance.presenter.attachView(this)
+        btn_start.setOnClickListener {
+            activity?.runOnUiThread {
+                NameGameApp.instance.presenter.startGame()
+            }
+        }
     }
 
+    override fun hideLoading() {
+        activity?.runOnUiThread {
+            loading_spinner.visibility = View.GONE
+        }
+    }
+
+    override fun showLoading() {
+        activity?.runOnUiThread {
+            loading_spinner.visibility = View.VISIBLE
+        }
+    }
 
     override fun onDestroyView() {
-        subscription?.unsubscribe()
+        NameGameApp.instance.presenter.detachView()
         super.onDestroyView()
-    }
-
-    override fun onStateChange() {
-        activity?.runOnUiThread {
-
-        }
     }
 }

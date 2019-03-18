@@ -2,11 +2,18 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/instacartFragment">
+    app:startDestination="@id/startScreen">
 
     <fragment
-        android:id="@+id/instacartFragment"
-        android:name="com.willowtreeapps.namegame.store.StoreFragment"
-        android:label="InstacartFragment"
+        android:id="@+id/startScreen"
+        android:name="com.willowtreeapps.namegame.store.StartFragment"
+        android:label="StartFragment"
         android:layout="@layout/content_main"/>
+
+    <fragment
+        android:id="@+id/questionScreen"
+        android:name="com.willowtreeapps.namegame.store.QuestionFragment"
+        android:label="QuestionFragment"
+        android:layout="@layout/fragment_question"/>
+
 </navigation>
