@@ -15,13 +15,13 @@ import com.willowtreeapps.common.middleware.Screen
 class AndroidNavigator : Navigator, Application.ActivityLifecycleCallbacks {
 
 
-    var currentActivity: Activity? = null
+    private var currentActivity: Activity? = null
 
     override fun goto(screen: Screen) {
         val navController = currentActivity!!.findNavController(R.id.nav_host_fragment)
 
         when (screen) {
-            Screen.QUESTION -> navController.navigate(R.id.questionScreen)
+            Screen.QUESTION -> navController.navigate(R.id.action_startScreen_to_questionScreen)
             else -> throw IllegalArgumentException("Screen $screen is not handled in AndroidNavigator")
         }
     }
