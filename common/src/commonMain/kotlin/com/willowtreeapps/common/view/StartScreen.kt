@@ -1,5 +1,6 @@
 package com.willowtreeapps.common.view
 
+import com.willowtreeapps.common.RoundViewState
 import com.willowtreeapps.common.repo.Profile
 
 interface View
@@ -12,7 +13,7 @@ interface StartScreen: View {
 interface QuestionScreen: View {
     fun showLoading()
 
-    fun showProfile(profile: Profile)
+    fun showProfile(viewState: RoundViewState)
 
     fun showCorrectAnswer(profileId: String)
 
