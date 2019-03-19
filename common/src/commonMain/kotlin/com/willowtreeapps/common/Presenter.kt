@@ -1,6 +1,7 @@
 package com.willowtreeapps.common
 
 import com.beyondeye.reduks.StoreSubscriber
+import com.willowtreeapps.common.boundary.toRoundViewState
 import com.willowtreeapps.common.view.QuestionScreen
 import com.willowtreeapps.common.view.RoundCompleteScreen
 import com.willowtreeapps.common.view.StartScreen
@@ -22,6 +23,7 @@ class Presenter(val game: Game, networkContext: CoroutineContext) : StoreSubscri
 
     fun attachView(view: View) {
         currentView = view
+        onStateChange()
     }
 
     fun detachView() {
@@ -44,6 +46,7 @@ class Presenter(val game: Game, networkContext: CoroutineContext) : StoreSubscri
                 }
             }
             is QuestionScreen -> {
+                view.showProfile(state.toRoundViewState())
             }
             is RoundCompleteScreen -> {
             }

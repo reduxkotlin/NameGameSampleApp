@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.willowtreeapps.common.RoundViewState
 import com.willowtreeapps.common.repo.Profile
 import com.willowtreeapps.common.view.QuestionScreen
+import com.willowtreeapps.namegame.GlideApp
 import com.willowtreeapps.namegame.NameGameApp
 import com.willowtreeapps.namegame.R
+import kotlinx.android.synthetic.main.fragment_question.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
@@ -32,7 +35,18 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen {
     override fun showLoading() {
     }
 
-    override fun showProfile(profile: Profile) {
+    override fun showProfile(viewState: RoundViewState) {
+        activity?.runOnUiThread {
+            with(viewState) {
+                txt_title.text = title
+                GlideApp.with(this@QuestionFragment).load(profileImageUrl)
+                        .into(imageView)
+                button1.text = button1Text
+                button2.text = button2Text
+                button3.text = button3Text
+                button4.text = button4Text
+            }
+        }
     }
 
     override fun showWrongAnswer(profileId: String) {
