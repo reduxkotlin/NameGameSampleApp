@@ -8,12 +8,18 @@
         android:id="@+id/startScreen"
         android:name="com.willowtreeapps.namegame.store.StartFragment"
         android:label="StartFragment"
-        android:layout="@layout/content_main"/>
+        tools:layout="@layout/content_main" >
+        <action
+            android:id="@+id/action_startScreen_to_questionScreen"
+            app:destination="@id/questionScreen" />
+    </fragment>
 
     <fragment
         android:id="@+id/questionScreen"
         android:name="com.willowtreeapps.namegame.store.QuestionFragment"
         android:label="QuestionFragment"
-        android:layout="@layout/fragment_question"/>
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        tools:layout="@layout/fragment_question"/>
 
 </navigation>
