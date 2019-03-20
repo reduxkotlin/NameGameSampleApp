@@ -3,23 +3,30 @@ import UIKit
 import main
 
 class QuestionViewController: UIViewController, QuestionScreen {
-    
-    
-    func showLoading() {
-        
+    func showProfile(viewState: RoundViewState) {
+        <#code#>
     }
     
-    func showProfile(profile: Profile) {
-        
+    func showCorrectAnswer() {
+        <#code#>
     }
     
-    func showCorrectAnswer(profileId: String) {
-        
+    func showWrongAnswer() {
+        <#code#>
     }
     
-    func showWrongAnswer(profileId: String) {
-        
+    func showCorrectAnswerEndGame() {
+        <#code#>
     }
+    
+    func showWrongAnswerEndGame() {
+        <#code#>
+    }
+    
+    func showEndOfGame() {
+        <#code#>
+    }
+    
     
     
 }

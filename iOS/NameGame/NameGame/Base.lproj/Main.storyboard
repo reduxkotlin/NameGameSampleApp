@@ -73,10 +73,37 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="2HN-es-o9K"/>
                     </view>
+                    <connections>
+                        <segue destination="3Y4-HQ-nYd" kind="show" id="aaD-EB-GK7"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Eon-W0-t2z" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1972" y="105.69715142428787"/>
+            <point key="canvasLocation" x="2074" y="106"/>
+        </scene>
+        <!--Game Results View Controller-->
+        <scene sceneID="XIl-E0-Ztk">
+            <objects>
+                <viewController storyboardIdentifier="gameResultsViewController" id="3Y4-HQ-nYd" customClass="GameResultsViewController" customModule="NameGame" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Mjf-sg-Jbp">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Game Results ViewController" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DEa-LQ-jdl">
+                                <rect key="frame" x="12" y="316" width="350" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="28"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="XsF-Gd-30O"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Ztk-TZ-OX2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2870" y="106"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="enU-xb-Jiv">

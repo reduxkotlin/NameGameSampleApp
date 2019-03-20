@@ -5,14 +5,14 @@ import main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    var game: Game?
-    var presenter: Presenter?
+    var game: GameEngine?
+    var presenterFactory: PresenterFactory?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         let navi: Navigator = IosNavigator()
-        game = Game(navigator: navi)
-        presenter = Presenter(game: game!, networkContext: UI())
+        game = GameEngine(navigator: navi)
+        presenterFactory = PresenterFactory(gameEngine: game!, networkContext: UI())
         return true
     }
 
