@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.willowtreeapps.common.QuestionPresenter
 import com.willowtreeapps.common.RoundViewState
 import com.willowtreeapps.common.view.QuestionScreen
@@ -124,6 +125,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen {
         with(viewState) {
             txt_results.text = title
             GlideApp.with(this@QuestionFragment).load(profileImageUrl)
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(imageView)
             button1.text = button1Text
             button2.text = button2Text
