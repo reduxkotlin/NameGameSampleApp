@@ -1,9 +1,9 @@
 package com.willowtreeapps.namegame
 
-import com.willowtreeapps.common.generateRounds
+import com.willowtreeapps.common.*
+import com.willowtreeapps.common.boundary.displayName
 import com.willowtreeapps.common.repo.MockRepositoryFactory
-import com.willowtreeapps.common.takeRandomDistint
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Test
 import java.lang.Exception
 import java.lang.IllegalStateException
@@ -37,5 +37,70 @@ class ReducersTest {
 
         assertEquals(10, rounds.size)
         assertEquals(10, rounds.distinctBy { it.profileId }.size)
+    }
+
+    @Test
+    fun `isLoadingProfiles set true`() {
+        val final = reducer(generateInitialTestState(), Actions.FetchingProfilesStartedAction())
+
+        assertTrue(final.isLoadingProfiles)
+    }
+
+    @Test
+    fun `isLoadingProfiles set false on success`() {
+        val initial = generateInitialTestState().copy(isLoadingProfiles = true)
+        val final = reducer(initial, Actions.FetchingProfilesSuccessAction(MockRepositoryFactory.getValidResponse()))
+
+        assertFalse(final.isLoadingProfiles)
+    }
+
+    @Test
+    fun `isLoadingProfiles set false on failure`() {
+        val initial = generateInitialTestState().copy(isLoadingProfiles = true)
+        val final = reducer(initial, Actions.FetchingProfilesFailedAction("Test failure"))
+
+        assertFalse(final.isLoadingProfiles)
+    }
+
+    @Test
+    fun `NextQuestionAction increments currentRoundIndex`() {
+        val initial = generateInitialTestState()
+        val final = reducer(initial, Actions.NextQuestionAction())
+
+        assertEquals(1, final.currentQuestionIndex)
+    }
+
+    @Test
+    fun `NextQuestionAction sets waitingForNextQuestion = false`() {
+        val initial = generateInitialTestState()
+        val final = reducer(initial, Actions.NextQuestionAction())
+
+        assertEquals(false, final.waitingForNextQuestion)
+    }
+
+    @Test
+    fun `mark current round as CORRECT when name matches`() {
+        val initial = generateInitialTestState()
+        val answer = initial.currentRoundProfile().displayName()
+
+        val final = reducer(initial, Actions.NamePickedAction(answer))
+
+        assertEquals(Question.Status.CORRECT, final.currentQuestion.status)
+    }
+
+    @Test
+    fun `mark current round as INCORRECT when name doesn't matches`() {
+        val initial = generateInitialTestState()
+        val answer = "wrong answer"
+
+        val final = reducer(initial, Actions.NamePickedAction(answer))
+
+        assertEquals(Question.Status.INCORRECT, final.currentQuestion.status)
+    }
+
+
+    private fun generateInitialTestState(): AppState {
+        val initialState = reducer(AppState(), Actions.FetchingProfilesSuccessAction(MockRepositoryFactory.getValidResponse()))
+        return initialState
     }
 }

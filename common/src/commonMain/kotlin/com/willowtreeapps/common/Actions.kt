@@ -11,10 +11,12 @@ sealed class Actions : Action {
     class FetchingProfilesSuccessAction(val profiles: List<Profile>)
     class FetchingProfilesFailedAction(val message: String)
 
-    class NamePickedAction(val profileId: String)
+    class NamePickedAction(val name: String)
 
     class NextQuestionAction
 
-    class RoundCompleteAction
+    class GameCompleteAction
+
+    class StartOverAction
 
 }

@@ -1,6 +1,7 @@
 package com.willowtreeapps.common.repo
 
 import com.willowtreeapps.common.ProfileId
+import com.willowtreeapps.common.boundary.displayName
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
@@ -21,7 +22,12 @@ data class Profile(
         val lastName: String,
         val headshot: Headshot,
         @Optional
-        val socialLinks: List<SocialLinks>? = null)
+        val socialLinks: List<SocialLinks>? = null) {
+
+    fun matches(name: String): Boolean {
+        return displayName() == name
+    }
+}
 
 @Serializable
 data class Headshot(val type: String,

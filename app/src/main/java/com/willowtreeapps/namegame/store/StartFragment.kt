@@ -5,12 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.beyondeye.reduks.StoreSubscriber
-import com.beyondeye.reduks.StoreSubscription
-import com.willowtreeapps.common.AppState
+import com.willowtreeapps.common.StartPresenter
 import com.willowtreeapps.common.view.StartScreen
 import com.willowtreeapps.namegame.*
-import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
@@ -20,16 +18,16 @@ class StartFragment : Fragment(), CoroutineScope, StartScreen {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main
 
+    var presenter: StartPresenter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.content_main, container, false)
+        return inflater.inflate(R.layout.fragment_start, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        NameGameApp.instance.presenter.attachView(this)
         btn_start.setOnClickListener {
             activity?.runOnUiThread {
-                NameGameApp.instance.presenter.startGame()
+                presenter?.startGame()
             }
         }
     }
@@ -46,8 +44,13 @@ class StartFragment : Fragment(), CoroutineScope, StartScreen {
         }
     }
 
-    override fun onDestroyView() {
-        NameGameApp.instance.presenter.detachView()
-        super.onDestroyView()
+    override fun onStart() {
+        super.onStart()
+        presenter = NameGameApp.instance.presenterFactory.attachView(this) as StartPresenter
+    }
+
+    override fun onStop() {
+        super.onStop()
+        NameGameApp.instance.presenterFactory.detachView(presenter!!)
     }
 }

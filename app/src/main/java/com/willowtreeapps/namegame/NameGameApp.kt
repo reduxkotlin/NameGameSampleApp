@@ -1,22 +1,22 @@
 package com.willowtreeapps.namegame
 
 import android.app.Application
-import com.willowtreeapps.common.Game
-import com.willowtreeapps.common.Presenter
+import com.willowtreeapps.common.GameEngine
+import com.willowtreeapps.common.PresenterFactory
 import kotlinx.coroutines.Dispatchers
 
 class NameGameApp : Application() {
 
-    lateinit var game: Game
+    lateinit var gameEngine: GameEngine
     lateinit var navigator: AndroidNavigator
-    lateinit var presenter: Presenter
+    lateinit var presenterFactory: PresenterFactory
 
     override fun onCreate() {
         super.onCreate()
         instance = this
         navigator = AndroidNavigator()
-        game = Game(navigator)
-        presenter = Presenter(game, Dispatchers.IO)
+        gameEngine = GameEngine(navigator)
+        presenterFactory = PresenterFactory(gameEngine, Dispatchers.IO)
 
         registerActivityLifecycleCallbacks(navigator)
     }

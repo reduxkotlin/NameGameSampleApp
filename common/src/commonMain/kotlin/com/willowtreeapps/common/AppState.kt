@@ -7,35 +7,49 @@ import com.willowtreeapps.common.middleware.NavigationMiddleware
 import com.willowtreeapps.common.middleware.Navigator
 import com.willowtreeapps.common.middleware.ViewEffectsMiddleware
 import com.willowtreeapps.common.repo.Profile
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.Serializer
-import kotlinx.serialization.internal.StringSerializer
 
-data class AppState(val isLoadingProfiles: Boolean,
+data class AppState(val isLoadingProfiles: Boolean = false,
                     val profiles: List<Profile> = listOf(),
                     val errorLoadingProfiles: Boolean = false,
                     val errorMsg: String = "",
-                    val currentRoundIndex: Int = 0,
-                    val numRounds: Int = 10,
-                    val rounds: List<Round> = listOf()) {
+                    val currentQuestionIndex: Int = 0,
+                    val numQuestions: Int = 3,
+                    val waitingForNextQuestion: Boolean = false,
+                    val waitingForResultsTap: Boolean = false,
+                    val questions: List<Question> = listOf()) {
     companion object {
-        val INITIAL_STATE = AppState(false)
+        val INITIAL_STATE = AppState()
     }
 
-    fun Round.profile(): Profile = profiles.find { ProfileId(it.id) == this.profileId }!!
+    fun Question.profile(): Profile = profiles.find { ProfileId(it.id) == this.profileId }!!
 
-    val currentRound: Round
-        get() = rounds[currentRoundIndex]
+    val currentQuestion: Question
+        get() = questions[currentQuestionIndex]
 
     fun getProfile(id: ProfileId) = profiles.find { it.id == id.id }
 
+    public fun currentRoundProfile() = getProfile(currentQuestion.profileId)!!
+
+    fun isGameComplete(): Boolean = currentQuestionIndex >= questions.size || (currentQuestionIndex == questions.size - 1 && questions[currentQuestionIndex].status != Question.Status.UNANSWERED)
+
+    val numCorrect: Int
+        get() = questions.count { it.status == Question.Status.CORRECT }
 }
 
 inline class ProfileId(val id: String)
 
-data class Round(val profileId: ProfileId, val choices: List<ProfileId>, val answerProfileId: ProfileId? = null)
+data class Question(val profileId: ProfileId,
+                    val choices: List<ProfileId>,
+                    val status: Status = Status.UNANSWERED,
+                    val answerName: String? = null) {
+    enum class Status {
+        UNANSWERED,
+        CORRECT,
+        INCORRECT
+    }
+}
 
-class Game(navigator: Navigator) {
+class GameEngine(navigator: Navigator) {
     val navigationMiddleware = NavigationMiddleware(navigator)
     val viewEffectsMiddleware = ViewEffectsMiddleware()
     val appStore by lazy {

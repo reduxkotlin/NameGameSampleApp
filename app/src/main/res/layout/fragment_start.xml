@@ -10,18 +10,6 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.willowtreeapps.namegame.MainActivity">
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rootRecyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/listBackground"
-        android:layoutAnimation="@anim/layout_animation_fade_in"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ProgressBar
         android:id="@+id/loading_spinner"
         style="?android:attr/progressBarStyleLarge"
