@@ -9,6 +9,8 @@ class IosNavigator: NSObject, Navigator {
         if let rootViewController = UIApplication.topViewController() {
 
             let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            
+            switch (screen)
             let newViewController = storyBoard.instantiateViewController(withIdentifier: "questionScreen") as! QuestionViewController
             //do sth with root view controller
             let navi = rootViewController.navigationController

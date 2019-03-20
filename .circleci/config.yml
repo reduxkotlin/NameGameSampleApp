@@ -46,6 +46,21 @@ jobs:
           command: |
             mkdir -p /tmp/workspace/apk
             cp -r app/build/outputs/apk/* /tmp/workspace/apk/
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - apk
+
+  build_ios:
+    macos:
+      xcode: "10.1"
+
+    steps:
+      - checkout
+      - *attach_builds
+      - run:
+          name: Build xcode-framework
+          command: ./gradlew common:build
       - run:
           name: Move frameworks to workspace
           command: |
@@ -54,39 +69,9 @@ jobs:
       - persist_to_workspace:
           root: *workspace_root
           paths:
-            - apk
             - xcode-frameworks
 
-  build_ios:
 
-    # Specify the Xcode version to use
-    macos:
-      xcode: "10.1"
-
-    steps:
-      - checkout
-      - *attach_builds
-
-
-      # Build the app and run tests
-      - run:
-          name: Build and run tests
-          command: fastlane scan
-          environment:
-            SCAN_DEVICE: iPhone 6
-            SCAN_SCHEME: WebTests
-
-      # Collect XML test results data to show in the UI,
-      # and save the same XML files under test-results folder
-      # in the Artifacts tab
-      - store_test_results:
-          path: test_output/report.xml
-      - store_artifacts:
-          path: /tmp/test-results
-          destination: scan-test-results
-      - store_artifacts:
-          path: ~/Library/Logs/scan
-          destination: scan-logs
 
 workflows:
   build_all_platforms:
@@ -97,3 +82,6 @@ workflows:
               only:
                 - /^feature.*/
                 - /^bugfix.*/
+#      - build_ios:
+#          requires:
+#            - build_android
