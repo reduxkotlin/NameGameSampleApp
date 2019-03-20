@@ -1,0 +1,99 @@
+version: 2.1
+
+references:
+
+  android_dependencies: &android_dependencies
+    run:
+      name: Download Android Dependencies
+      command: |
+        ./gradlew androidDependencies
+
+  workspace_root: &workspace_root
+                  /tmp/workspace
+
+  attach_builds: &attach_builds
+    attach_workspace:
+      at: *workspace_root
+
+executors:
+  android_executor:
+    docker:
+      - image: circleci/android:api-28
+    environment:
+      TERM: dumb
+      _JAVA_OPTIONS: '-Xms1024m -Xmx2048m'
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xms1024m -Xmx2048m -XX:+HeapDumpOnOutOfMemoryError" -Dkotlin.compiler.execution.strategy="in-process" -Dorg.gradle.daemon=false'
+      ANDROID_HOME: /opt/android/sdk
+      ADB_INSTALL_TIMEOUT: 10
+
+
+jobs:
+  build_android:
+    executor: android_executor
+    steps:
+      - checkout
+      - *android_dependencies
+      - *attach_builds
+      - run:
+          name: Build and Run JVM Unit Tests
+          command: ./gradlew build
+      - store_artifacts:
+          path: app/build/outputs/reports/
+      - store_test_results:
+          path: app/build/test-results
+      - run:
+          name: Move APKs to workspace
+          command: |
+            mkdir -p /tmp/workspace/apk
+            cp -r app/build/outputs/apk/* /tmp/workspace/apk/
+      - run:
+          name: Move frameworks to workspace
+          command: |
+            mkdir -p /tmp/workspace/xcode-frameworks
+            cp -r common/build/xcode-frameworks/* /tmp/workspace/xcode-frameworks
+      - persist_to_workspace:
+          root: *workspace_root
+          paths:
+            - apk
+            - xcode-frameworks
+
+  build_ios:
+
+    # Specify the Xcode version to use
+    macos:
+      xcode: "10.1"
+
+    steps:
+      - checkout
+      - *attach_builds
+
+
+      # Build the app and run tests
+      - run:
+          name: Build and run tests
+          command: fastlane scan
+          environment:
+            SCAN_DEVICE: iPhone 6
+            SCAN_SCHEME: WebTests
+
+      # Collect XML test results data to show in the UI,
+      # and save the same XML files under test-results folder
+      # in the Artifacts tab
+      - store_test_results:
+          path: test_output/report.xml
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: scan-test-results
+      - store_artifacts:
+          path: ~/Library/Logs/scan
+          destination: scan-logs
+
+workflows:
+  build_all_platforms:
+    jobs:
+      - build_android:
+          filters:
+            branches:
+              only:
+                - /^feature.*/
+                - /^bugfix.*/
