@@ -1,25 +1,33 @@
 package com.willowtreeapps.common.view
 
+import com.willowtreeapps.common.GameResultsViewState
 import com.willowtreeapps.common.RoundViewState
-import com.willowtreeapps.common.repo.Profile
 
 interface View
 
-interface StartScreen: View {
+interface StartScreen : View {
     fun showLoading()
     fun hideLoading()
 }
 
-interface QuestionScreen: View {
-    fun showLoading()
+interface QuestionScreen : View {
 
     fun showProfile(viewState: RoundViewState)
 
-    fun showCorrectAnswer(profileId: String)
+    fun showCorrectAnswer()
 
-    fun showWrongAnswer(profileId: String)
+    fun showWrongAnswer()
+
+    fun showCorrectAnswerEndGame()
+
+    fun showWrongAnswerEndGame()
+
+    /**
+     * Shows status of last question and a button to end game and advance to summary screen.
+     */
+    fun showEndOfGame()
 }
 
-interface RoundCompleteScreen: View {
-    fun showResults()
+interface GameResultsScreen : View {
+    fun showResults(viewState: GameResultsViewState)
 }

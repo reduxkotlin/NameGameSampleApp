@@ -15,21 +15,34 @@ val reducer = ReducerFn<AppState> { state, action ->
     when (action) {
         is FetchingProfilesStartedAction -> state.copy(isLoadingProfiles = true)
         is FetchingProfilesSuccessAction -> {
-            val rounds = generateRounds(action.profiles, state.numRounds)
-            state.copy(isLoadingProfiles = false, profiles = action.profiles, rounds = rounds)
+            val rounds = generateRounds(action.profiles, state.numQuestions)
+            state.copy(isLoadingProfiles = false, profiles = action.profiles, questions = rounds)
         }
         is FetchingProfilesFailedAction -> state.copy(isLoadingProfiles = false, errorLoadingProfiles = true, errorMsg = action.message)
+        is NamePickedAction -> {
+            val status = if (state.currentRoundProfile()?.matches(action.name) == true) {
+                Question.Status.CORRECT
+            } else {
+                Question.Status.INCORRECT
+            }
+            val newQuestions = state.questions.toMutableList()
+            newQuestions[state.currentQuestionIndex] = newQuestions[state.currentQuestionIndex].copy(answerName = action.name, status = status)
+            state.copy(questions = newQuestions, waitingForNextQuestion = true)
+        }
+        is NextQuestionAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
+        is GameCompleteAction -> state.copy(waitingForResultsTap = true, waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
+        is StartOverAction -> AppState.INITIAL_STATE
         else -> throw AssertionError("Action ${action::class.simpleName} not handled")
     }
 }
 
-fun generateRounds(profiles: List<Profile>, n: Int): List<Round> =
+fun generateRounds(profiles: List<Profile>, n: Int): List<Question> =
         profiles.takeRandomDistint(n)
                 .map {
                     val choiceList = profiles.takeRandomDistint(3).toMutableList()
                     choiceList.add(abs(random.nextInt() % 4), it)
 
-                    Round(profileId = ProfileId(it.id), choices = choiceList
+                    Question(profileId = ProfileId(it.id), choices = choiceList
                             .map { ProfileId(it.id) })
                 }
 
@@ -60,3 +73,6 @@ fun <T> List<T>.takeRandomDistint(n: Int): List<T> {
     return newList.toList()
 }
 
+
+fun <T> List<T>.takeRandom(): T =
+        this[random.nextInt(this.size - 1)]
