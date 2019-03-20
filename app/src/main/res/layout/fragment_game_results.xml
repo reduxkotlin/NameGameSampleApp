@@ -8,7 +8,6 @@
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    app:layoutDescription="@xml/questions_motion"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.willowtreeapps.namegame.MainActivity">
 
@@ -17,7 +16,7 @@
       android:id="@+id/txt_results"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="48dp"
+      android:layout_marginTop="64dp"
       android:gravity="center"
       android:text="Summary fragment"
       android:textSize="36sp"

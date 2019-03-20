@@ -8,14 +8,14 @@
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    app:layoutDescription="@xml/questions_motion"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.willowtreeapps.namegame.MainActivity">
+
   <TextView
       android:id="@+id/txt_results"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_marginTop="48dp"
+      android:layout_marginTop="64dp"
       android:gravity="center"
       android:text="Question fragment"
       android:textSize="36sp"
@@ -34,6 +34,7 @@
       tools:srcCompat="@tools:sample/avatars" />
 
   <Button
+      style="@style/ChoiceButton"
       android:id="@+id/button3"
       android:layout_width="193dp"
       android:layout_height="wrap_content"
@@ -47,6 +48,7 @@
       app:layout_constraintStart_toStartOf="parent" />
 
   <Button
+      style="@style/ChoiceButton"
       android:id="@+id/button4"
       android:layout_width="194dp"
       android:layout_height="wrap_content"
@@ -60,6 +62,7 @@
       app:layout_constraintStart_toEndOf="@+id/button3" />
 
   <Button
+      style="@style/ChoiceButton"
       android:id="@+id/button1"
       android:layout_width="193dp"
       android:layout_height="wrap_content"
@@ -73,6 +76,7 @@
       app:layout_constraintStart_toStartOf="parent" />
 
   <Button
+      style="@style/ChoiceButton"
       android:id="@+id/button2"
       android:layout_width="194dp"
       android:layout_height="wrap_content"
