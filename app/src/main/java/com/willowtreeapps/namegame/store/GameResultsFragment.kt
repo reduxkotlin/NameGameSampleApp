@@ -38,6 +38,8 @@ class GameResultsFragment : Fragment(), CoroutineScope, GameResultsScreen {
     override fun onResume() {
         super.onResume()
         presenter = NameGameApp.instance.presenterFactory.attachView(this) as GameResultsPresenter
+        presenter!!.startOverTappedDebounce()
+        presenter!!.startOverTappedDebounce()
     }
 
     override fun onPause() {

@@ -1,8 +1,10 @@
 package com.willowtreeapps.common
 
 import com.beyondeye.reduks.*
+import com.soywiz.klock.DateTime
 import com.willowtreeapps.common.boundary.toGameResultsViewState
 import com.willowtreeapps.common.boundary.toRoundViewState
+import com.willowtreeapps.common.util.debounce
 import com.willowtreeapps.common.view.GameResultsScreen
 import com.willowtreeapps.common.view.QuestionScreen
 import com.willowtreeapps.common.view.StartScreen
@@ -135,7 +137,11 @@ class GameResultsPresenter(val view: GameResultsScreen, val store: Store<AppStat
         view.showResults(state.toGameResultsViewState())
     }
 
-    fun startOverTapped() {
+    fun startOverTapped()  {
+        store.dispatch(Actions.StartOverAction())
+    }
+
+    val startOverTappedDebounce = debounce {
         store.dispatch(Actions.StartOverAction())
     }
 
