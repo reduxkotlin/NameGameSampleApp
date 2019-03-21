@@ -25,7 +25,7 @@ kotlin {
 
                 implementation "io.ktor:ktor-client-core:$ktorVersion"
                 implementation "io.ktor:ktor-client-json:$ktorVersion"
-                implementation "com.soywiz:klock-metadata:$klockVersion" // Common
+//                implementation "com.soywiz:klock-metadata:$klockVersion" // Common
 
             }
         }
@@ -45,7 +45,7 @@ kotlin {
                 implementation "io.ktor:ktor-client-core-jvm:$ktorVersion"
                 implementation "io.ktor:ktor-client-json-jvm:$ktorVersion"
                 implementation "io.ktor:ktor-client-logging-jvm:$ktorVersion"
-                implementation "com.soywiz:klock-jvm:$klockVersion"
+//                implementation "com.soywiz:klock-jvm:$klockVersion"
             }
         }
         jvmTest {
@@ -63,7 +63,7 @@ kotlin {
                 implementation "io.ktor:ktor-client-ios:$ktorVersion"
                 implementation "io.ktor:ktor-client-core-native:$ktorVersion"
                 implementation "io.ktor:ktor-client-json-native:$ktorVersion"
-                implementation "com.soywiz:klock-iosarm64:$klockVersion"
+//                implementation "com.soywiz:klock-iosarm64:$klockVersion"
             }
         }
     }

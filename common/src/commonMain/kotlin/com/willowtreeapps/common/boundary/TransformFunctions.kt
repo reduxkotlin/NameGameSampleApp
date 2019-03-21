@@ -3,17 +3,17 @@ package com.willowtreeapps.common.boundary
 import com.willowtreeapps.common.*
 import com.willowtreeapps.common.repo.Profile
 
-fun AppState.toRoundViewState(): RoundViewState {
+fun AppState.toRoundViewState(): QuestionViewState {
     val profile = questions[currentQuestionIndex].profile()
     val imageUrl = profile.headshot.url
     val choice1 = getProfile(currentQuestion.choices[0])!!.displayName()
     val choice2 = getProfile(currentQuestion.choices[1])!!.displayName()
     val choice3 = getProfile(currentQuestion.choices[2])!!.displayName()
     val choice4 = getProfile(currentQuestion.choices[3])!!.displayName()
-    return RoundViewState(title = "Who is this?",
+    return QuestionViewState(title = "Who is this?",
             profileImageUrl = "https:/$imageUrl",
-            currentRound = (currentQuestionIndex + 1).toString(),
-            numRounds = this.numQuestions.toString(),
+            currentQuestion = (currentQuestionIndex + 1).toString(),
+            numQuestions = this.numQuestions.toString(),
             button1Text = choice1,
             button2Text = choice2,
             button3Text = choice3,
