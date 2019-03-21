@@ -8,7 +8,6 @@ class StartScreenViewController: UIViewController, StartScreen {
     var presenter: StartPresenter?
     
     @IBAction func viewTapped(_ sender: Any) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         presenter?.startGame()
     }
 

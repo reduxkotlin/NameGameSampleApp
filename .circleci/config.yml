@@ -82,6 +82,7 @@ workflows:
               only:
                 - /^feature.*/
                 - /^bugfix.*/
+                - master
 #      - build_ios:
 #          requires:
 #            - build_android
