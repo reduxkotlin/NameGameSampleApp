@@ -6,12 +6,12 @@ import com.willowtreeapps.common.repo.Profile
 fun AppState.toRoundViewState(): QuestionViewState {
     val profile = questions[currentQuestionIndex].profile()
     val imageUrl = profile.headshot.url
-    val choice1 = getProfile(currentQuestion.choices[0])!!.displayName()
-    val choice2 = getProfile(currentQuestion.choices[1])!!.displayName()
-    val choice3 = getProfile(currentQuestion.choices[2])!!.displayName()
-    val choice4 = getProfile(currentQuestion.choices[3])!!.displayName()
+    val choice1 = getProfile(currentQuestion?.choices?.get(0))!!.displayName()
+    val choice2 = getProfile(currentQuestion?.choices?.get(1))!!.displayName()
+    val choice3 = getProfile(currentQuestion?.choices?.get(2))!!.displayName()
+    val choice4 = getProfile(currentQuestion?.choices?.get(3))!!.displayName()
     return QuestionViewState(title = "Who is this?",
-            profileImageUrl = "https:/$imageUrl",
+            profileImageUrl = "https:$imageUrl",
             currentQuestion = (currentQuestionIndex + 1).toString(),
             numQuestions = this.numQuestions.toString(),
             button1Text = choice1,

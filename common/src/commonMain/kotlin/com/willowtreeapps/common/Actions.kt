@@ -18,5 +18,6 @@ sealed class Actions : Action {
     class GameCompleteAction
 
     class StartOverAction
+    class ResetGameStateAction()
 
 }

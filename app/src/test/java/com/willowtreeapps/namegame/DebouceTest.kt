@@ -2,7 +2,6 @@ package com.willowtreeapps.namegame
 
 import com.willowtreeapps.common.util.debounce
 import org.junit.Assert.assertEquals
-import org.junit.Assert.fail
 import org.junit.Test
 
 class DebounceTest {

@@ -2,6 +2,7 @@ import Foundation
 import UIKit
 import main
 
+
 class QuestionViewController: UIViewController, QuestionScreen {
     @IBOutlet weak var labelQuestion: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
@@ -21,8 +22,12 @@ class QuestionViewController: UIViewController, QuestionScreen {
     @IBAction func onEndGameTap(_ sender: Any) { presenter?.endGameTapped() }
     
     var presenter: QuestionPresenter?
+    var confettiView: SAConfettiView?
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        confettiView = SAConfettiView(frame: self.view.bounds)
+        self.view.addSubview(confettiView!)
+        self.view.sendSubviewToBack(confettiView!)
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         presenter = appDelegate.presenterFactory!.attachView(view: self) as? QuestionPresenter
     }
@@ -30,10 +35,14 @@ class QuestionViewController: UIViewController, QuestionScreen {
     override func viewDidDisappear(_ animated: Bool) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.presenterFactory?.detachView(presenter: presenter!)
+        if (isMovingFromParent) {
+            presenter?.onBackPressed()
+        }
     }
     
     func showProfile(viewState: QuestionViewState) {
-        if (buttonNext.isHidden) {
+        stopCelegration()
+        if (!buttonNext.isHidden) {
             fadeNextButton {
                 self.setProfileAndFadeIn(viewState: viewState)
             }
@@ -67,20 +76,21 @@ class QuestionViewController: UIViewController, QuestionScreen {
             self.button2.alpha = 1.0
             self.button3.alpha = 1.0
             self.button4.alpha = 1.0
+            self.profileImageView.alpha = 1.0
         })
     }
     
     private func hideButtonsShowNext() {
         UIView.animate(withDuration: 0.5, animations: {
-            self.button1.alpha = 1.0
-            self.button2.alpha = 1.0
-            self.button3.alpha = 1.0
-            self.button4.alpha = 1.0
+            self.button1.alpha = 0
+            self.button2.alpha = 0
+            self.button3.alpha = 0
+            self.button4.alpha = 0
         }, completion: {_ in
             UIView.animate(withDuration: 0.5, animations: {
                 self.buttonNext?.isHidden = false
                 self.buttonNext?.alpha = 1
-                })
+            })
         })
     }
     
@@ -99,52 +109,32 @@ class QuestionViewController: UIViewController, QuestionScreen {
     private func fadeNextButton(after: @escaping () -> ()) {
         UIView.animate(withDuration: 0.5, animations: {
             self.buttonNext.alpha = 0
+            self.profileImageView.alpha = 0
         }, completion: {_ in
             after()
         })
     }
     
     private func setProfileAndFadeIn(viewState: QuestionViewState) {
+        labelQuestion.text = viewState.title
         button1.setTitle(viewState.button1Text, for: .normal)
         button2.setTitle(viewState.button2Text, for: .normal)
         button3.setTitle(viewState.button3Text, for: .normal)
         button4.setTitle(viewState.button4Text, for: .normal)
-        loadImage(url: URL(string: viewState.profileImageUrl)!)
+        profileImageView.downloaded(from: viewState.profileImageUrl)
         showButtons()
     }
     
     private func celebrate() {
-        
+        confettiView!.startConfetti()
     }
     
-    func loadImage(url: URL) {
-        let session = URLSession(configuration: .default)
-        
-        let downloadPicTask = session.dataTask(with: url) { (data, response, error) in
-            // The download has finished.
-            if let e = error {
-                print("Error downloading profile picture: \(e)")
-            } else {
-                // No errors found.
-                // It would be weird if we didn't have a response, so check for that too.
-                if let res = response as? HTTPURLResponse {
-                    print("Downloaded profile picture with response code \(res.statusCode)")
-                    if let imageData = data {
-                        DispatchQueue.main.async {
-                            // Finally convert that Data into an image and do what you wish with it.
-                            let image = UIImage(data: imageData)
-                            self.profileImageView.image = image
-                        }
-                        // Do something with your image.
-                    } else {
-                        print("Couldn't get image: Image is nil")
-                    }
-                } else {
-                    print("Couldn't get response code for some reason")
-                }
-            }
-        }
-        downloadPicTask.resume()
+    private func stopCelegration() {
+        confettiView!.stopConfetti()
     }
     
+    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
 }
+

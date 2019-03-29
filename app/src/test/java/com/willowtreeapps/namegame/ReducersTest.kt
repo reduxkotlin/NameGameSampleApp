@@ -85,7 +85,7 @@ class ReducersTest {
 
         val final = reducer(initial, Actions.NamePickedAction(answer))
 
-        assertEquals(Question.Status.CORRECT, final.currentQuestion.status)
+        assertEquals(Question.Status.CORRECT, final.currentQuestion?.status)
     }
 
     @Test
@@ -95,7 +95,7 @@ class ReducersTest {
 
         val final = reducer(initial, Actions.NamePickedAction(answer))
 
-        assertEquals(Question.Status.INCORRECT, final.currentQuestion.status)
+        assertEquals(Question.Status.INCORRECT, final.currentQuestion?.status)
     }
 
 

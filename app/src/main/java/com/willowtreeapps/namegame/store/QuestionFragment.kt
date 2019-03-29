@@ -15,6 +15,7 @@ import com.willowtreeapps.common.QuestionPresenter
 import com.willowtreeapps.common.QuestionViewState
 import com.willowtreeapps.common.view.QuestionScreen
 import com.willowtreeapps.namegame.GlideApp
+import com.willowtreeapps.namegame.MainActivity
 import com.willowtreeapps.namegame.NameGameApp
 import com.willowtreeapps.namegame.R
 import kotlinx.android.synthetic.main.fragment_question.*
@@ -24,7 +25,7 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import kotlin.coroutines.CoroutineContext
 
-class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen {
+class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivity.IOnBackPressed {
 
     private var presenter: QuestionPresenter? = null
 
@@ -60,11 +61,11 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen {
     }
 
 
-    override fun showCorrectAnswer() {
-        hideButtonsShowNext()
-        celebrate()
+    override fun onBackPressed(): Boolean {
+        NameGameApp.instance.presenterFactory.detachView(presenter!!)
+        presenter?.onBackPressed()
+        return false
     }
-
 
     override fun showProfile(viewState: QuestionViewState) {
         activity?.runOnUiThread {
@@ -74,6 +75,12 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen {
                 setProfileAndFadeIn(viewState)
             }
         }
+    }
+
+
+    override fun showCorrectAnswer() {
+        hideButtonsShowNext()
+        celebrate()
     }
 
     override fun showWrongAnswer() {
@@ -177,5 +184,6 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen {
                 .setPosition(-50f, view_konfetti.width + 50f, -50f, -50f)
                 .burst(200)
     }
+
 
 }

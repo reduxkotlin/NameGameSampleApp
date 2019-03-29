@@ -58,13 +58,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Questions ViewController" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z67-sC-fPz">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Questions ViewController" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z67-sC-fPz">
                                 <rect key="frame" x="27" y="67" width="321" height="109"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HwG-d4-DGm">
+                            <imageView userInteractionEnabled="NO" alpha="0.0" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="HwG-d4-DGm">
                                 <rect key="frame" x="27" y="184" width="321" height="321"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="321" id="YZ3-7U-hUR"/>
@@ -85,7 +85,7 @@
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="en6-Vs-wZO"/>
                                 </constraints>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="Next Tree"/>
                                 <connections>
                                     <action selector="onNextTreeTap:" destination="Tfp-4c-tog" eventType="touchUpInside" id="mZe-oz-zZy"/>
                                 </connections>
@@ -113,7 +113,7 @@
                             </button>
                             <button hidden="YES" opaque="NO" alpha="0.0" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xnI-lK-26H">
                                 <rect key="frame" x="147" y="566" width="80" height="32"/>
-                                <state key="normal" title="Button"/>
+                                <state key="normal" title="See Results"/>
                                 <connections>
                                     <action selector="onEndGameTap:" destination="Tfp-4c-tog" eventType="touchUpInside" id="97k-vw-e0V"/>
                                 </connections>
@@ -174,7 +174,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="1 out of 3" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8sA-5W-Ryb">
-                                <rect key="frame" x="131" y="92" width="112" height="34"/>
+                                <rect key="frame" x="16" y="92" width="343" height="34"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <nil key="textColor"/>
@@ -184,9 +184,12 @@
                                 <rect key="frame" x="153" y="557" width="68" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Start over"/>
+                                <connections>
+                                    <action selector="viewTapped:" destination="3Y4-HQ-nYd" eventType="touchUpInside" id="CTW-4y-JmC"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="You can do better!" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DEa-LQ-jdl">
-                                <rect key="frame" x="12" y="327" width="347" height="34"/>
+                                <rect key="frame" x="12" y="327" width="347" height="94"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                 <nil key="textColor"/>
