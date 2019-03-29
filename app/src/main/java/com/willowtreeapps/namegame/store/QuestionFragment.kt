@@ -12,9 +12,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.willowtreeapps.common.QuestionPresenter
-import com.willowtreeapps.common.RoundViewState
+import com.willowtreeapps.common.QuestionViewState
 import com.willowtreeapps.common.view.QuestionScreen
 import com.willowtreeapps.namegame.GlideApp
+import com.willowtreeapps.namegame.MainActivity
 import com.willowtreeapps.namegame.NameGameApp
 import com.willowtreeapps.namegame.R
 import kotlinx.android.synthetic.main.fragment_question.*
@@ -24,7 +25,7 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import kotlin.coroutines.CoroutineContext
 
-class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen {
+class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivity.IOnBackPressed {
 
     private var presenter: QuestionPresenter? = null
 
@@ -57,6 +58,42 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen {
         button4.setOnClickListener { presenter?.namePicked(button4.text.toString()) }
         btn_next.setOnClickListener { presenter?.nextTapped() }
         btn_end_game.setOnClickListener { presenter?.endGameTapped() }
+    }
+
+
+    override fun onBackPressed(): Boolean {
+        NameGameApp.instance.presenterFactory.detachView(presenter!!)
+        presenter?.onBackPressed()
+        return false
+    }
+
+    override fun showProfile(viewState: QuestionViewState) {
+        activity?.runOnUiThread {
+            if (btn_next.visibility == View.VISIBLE) {
+                fadeNextButton { setProfileAndFadeIn(viewState) }
+            } else {
+                setProfileAndFadeIn(viewState)
+            }
+        }
+    }
+
+
+    override fun showCorrectAnswer() {
+        hideButtonsShowNext()
+        celebrate()
+    }
+
+    override fun showWrongAnswer() {
+        hideButtonsShowNext()
+    }
+
+    override fun showCorrectAnswerEndGame() {
+        hideButtonsShowEndAnimatorSet.start()
+        celebrate()
+    }
+
+    override fun showWrongAnswerEndGame() {
+        hideButtonsShowEndAnimatorSet.start()
     }
 
     private val hideButtonsShowNextAnimatorSet by lazy {
@@ -121,7 +158,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen {
         })
     }
 
-    private fun setProfileAndFadeIn(viewState: RoundViewState) {
+    private fun setProfileAndFadeIn(viewState: QuestionViewState) {
         with(viewState) {
             txt_results.text = title
             GlideApp.with(this@QuestionFragment).load(profileImageUrl)
@@ -133,11 +170,6 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen {
             button4.text = button4Text
             showButtons()
         }
-    }
-
-    override fun showCorrectAnswer() {
-        hideButtonsShowNext()
-        celebrate()
     }
 
     private fun celebrate() {
@@ -153,30 +185,5 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen {
                 .burst(200)
     }
 
-    override fun showProfile(viewState: RoundViewState) {
-        activity?.runOnUiThread {
-            if (btn_next.visibility == View.VISIBLE) {
-                fadeNextButton { setProfileAndFadeIn(viewState) }
-            } else {
-                setProfileAndFadeIn(viewState)
-            }
-        }
-    }
 
-    override fun showWrongAnswer() {
-        hideButtonsShowNext()
-    }
-
-    override fun showCorrectAnswerEndGame() {
-        hideButtonsShowEndAnimatorSet.start()
-        celebrate()
-    }
-
-    override fun showWrongAnswerEndGame() {
-        hideButtonsShowEndAnimatorSet.start()
-    }
-
-    override fun showEndOfGame() {
-        hideButtonsShowEndAnimatorSet.start()
-    }
 }

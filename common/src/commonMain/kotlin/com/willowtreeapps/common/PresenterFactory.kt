@@ -37,7 +37,9 @@ class PresenterFactory(val gameEngine: GameEngine, networkContext: CoroutineCont
     }
 
     fun detachView(presenter: Presenter) {
-        presenters.remove(presenter)
+        if (presenters.contains(presenter)) {
+            presenters.remove(presenter)
+        }
     }
 
     override fun onStateChange() {
@@ -69,6 +71,7 @@ class StartPresenter(view: StartScreen,
     }
 
     fun startGame() {
+        store.dispatch(Actions.ResetGameStateAction())
         store.dispatch(networkThunks.fetchProfiles())
     }
 }
@@ -76,7 +79,7 @@ class StartPresenter(view: StartScreen,
 class QuestionPresenter(view: QuestionScreen, val store: Store<AppState>) : Presenter {
     val subscriber = StoreSubscriberBuilderFn<AppState> { store ->
         val selBuilder = SelectorBuilder<AppState>()
-        val profileSelector = selBuilder.withSingleField { currentQuestion.profileId.id }
+        val profileSelector = selBuilder.withSingleField { currentQuestion?.profileId?.id ?: Any() }
         StoreSubscriberFn<AppState> {
             val state = store.state
             profileSelector.onChangeIn(state) {
@@ -85,7 +88,7 @@ class QuestionPresenter(view: QuestionScreen, val store: Store<AppState>) : Pres
 
             if (state.isGameComplete()) {
                 if (state.waitingForNextQuestion) {
-                    when (state.currentQuestion.status) {
+                    when (state.currentQuestion?.status) {
                         Question.Status.CORRECT -> {
                             view.showCorrectAnswerEndGame()
                         }
@@ -97,7 +100,7 @@ class QuestionPresenter(view: QuestionScreen, val store: Store<AppState>) : Pres
                 }
             } else {
                 if (state.waitingForNextQuestion) {
-                    when (state.currentQuestion.status) {
+                    when (state.currentQuestion?.status) {
                         Question.Status.CORRECT -> {
                             view.showCorrectAnswer()
                         }
@@ -127,6 +130,10 @@ class QuestionPresenter(view: QuestionScreen, val store: Store<AppState>) : Pres
         store.dispatch(Actions.GameCompleteAction())
     }
 
+    fun onBackPressed() {
+        store.dispatch(Actions.StartOverAction())
+    }
+
 }
 
 class GameResultsPresenter(val view: GameResultsScreen, val store: Store<AppState>) : Presenter {
@@ -139,4 +146,7 @@ class GameResultsPresenter(val view: GameResultsScreen, val store: Store<AppStat
         store.dispatch(Actions.StartOverAction())
     }
 
+    fun onBackPressed() {
+        TODO("Handle back press from Game Results")
+    }
 }

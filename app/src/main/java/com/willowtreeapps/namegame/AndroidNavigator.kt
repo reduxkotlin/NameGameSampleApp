@@ -17,12 +17,13 @@ class AndroidNavigator : Navigator, Application.ActivityLifecycleCallbacks {
 
     private var currentActivity: Activity? = null
 
+    //TODO consider using current screen & destination screen to determine routing & animation
     override fun goto(screen: Screen) {
         val navController = currentActivity!!.findNavController(R.id.nav_host_fragment)
-
         when (screen) {
             Screen.QUESTION -> navController.navigate(R.id.action_startScreen_to_questionScreen)
             Screen.GAME_COMPLETE -> navController.navigate(R.id.action_questionScreen_to_resultsFragment)
+//            Screen.START -> navController.navigate(R.id.startScreen)
             Screen.START -> navController.navigate(R.id.action_resultsFragment_to_startScreen)
             else -> throw IllegalArgumentException("Screen $screen is not handled in AndroidNavigator")
         }

@@ -13,14 +13,15 @@ import UIKit
 class GameResultsViewController: UIViewController, GameResultsScreen {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var msgLabel: UILabel!
-    var presenter: GameResultsPresenter?
+    
+      var presenter: GameResultsPresenter?
     
     @IBAction func viewTapped(_ sender: Any){
         presenter?.startOverTapped()
     }
 
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         presenter = appDelegate.presenterFactory!.attachView(view: self) as? GameResultsPresenter
     }
@@ -31,6 +32,7 @@ class GameResultsViewController: UIViewController, GameResultsScreen {
     }
     
     func showResults(viewState: GameResultsViewState) {
-        
+        titleLabel.text = viewState.resultsText
+        msgLabel.text = viewState.messageText
     }
 }

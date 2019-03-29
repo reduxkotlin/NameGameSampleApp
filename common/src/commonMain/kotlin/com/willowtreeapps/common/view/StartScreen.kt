@@ -1,7 +1,7 @@
 package com.willowtreeapps.common.view
 
 import com.willowtreeapps.common.GameResultsViewState
-import com.willowtreeapps.common.RoundViewState
+import com.willowtreeapps.common.QuestionViewState
 
 interface View
 
@@ -12,7 +12,7 @@ interface StartScreen : View {
 
 interface QuestionScreen : View {
 
-    fun showProfile(viewState: RoundViewState)
+    fun showProfile(viewState: QuestionViewState)
 
     fun showCorrectAnswer()
 
@@ -21,11 +21,6 @@ interface QuestionScreen : View {
     fun showCorrectAnswerEndGame()
 
     fun showWrongAnswerEndGame()
-
-    /**
-     * Shows status of last question and a button to end game and advance to summary screen.
-     */
-    fun showEndOfGame()
 }
 
 interface GameResultsScreen : View {

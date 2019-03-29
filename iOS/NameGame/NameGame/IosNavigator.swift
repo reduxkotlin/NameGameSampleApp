@@ -12,7 +12,7 @@ class IosNavigator: NSObject, Navigator {
         case Screen.gameComplete:
             pushViewController(identifier: "gameResultsScreen")
         case Screen.start:
-            pushViewController(identifier: "startScreen")
+            UIApplication.topViewController()!.navigationController?.popToRootViewController(animated: true)
         default:
             Logger().d(message: "Unhandled navigation goto: " + screen.name)
         }

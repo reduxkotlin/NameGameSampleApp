@@ -3,6 +3,7 @@ package com.willowtreeapps.common
 import com.beyondeye.reduks.ReducerFn
 import com.willowtreeapps.common.Actions.*
 import com.willowtreeapps.common.repo.Profile
+import com.willowtreeapps.common.util.TimeUtil
 import kotlin.math.abs
 import kotlin.random.Random
 
@@ -31,7 +32,7 @@ val reducer = ReducerFn<AppState> { state, action ->
         }
         is NextQuestionAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
         is GameCompleteAction -> state.copy(waitingForResultsTap = true, waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
-        is StartOverAction -> AppState.INITIAL_STATE
+        is StartOverAction, is ResetGameStateAction -> AppState.INITIAL_STATE
         else -> throw AssertionError("Action ${action::class.simpleName} not handled")
     }
 }
@@ -47,7 +48,7 @@ fun generateRounds(profiles: List<Profile>, n: Int): List<Question> =
                 }
 
 
-private val random = Random(2340923874)
+private val random = Random(TimeUtil.systemTimeMs())
 
 /**
  * Take N distict elements from the list.  Distict is determined by a comparasion of objects in the

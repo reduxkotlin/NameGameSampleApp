@@ -12,6 +12,12 @@
 		1E19EEAA2242F22A0094EA01 /* RuntimeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E19EEA92242F22A0094EA01 /* RuntimeError.swift */; };
 		1E43892D224013860034263E /* IosNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E43892C224013860034263E /* IosNavigator.swift */; };
 		1E43892F224015A80034263E /* QuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E43892E224015A80034263E /* QuestionViewController.swift */; };
+		1E9D6D1B2243F1C000F5C0B8 /* SAConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9D6D1A2243F1C000F5C0B8 /* SAConfettiView.swift */; };
+		1E9D6D2E2243F8C600F5C0B8 /* triangle.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9D6D2A2243F8C600F5C0B8 /* triangle.png */; };
+		1E9D6D2F2243F8C600F5C0B8 /* diamond.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9D6D2B2243F8C600F5C0B8 /* diamond.png */; };
+		1E9D6D302243F8C600F5C0B8 /* confetti.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9D6D2C2243F8C600F5C0B8 /* confetti.png */; };
+		1E9D6D312243F8C600F5C0B8 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9D6D2D2243F8C600F5C0B8 /* star.png */; };
+		1E9D6D332243FA4700F5C0B8 /* ImageUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9D6D322243FA4700F5C0B8 /* ImageUtils.swift */; };
 		1EB9EA7F2238071A008AF004 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9EA7E2238071A008AF004 /* AppDelegate.swift */; };
 		1EB9EA842238071A008AF004 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9EA822238071A008AF004 /* Main.storyboard */; };
 		1EB9EA862238071B008AF004 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9EA852238071B008AF004 /* Assets.xcassets */; };
@@ -20,8 +26,6 @@
 		1EB9EA9F2238071C008AF004 /* NameGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9EA9E2238071C008AF004 /* NameGameUITests.swift */; };
 		1EB9EAB022382532008AF004 /* main.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1EB9EAAF22382532008AF004 /* main.framework */; };
 		1EB9EAB422382BBC008AF004 /* main.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1EB9EAB222382BBC008AF004 /* main.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		D794BC0580F8ABAD74AEC0E7 /* Pods_NameGameTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A3C83D4D3C38CDD08E0A5E /* Pods_NameGameTests.framework */; };
-		EB73C32D7A5026680B6E058F /* Pods_NameGameUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACB48F17499F8632BF88AB6B /* Pods_NameGameUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +65,14 @@
 		1E19EEA92242F22A0094EA01 /* RuntimeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeError.swift; sourceTree = "<group>"; };
 		1E43892C224013860034263E /* IosNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosNavigator.swift; sourceTree = "<group>"; };
 		1E43892E224015A80034263E /* QuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionViewController.swift; sourceTree = "<group>"; };
+		1E9D6D162243EFCC00F5C0B8 /* SAConfettiView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SAConfettiView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E9D6D182243F09200F5C0B8 /* Cheers.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Cheers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E9D6D1A2243F1C000F5C0B8 /* SAConfettiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SAConfettiView.swift; sourceTree = "<group>"; };
+		1E9D6D2A2243F8C600F5C0B8 /* triangle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = triangle.png; path = NameGame/triangle.png; sourceTree = "<group>"; };
+		1E9D6D2B2243F8C600F5C0B8 /* diamond.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = diamond.png; path = NameGame/diamond.png; sourceTree = "<group>"; };
+		1E9D6D2C2243F8C600F5C0B8 /* confetti.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = confetti.png; path = NameGame/confetti.png; sourceTree = "<group>"; };
+		1E9D6D2D2243F8C600F5C0B8 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = star.png; path = NameGame/star.png; sourceTree = "<group>"; };
+		1E9D6D322243FA4700F5C0B8 /* ImageUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageUtils.swift; sourceTree = "<group>"; };
 		1EB9EA7B2238071A008AF004 /* NameGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NameGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EB9EA7E2238071A008AF004 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1EB9EA832238071A008AF004 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -76,9 +88,6 @@
 		1EB9EAAD22382510008AF004 /* NameGame */ = {isa = PBXFileReference; lastKnownFileType = folder; name = NameGame; path = ../..; sourceTree = "<group>"; };
 		1EB9EAAF22382532008AF004 /* main.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = main.framework; path = ../../common/build/bin/ios/mainDebugFramework/main.framework; sourceTree = "<group>"; };
 		1EB9EAB222382BBC008AF004 /* main.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = main.framework; path = ../../common/build/bin/ios/mainDebugFramework/main.framework; sourceTree = "<group>"; };
-		53A3C83D4D3C38CDD08E0A5E /* Pods_NameGameTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NameGameTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		ACB48F17499F8632BF88AB6B /* Pods_NameGameUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NameGameUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CEC3584174F51CF5ECAE2ED7 /* Pods_NameGame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NameGame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,7 +103,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D794BC0580F8ABAD74AEC0E7 /* Pods_NameGameTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -102,22 +110,33 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB73C32D7A5026680B6E058F /* Pods_NameGameUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		176EDFB34D6E38AB66E87E76 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		1EB9EA722238071A008AF004 = {
 			isa = PBXGroup;
 			children = (
+				1E9D6D2C2243F8C600F5C0B8 /* confetti.png */,
+				1E9D6D2B2243F8C600F5C0B8 /* diamond.png */,
+				1E9D6D2D2243F8C600F5C0B8 /* star.png */,
+				1E9D6D2A2243F8C600F5C0B8 /* triangle.png */,
 				1EB9EAB222382BBC008AF004 /* main.framework */,
 				1EB9EA7D2238071A008AF004 /* NameGame */,
 				1EB9EA922238071B008AF004 /* NameGameTests */,
 				1EB9EA9D2238071C008AF004 /* NameGameUITests */,
 				1EB9EA7C2238071A008AF004 /* Products */,
 				1EB9EAAC2238250F008AF004 /* Frameworks */,
+				176EDFB34D6E38AB66E87E76 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -144,6 +163,8 @@
 				1E19EEA5224019610094EA01 /* StartScreenViewController.swift */,
 				1E19EEA72242D0AF0094EA01 /* GameResultsViewController.swift */,
 				1E19EEA92242F22A0094EA01 /* RuntimeError.swift */,
+				1E9D6D1A2243F1C000F5C0B8 /* SAConfettiView.swift */,
+				1E9D6D322243FA4700F5C0B8 /* ImageUtils.swift */,
 			);
 			path = NameGame;
 			sourceTree = "<group>";
@@ -169,11 +190,10 @@
 		1EB9EAAC2238250F008AF004 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1E9D6D182243F09200F5C0B8 /* Cheers.framework */,
+				1E9D6D162243EFCC00F5C0B8 /* SAConfettiView.framework */,
 				1EB9EAAF22382532008AF004 /* main.framework */,
 				1EB9EAAD22382510008AF004 /* NameGame */,
-				CEC3584174F51CF5ECAE2ED7 /* Pods_NameGame.framework */,
-				53A3C83D4D3C38CDD08E0A5E /* Pods_NameGameTests.framework */,
-				ACB48F17499F8632BF88AB6B /* Pods_NameGameUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -204,7 +224,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1EB9EAA62238071C008AF004 /* Build configuration list for PBXNativeTarget "NameGameTests" */;
 			buildPhases = (
-				F734DD6C87DECFA6805FF357 /* [CP] Check Pods Manifest.lock */,
 				1EB9EA8B2238071B008AF004 /* Sources */,
 				1EB9EA8C2238071B008AF004 /* Frameworks */,
 				1EB9EA8D2238071B008AF004 /* Resources */,
@@ -223,7 +242,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1EB9EAA92238071C008AF004 /* Build configuration list for PBXNativeTarget "NameGameUITests" */;
 			buildPhases = (
-				5103126C9BF956C7ADB08E88 /* [CP] Check Pods Manifest.lock */,
 				1EB9EA962238071C008AF004 /* Sources */,
 				1EB9EA972238071C008AF004 /* Frameworks */,
 				1EB9EA982238071C008AF004 /* Resources */,
@@ -286,6 +304,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E9D6D2E2243F8C600F5C0B8 /* triangle.png in Resources */,
+				1E9D6D2F2243F8C600F5C0B8 /* diamond.png in Resources */,
+				1E9D6D302243F8C600F5C0B8 /* confetti.png in Resources */,
+				1E9D6D312243F8C600F5C0B8 /* star.png in Resources */,
 				1EB9EA892238071B008AF004 /* LaunchScreen.storyboard in Resources */,
 				1EB9EA862238071B008AF004 /* Assets.xcassets in Resources */,
 				1EB9EA842238071A008AF004 /* Main.storyboard in Resources */,
@@ -326,50 +348,6 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#move to the xcode-frameworks folder\ncd \"$SRCROOT/../../common/build/xcode-frameworks\"\n#run the gradle task\n./gradlew :common:packForXCode -PXCODE_CONFIGURATION=${CONFIGURATION}\n";
 		};
-		5103126C9BF956C7ADB08E88 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-NameGameUITests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		F734DD6C87DECFA6805FF357 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-NameGameTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -379,10 +357,12 @@
 			files = (
 				1E43892D224013860034263E /* IosNavigator.swift in Sources */,
 				1E43892F224015A80034263E /* QuestionViewController.swift in Sources */,
+				1E9D6D1B2243F1C000F5C0B8 /* SAConfettiView.swift in Sources */,
 				1EB9EA7F2238071A008AF004 /* AppDelegate.swift in Sources */,
 				1E19EEAA2242F22A0094EA01 /* RuntimeError.swift in Sources */,
 				1E19EEA6224019610094EA01 /* StartScreenViewController.swift in Sources */,
 				1E19EEA82242D0AF0094EA01 /* GameResultsViewController.swift in Sources */,
+				1E9D6D332243FA4700F5C0B8 /* ImageUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

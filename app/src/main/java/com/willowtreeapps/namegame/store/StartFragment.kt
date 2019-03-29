@@ -32,6 +32,16 @@ class StartFragment : Fragment(), CoroutineScope, StartScreen {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter = NameGameApp.instance.presenterFactory.attachView(this) as StartPresenter
+    }
+
+    override fun onPause() {
+        super.onPause()
+        NameGameApp.instance.presenterFactory.detachView(presenter!!)
+    }
+
     override fun hideLoading() {
         activity?.runOnUiThread {
             loading_spinner.visibility = View.GONE
@@ -44,13 +54,13 @@ class StartFragment : Fragment(), CoroutineScope, StartScreen {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        presenter = NameGameApp.instance.presenterFactory.attachView(this) as StartPresenter
-    }
-
-    override fun onStop() {
-        super.onStop()
-        NameGameApp.instance.presenterFactory.detachView(presenter!!)
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        presenter = NameGameApp.instance.presenterFactory.attachView(this) as StartPresenter
+//    }
+//
+//    override fun onStop() {
+//        super.onStop()
+//        NameGameApp.instance.presenterFactory.detachView(presenter!!)
+//    }
 }
