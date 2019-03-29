@@ -2,7 +2,7 @@ package com.willowtreeapps.common
 
 import com.beyondeye.reduks.*
 import com.willowtreeapps.common.boundary.toGameResultsViewState
-import com.willowtreeapps.common.boundary.toRoundViewState
+import com.willowtreeapps.common.boundary.toQuestionViewState
 import com.willowtreeapps.common.view.GameResultsScreen
 import com.willowtreeapps.common.view.QuestionScreen
 import com.willowtreeapps.common.view.StartScreen
@@ -83,17 +83,17 @@ class QuestionPresenter(view: QuestionScreen, val store: Store<AppState>) : Pres
         StoreSubscriberFn<AppState> {
             val state = store.state
             profileSelector.onChangeIn(state) {
-                view.showProfile(state.toRoundViewState())
+                view.showProfile(state.toQuestionViewState())
             }
 
             if (state.isGameComplete()) {
                 if (state.waitingForNextQuestion) {
                     when (state.currentQuestion?.status) {
                         Question.Status.CORRECT -> {
-                            view.showCorrectAnswerEndGame()
+                            view.showCorrectAnswerEndGame(state.toQuestionViewState())
                         }
                         Question.Status.INCORRECT -> {
-                            view.showWrongAnswerEndGame()
+                            view.showWrongAnswerEndGame(state.toQuestionViewState())
                         }
                         Question.Status.UNANSWERED -> throw IllegalStateException("Question status cannot be Unanswered when waiting for next round == true")
                     }
@@ -102,10 +102,10 @@ class QuestionPresenter(view: QuestionScreen, val store: Store<AppState>) : Pres
                 if (state.waitingForNextQuestion) {
                     when (state.currentQuestion?.status) {
                         Question.Status.CORRECT -> {
-                            view.showCorrectAnswer()
+                            view.showCorrectAnswer(state.toQuestionViewState())
                         }
                         Question.Status.INCORRECT -> {
-                            view.showWrongAnswer()
+                            view.showWrongAnswer(state.toQuestionViewState())
                         }
                         Question.Status.UNANSWERED -> throw IllegalStateException("Question status cannot be Unanswered when waiting for next round == true")
                     }

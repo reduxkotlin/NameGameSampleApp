@@ -43,6 +43,7 @@
 
     <style name="ChoiceButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@drawable/button_color_selector</item>
 
     </style>
 

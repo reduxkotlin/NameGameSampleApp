@@ -10,7 +10,9 @@ class QuestionViewState(
         val button1Text: String,
         val button2Text: String,
         val button3Text: String,
-        val button4Text: String)
+        val button4Text: String,
+        val correctBtnNum: Int,
+        val selectedBtnNum: Int)
 
 
 data class GameResultsViewState(val resultsText: String,

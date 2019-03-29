@@ -14,13 +14,13 @@ interface QuestionScreen : View {
 
     fun showProfile(viewState: QuestionViewState)
 
-    fun showCorrectAnswer()
+    fun showCorrectAnswer(viewState: QuestionViewState)
 
-    fun showWrongAnswer()
+    fun showWrongAnswer(viewState: QuestionViewState)
 
-    fun showCorrectAnswerEndGame()
+    fun showCorrectAnswerEndGame(viewState: QuestionViewState)
 
-    fun showWrongAnswerEndGame()
+    fun showWrongAnswerEndGame(viewState: QuestionViewState)
 }
 
 interface GameResultsScreen : View {

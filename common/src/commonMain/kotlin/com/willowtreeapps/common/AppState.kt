@@ -31,7 +31,7 @@ data class AppState(val isLoadingProfiles: Boolean = false,
 
     fun getProfile(id: ProfileId?) = profiles.find { it.id == id?.id }
 
-    public fun currentRoundProfile() = getProfile(currentQuestion?.profileId)!!
+    public fun currentQuestionProfile() = getProfile(currentQuestion?.profileId)!!
 
     fun isGameComplete(): Boolean = currentQuestionIndex >= questions.size || (currentQuestionIndex == questions.size - 1 && questions[currentQuestionIndex].status != Question.Status.UNANSWERED)
 
