@@ -7,6 +7,7 @@ import com.willowtreeapps.common.middleware.NavigationMiddleware
 import com.willowtreeapps.common.middleware.Navigator
 import com.willowtreeapps.common.middleware.ViewEffectsMiddleware
 import com.willowtreeapps.common.repo.Profile
+import com.willowtreeapps.common.util.VibrateUtil
 
 data class AppState(val isLoadingProfiles: Boolean = false,
                     val profiles: List<Profile> = listOf(),
@@ -52,9 +53,11 @@ data class Question(val profileId: ProfileId,
     }
 }
 
-class GameEngine(navigator: Navigator) {
-    val navigationMiddleware = NavigationMiddleware(navigator)
-    val viewEffectsMiddleware = ViewEffectsMiddleware()
+class GameEngine(navigator: Navigator, application: Any) {
+    private val navigationMiddleware = NavigationMiddleware(navigator)
+    private val viewEffectsMiddleware = ViewEffectsMiddleware()
+    val vibrateUtil = VibrateUtil(application)
+
     val appStore by lazy {
         SimpleStore(AppState.INITIAL_STATE, reducer)
                 .applyMiddleware(::thunkMiddleware,

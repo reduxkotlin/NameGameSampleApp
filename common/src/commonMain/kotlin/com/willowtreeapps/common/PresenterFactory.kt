@@ -3,6 +3,7 @@ package com.willowtreeapps.common
 import com.beyondeye.reduks.*
 import com.willowtreeapps.common.boundary.toGameResultsViewState
 import com.willowtreeapps.common.boundary.toQuestionViewState
+import com.willowtreeapps.common.util.VibrateUtil
 import com.willowtreeapps.common.view.GameResultsScreen
 import com.willowtreeapps.common.view.QuestionScreen
 import com.willowtreeapps.common.view.StartScreen
@@ -14,20 +15,20 @@ import kotlin.coroutines.CoroutineContext
  * Each view must attach/detach itself as it becomes visible/not visible.
  * Attaching returns a presenter to the view.
  */
-class PresenterFactory(val gameEngine: GameEngine, networkContext: CoroutineContext) : StoreSubscriber<AppState> {
+class PresenterFactory(private val gameEngine: GameEngine, networkContext: CoroutineContext) : StoreSubscriber<AppState> {
 
     init {
         gameEngine.appStore.subscribe(this)
     }
 
-    val networkThunks = NetworkThunks(networkContext, gameEngine.appStore)
-    val presenters = mutableSetOf<Presenter>()
+    private val networkThunks = NetworkThunks(networkContext, gameEngine.appStore)
+    private val presenters = mutableSetOf<Presenter>()
 
 
     fun attachView(view: View): Presenter {
         val presenter = when (view) {
             is StartScreen -> StartPresenter(view, gameEngine.appStore, networkThunks)
-            is QuestionScreen -> QuestionPresenter(view, gameEngine.appStore)
+            is QuestionScreen -> QuestionPresenter(view, gameEngine.appStore, gameEngine.vibrateUtil)
             is GameResultsScreen -> GameResultsPresenter(view, gameEngine.appStore)
             else -> throw IllegalStateException("Screen $view not handled")
         }
@@ -49,14 +50,14 @@ class PresenterFactory(val gameEngine: GameEngine, networkContext: CoroutineCont
 
 interface Presenter {
 
-    abstract fun onStateChange(state: AppState)
+    fun onStateChange(state: AppState)
 }
 
 class StartPresenter(view: StartScreen,
                      val store: Store<AppState>,
-                     val networkThunks: NetworkThunks) : Presenter {
-    val subscriber = StoreSubscriberBuilderFn<AppState> { store ->
-        StoreSubscriberFn<AppState> {
+                     private val networkThunks: NetworkThunks) : Presenter {
+    private val subscriber = StoreSubscriberBuilderFn<AppState> { store ->
+        StoreSubscriberFn {
             val state = store.state
             if (state.isLoadingProfiles) {
                 view.showLoading()
@@ -76,11 +77,13 @@ class StartPresenter(view: StartScreen,
     }
 }
 
-class QuestionPresenter(view: QuestionScreen, val store: Store<AppState>) : Presenter {
-    val subscriber = StoreSubscriberBuilderFn<AppState> { store ->
+class QuestionPresenter(view: QuestionScreen,
+                        val store: Store<AppState>,
+                        private val vibrateUtil: VibrateUtil) : Presenter {
+    private val subscriber = StoreSubscriberBuilderFn<AppState> { store ->
         val selBuilder = SelectorBuilder<AppState>()
         val profileSelector = selBuilder.withSingleField { currentQuestion?.profileId?.id ?: Any() }
-        StoreSubscriberFn<AppState> {
+        StoreSubscriberFn {
             val state = store.state
             profileSelector.onChangeIn(state) {
                 view.showProfile(state.toQuestionViewState())
@@ -93,6 +96,7 @@ class QuestionPresenter(view: QuestionScreen, val store: Store<AppState>) : Pres
                             view.showCorrectAnswerEndGame(state.toQuestionViewState())
                         }
                         Question.Status.INCORRECT -> {
+                            vibrateUtil.vibrate()
                             view.showWrongAnswerEndGame(state.toQuestionViewState())
                         }
                         Question.Status.UNANSWERED -> throw IllegalStateException("Question status cannot be Unanswered when waiting for next round == true")
@@ -105,6 +109,7 @@ class QuestionPresenter(view: QuestionScreen, val store: Store<AppState>) : Pres
                             view.showCorrectAnswer(state.toQuestionViewState())
                         }
                         Question.Status.INCORRECT -> {
+                            vibrateUtil.vibrate()
                             view.showWrongAnswer(state.toQuestionViewState())
                         }
                         Question.Status.UNANSWERED -> throw IllegalStateException("Question status cannot be Unanswered when waiting for next round == true")

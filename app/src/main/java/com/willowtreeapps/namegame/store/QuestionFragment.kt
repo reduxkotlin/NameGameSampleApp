@@ -107,6 +107,8 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
     }
 
     override fun showWrongAnswerEndGame(viewState: QuestionViewState) {
+        val selectedBtn = getBtnByNum(viewState.selectedBtnNum)
+        selectedBtn.isSelected = true
         hideButtonsShowNext(viewState, true)
     }
 
@@ -122,8 +124,8 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
 
     private fun wrongBounceAnimation(viewState: QuestionViewState, f: () -> Unit) {
         val selectedBtn = getBtnByNum(viewState.selectedBtnNum)
-        val animScaleX = ObjectAnimator.ofFloat(selectedBtn, "scaleX", 3F, 0.5F, 1F)
-        val animScaleY = ObjectAnimator.ofFloat(selectedBtn, "scaleY", 3F, 0.5F, 1F)
+        val animScaleX = ObjectAnimator.ofFloat(selectedBtn, View.SCALE_X, 3F, 0.5F, 1F)
+        val animScaleY = ObjectAnimator.ofFloat(selectedBtn, View.SCALE_Y, 3F, 0.5F, 1F)
         val upSet = AnimatorSet()
         upSet.playTogether(animScaleX, animScaleY)
         upSet.interpolator = BounceInterpolator()
@@ -147,10 +149,10 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
                 val endX = imageView.x + (imageView.width - this.width) / 2
                 val endY = imageView.y + imageView.height
 
-                val animX = ObjectAnimator.ofFloat(this, "x", endX)
-                val animY = ObjectAnimator.ofFloat(this, "y", endY)
-                val animScaleX = ObjectAnimator.ofFloat(this, "scaleX", 2F)
-                val animScaleY = ObjectAnimator.ofFloat(this, "scaleY", 2F)
+                val animX = ObjectAnimator.ofFloat(this, View.X, endX)
+                val animY = ObjectAnimator.ofFloat(this, View.Y, endY)
+                val animScaleX = ObjectAnimator.ofFloat(this, View.SCALE_X, 2F)
+                val animScaleY = ObjectAnimator.ofFloat(this, View.SCALE_Y, 2F)
                 val set = AnimatorSet()
                 set.playTogether(animX, animY, animScaleX, animScaleY)
                 set
