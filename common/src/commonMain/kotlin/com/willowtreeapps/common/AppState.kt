@@ -53,7 +53,7 @@ data class Question(val profileId: ProfileId,
     }
 }
 
-class GameEngine(navigator: Navigator, application: Any) {
+class GameEngine(navigator: Navigator, application: Any = Any()) {
     private val navigationMiddleware = NavigationMiddleware(navigator)
     private val viewEffectsMiddleware = ViewEffectsMiddleware()
     val vibrateUtil = VibrateUtil(application)

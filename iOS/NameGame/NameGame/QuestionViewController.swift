@@ -51,21 +51,21 @@ class QuestionViewController: UIViewController, QuestionScreen {
         }
     }
     
-    func showCorrectAnswer() {
+    func showCorrectAnswer(viewState: QuestionViewState) {
         hideButtonsShowNext()
         celebrate()
     }
     
-    func showWrongAnswer() {
+    func showWrongAnswer(viewState: QuestionViewState) {
         hideButtonsShowNext()
     }
     
-    func showCorrectAnswerEndGame() {
+    func showCorrectAnswerEndGame(viewState: QuestionViewState) {
         hideButtonsShowEnd()
         celebrate()
     }
     
-    func showWrongAnswerEndGame() {
+    func showWrongAnswerEndGame(viewState: QuestionViewState) {
         hideButtonsShowEnd()
     }
     
