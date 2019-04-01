@@ -3,14 +3,42 @@ repositories {
 }
 
 apply plugin: 'kotlin-multiplatform'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlinx-serialization'
 
+
+
 kotlin {
+    android {
+        compilations.all {
+            tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) { task ->
+                kotlinOptions {
+                    freeCompilerArgs = ['-Xuse-experimental=kotlin.Experimental']
+                }
+            }
+        }
+        publishLibraryVariants("release")
+    }
+
+//    iosArm64("ios")
+//    iosX64("iosSim")
+//
+//    targets.all { target ->
+//        if (target.name == 'android') return // Android handles this differently
+//        compilations.all { compilation ->
+//            tasks[compileKotlinTaskName].kotlinOptions {
+//                freeCompilerArgs = ['-Xuse-experimental=kotlin.Experimental']
+//            }
+//        }
+//    }
+//
     targets {
         fromPreset(presets.jvm, 'jvm')
 
-        // Change to `presets.iosArm64` to deploy the app to iPhone
-        fromPreset(presets.iosX64, 'ios') {
+//        fromPreset(presets.android, 'androidMain')
+
+//         Change to `presets.iosArm64` to deploy the app to iPhone
+        fromPreset(presets.iosArm64, 'ios') {
             compilations.main.outputKinds('FRAMEWORK')
         }
     }
@@ -34,6 +62,18 @@ kotlin {
                 implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
             }
         }
+        androidMain {
+            dependencies {
+                implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+                implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+
+                implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serializationVersion"
+
+                implementation "io.ktor:ktor-client-core-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-json-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-logging-jvm:$ktorVersion"
+            }
+        }
         jvmMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
@@ -52,6 +92,7 @@ kotlin {
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
             }
         }
+
         iosMain {
             dependencies {
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutinesVersion"
@@ -63,8 +104,25 @@ kotlin {
                 implementation "io.ktor:ktor-client-json-native:$ktorVersion"
             }
         }
+
+        iosSimMain.dependsOn iosMain
+        iosSimTest.dependsOn iosTest
     }
 }
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        minSdkVersion 15
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
 // This task attaches native framework built from ios module to Xcode project
 // Don't run this task directly,
 // Xcode runs this task itself during its build process when we configure it.
@@ -90,3 +148,8 @@ task packForXCode(type: Sync) {
 }
 
 tasks.build.dependsOn packForXCode
+
+// workaround for https://youtrack.jetbrains.com/issue/KT-27170
+configurations {
+    compileClasspath
+}

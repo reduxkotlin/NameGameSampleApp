@@ -1,7 +1,6 @@
 package com.willowtreeapps.namegame
 
 import com.willowtreeapps.common.*
-import com.willowtreeapps.common.boundary.displayName
 import com.willowtreeapps.common.repo.MockRepositoryFactory
 import org.junit.Assert.*
 import org.junit.Test
@@ -81,7 +80,7 @@ class ReducersTest {
     @Test
     fun `mark current round as CORRECT when name matches`() {
         val initial = generateInitialTestState()
-        val answer = initial.currentRoundProfile().displayName()
+        val answer = initial.currentQuestionProfile().displayName()
 
         val final = reducer(initial, Actions.NamePickedAction(answer))
 

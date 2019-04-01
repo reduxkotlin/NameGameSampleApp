@@ -21,7 +21,7 @@ val reducer = ReducerFn<AppState> { state, action ->
         }
         is FetchingProfilesFailedAction -> state.copy(isLoadingProfiles = false, errorLoadingProfiles = true, errorMsg = action.message)
         is NamePickedAction -> {
-            val status = if (state.currentRoundProfile()?.matches(action.name) == true) {
+            val status = if (state.currentQuestionProfile()?.matches(action.name) == true) {
                 Question.Status.CORRECT
             } else {
                 Question.Status.INCORRECT

@@ -15,7 +15,7 @@ class NameGameApp : Application() {
         super.onCreate()
         instance = this
         navigator = AndroidNavigator()
-        gameEngine = GameEngine(navigator)
+        gameEngine = GameEngine(navigator, this)
         presenterFactory = PresenterFactory(gameEngine, Dispatchers.IO)
 
         registerActivityLifecycleCallbacks(navigator)

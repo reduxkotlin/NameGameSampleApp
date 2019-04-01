@@ -23,11 +23,16 @@ class QuestionViewController: UIViewController, QuestionScreen {
     
     var presenter: QuestionPresenter?
     var confettiView: SAConfettiView?
+    var restoreX: CGFloat?
+    var restoreY: CGFloat?
+    var lastCorrectBtn: UIButton?
+    var lastSelectedBtn: UIButton?
+
     
     override func viewWillAppear(_ animated: Bool) {
         confettiView = SAConfettiView(frame: self.view.bounds)
         self.view.addSubview(confettiView!)
-        self.view.sendSubviewToBack(confettiView!)
+        confettiView?.isUserInteractionEnabled = false
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         presenter = appDelegate.presenterFactory!.attachView(view: self) as? QuestionPresenter
     }
@@ -51,26 +56,32 @@ class QuestionViewController: UIViewController, QuestionScreen {
         }
     }
     
-    func showCorrectAnswer() {
-        hideButtonsShowNext()
+    func showCorrectAnswer(viewState: QuestionViewState) {
+        hideButtonsShowNext(viewState: viewState, isEndGame: false)
         celebrate()
     }
     
-    func showWrongAnswer() {
-        hideButtonsShowNext()
+    func showWrongAnswer(viewState: QuestionViewState) {
+        hideButtonsShowNext(viewState: viewState, isEndGame: false)
     }
     
-    func showCorrectAnswerEndGame() {
-        hideButtonsShowEnd()
+    func showCorrectAnswerEndGame(viewState: QuestionViewState) {
+        hideButtonsShowNext(viewState: viewState, isEndGame: true)
         celebrate()
     }
     
-    func showWrongAnswerEndGame() {
-        hideButtonsShowEnd()
+    func showWrongAnswerEndGame(viewState: QuestionViewState) {
+        hideButtonsShowNext(viewState: viewState, isEndGame: true)
     }
     
     
     private func showButtons() {
+        if (restoreX != nil && restoreY != nil) {
+            lastCorrectBtn?.frame.origin.x = restoreX!
+            lastCorrectBtn?.frame.origin.y = restoreY!
+            lastCorrectBtn?.transform = CGAffineTransform(scaleX: 1, y: 1)
+            lastCorrectBtn?.alpha = 0
+        }
         UIView.animate(withDuration: 0.5, animations: {
             self.button1.alpha = 1.0
             self.button2.alpha = 1.0
@@ -80,16 +91,48 @@ class QuestionViewController: UIViewController, QuestionScreen {
         })
     }
     
-    private func hideButtonsShowNext() {
-        UIView.animate(withDuration: 0.5, animations: {
-            self.button1.alpha = 0
-            self.button2.alpha = 0
-            self.button3.alpha = 0
-            self.button4.alpha = 0
+    /**
+     *  Hides the incorrect buttons and animates the correct name to be centered below profile image
+     */
+    private func hideButtonsShowNext(viewState: QuestionViewState, isEndGame: Bool) {
+        let correctBtn = getBtnByNum(num: viewState.correctBtnNum)
+        let selectedBtn = getBtnByNum(num: viewState.selectedBtnNum)
+        
+        func hideOrMoveAnimation(view: UIView) {
+            if (view == correctBtn) {
+                view.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+
+                let p = profileImageView.convert(profileImageView.bounds, to: nil)
+            
+                let endX = p.minX + (profileImageView.frame.width - view.frame.size.width) / 2
+                let endY = p.minY + profileImageView.bounds.height
+
+                view.frame.origin.x = endX
+                view.frame.origin.y = endY
+            } else {
+                view.alpha = 0
+            }
+        }
+        restoreX = correctBtn.frame.origin.x
+        restoreY = correctBtn.frame.origin.y
+        lastCorrectBtn = correctBtn
+        lastSelectedBtn = selectedBtn
+        
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut,animations: {
+            hideOrMoveAnimation(view: self.button1)
+            hideOrMoveAnimation(view: self.button2)
+            hideOrMoveAnimation(view: self.button3)
+            hideOrMoveAnimation(view: self.button4)
         }, completion: {_ in
+            var btn: UIButton
+            if (isEndGame) {
+                btn = self.buttonEndGame
+            } else {
+                btn = self.buttonNext
+            }
+            btn.isHidden = false
             UIView.animate(withDuration: 0.5, animations: {
-                self.buttonNext?.isHidden = false
-                self.buttonNext?.alpha = 1
+                    btn.alpha = 1
             })
         })
     }
@@ -111,6 +154,7 @@ class QuestionViewController: UIViewController, QuestionScreen {
             self.buttonNext.alpha = 0
             self.profileImageView.alpha = 0
         }, completion: {_ in
+            self.buttonNext.isHidden = true
             after()
         })
     }
@@ -135,6 +179,21 @@ class QuestionViewController: UIViewController, QuestionScreen {
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    func getBtnByNum(num: Int32) -> UIButton {
+        switch num {
+        case 1:
+            return button1
+        case 2:
+            return button2
+        case 3:
+            return button3
+        case 4:
+            return button4
+        default:
+            return button4
+        }
     }
 }
 

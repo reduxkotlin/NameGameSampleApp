@@ -1,0 +1,10 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Unfocused and pressed -->
+    <item android:color="@color/red"
+        android:state_selected="true" />
+
+    <!-- Default color -->
+    <item android:color="@color/colorPrimary" />
+
+</selector>
