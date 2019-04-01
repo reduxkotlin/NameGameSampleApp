@@ -143,8 +143,8 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
         val correctBtn = getBtnByNum(viewState.correctBtnNum)
         val selectedBtn = getBtnByNum(viewState.selectedBtnNum)
 
-        fun View.hideOrMoveAnimation(isCorrect: Boolean): AnimatorSet {
-            return if (isCorrect) {
+        fun View.hideOrMoveAnimation(): AnimatorSet {
+            return if (this == correctBtn) {
 
                 val endX = imageView.x + (imageView.width - this.width) / 2
                 val endY = imageView.y + imageView.height
@@ -168,10 +168,10 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
         lastCorrectBtn = correctBtn
         lastSelectedBtn = selectedBtn
 
-        val anim1 = button1.hideOrMoveAnimation(button1 == correctBtn)
-        val anim2 = button2.hideOrMoveAnimation(button2 == correctBtn)
-        val anim3 = button3.hideOrMoveAnimation(button3 == correctBtn)
-        val anim4 = button4.hideOrMoveAnimation(button4 == correctBtn)
+        val anim1 = button1.hideOrMoveAnimation()
+        val anim2 = button2.hideOrMoveAnimation()
+        val anim3 = button3.hideOrMoveAnimation()
+        val anim4 = button4.hideOrMoveAnimation()
 
         val set = AnimatorSet()
         set.playTogether(anim1, anim2, anim3, anim4)
