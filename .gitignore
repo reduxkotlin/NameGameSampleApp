@@ -5,6 +5,7 @@
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea
+/iOS/NameGame/.idea/
 .DS_Store
 /build
 /common/build
