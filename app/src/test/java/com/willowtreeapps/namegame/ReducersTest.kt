@@ -1,6 +1,7 @@
 package com.willowtreeapps.namegame
 
 import com.willowtreeapps.common.*
+import com.willowtreeapps.common.boundary.displayName
 import com.willowtreeapps.common.repo.MockRepositoryFactory
 import org.junit.Assert.*
 import org.junit.Test
