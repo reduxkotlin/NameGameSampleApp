@@ -27,6 +27,7 @@ class QuestionViewController: UIViewController, QuestionScreen {
     var restoreY: CGFloat?
     var lastCorrectBtn: UIButton?
     var lastSelectedBtn: UIButton?
+    var lastSelectedColor: UIColor?
 
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,9 +49,7 @@ class QuestionViewController: UIViewController, QuestionScreen {
     func showProfile(viewState: QuestionViewState) {
         stopCelegration()
         if (!buttonNext.isHidden) {
-            fadeNextButton {
-                self.setProfileAndFadeIn(viewState: viewState)
-            }
+            fadeNextButton { self.setProfileAndFadeIn(viewState: viewState) }
         } else {
             setProfileAndFadeIn(viewState: viewState)
         }
@@ -62,7 +61,7 @@ class QuestionViewController: UIViewController, QuestionScreen {
     }
     
     func showWrongAnswer(viewState: QuestionViewState) {
-        hideButtonsShowNext(viewState: viewState, isEndGame: false)
+        wrongShakeAnimation(viewState: viewState, after: { self.hideButtonsShowNext(viewState: viewState, isEndGame: false) })
     }
     
     func showCorrectAnswerEndGame(viewState: QuestionViewState) {
@@ -71,24 +70,18 @@ class QuestionViewController: UIViewController, QuestionScreen {
     }
     
     func showWrongAnswerEndGame(viewState: QuestionViewState) {
-        hideButtonsShowNext(viewState: viewState, isEndGame: true)
+        wrongShakeAnimation(viewState: viewState, after: { self.hideButtonsShowNext(viewState: viewState, isEndGame: true)} )
     }
     
-    
-    private func showButtons() {
-        if (restoreX != nil && restoreY != nil) {
-            lastCorrectBtn?.frame.origin.x = restoreX!
-            lastCorrectBtn?.frame.origin.y = restoreY!
-            lastCorrectBtn?.transform = CGAffineTransform(scaleX: 1, y: 1)
-            lastCorrectBtn?.alpha = 0
-        }
-        UIView.animate(withDuration: 0.5, animations: {
-            self.button1.alpha = 1.0
-            self.button2.alpha = 1.0
-            self.button3.alpha = 1.0
-            self.button4.alpha = 1.0
-            self.profileImageView.alpha = 1.0
-        })
+
+    private func wrongShakeAnimation(viewState: QuestionViewState, after: @escaping () -> ()) {
+        let selectedBtn = getBtnByNum(num: viewState.selectedBtnNum)
+        lastSelectedColor = selectedBtn.tintColor
+        selectedBtn.tintColor = UIColor.red
+        selectedBtn.transform = CGAffineTransform(translationX: 20, y: 0)
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+            selectedBtn.transform = CGAffineTransform.identity
+        }, completion: {_ in after()})
     }
     
     /**
@@ -137,15 +130,20 @@ class QuestionViewController: UIViewController, QuestionScreen {
         })
     }
     
-    private func hideButtonsShowEnd() {
+    private func showButtons() {
+        if (restoreX != nil && restoreY != nil) {
+            lastCorrectBtn?.frame.origin.x = restoreX!
+            lastCorrectBtn?.frame.origin.y = restoreY!
+            lastCorrectBtn?.transform = CGAffineTransform(scaleX: 1, y: 1)
+            lastCorrectBtn?.alpha = 0
+            lastSelectedBtn?.tintColor = lastSelectedColor
+        }
         UIView.animate(withDuration: 0.5, animations: {
-            self.button1.alpha = 0
-            self.button2.alpha = 0
-            self.button3.alpha = 0
-            self.button4.alpha = 0
-        }, completion: {_ in
-            self.buttonEndGame.isHidden = false
-            self.buttonEndGame.alpha = 1
+            self.button1.alpha = 1.0
+            self.button2.alpha = 1.0
+            self.button3.alpha = 1.0
+            self.button4.alpha = 1.0
+            self.profileImageView.alpha = 1.0
         })
     }
     
@@ -176,11 +174,7 @@ class QuestionViewController: UIViewController, QuestionScreen {
     private func stopCelegration() {
         confettiView!.stopConfetti()
     }
-    
-    func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
-    }
-    
+
     func getBtnByNum(num: Int32) -> UIButton {
         switch num {
         case 1:

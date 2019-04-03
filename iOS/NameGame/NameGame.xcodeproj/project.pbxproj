@@ -17,6 +17,7 @@
 		1E9D6D3F224EA74E00F5C0B8 /* diamond.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9D6D3B224EA74E00F5C0B8 /* diamond.png */; };
 		1E9D6D40224EA74E00F5C0B8 /* confetti.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9D6D3C224EA74E00F5C0B8 /* confetti.png */; };
 		1E9D6D41224EA74E00F5C0B8 /* star.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9D6D3D224EA74E00F5C0B8 /* star.png */; };
+		1E9ED1E222550E7E000D7C69 /* willowtree_banner.png in Resources */ = {isa = PBXBuildFile; fileRef = 1E9ED1E122550E7E000D7C69 /* willowtree_banner.png */; };
 		1EB9EA7F2238071A008AF004 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9EA7E2238071A008AF004 /* AppDelegate.swift */; };
 		1EB9EA842238071A008AF004 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9EA822238071A008AF004 /* Main.storyboard */; };
 		1EB9EA862238071B008AF004 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9EA852238071B008AF004 /* Assets.xcassets */; };
@@ -71,6 +72,7 @@
 		1E9D6D3B224EA74E00F5C0B8 /* diamond.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = diamond.png; sourceTree = "<group>"; };
 		1E9D6D3C224EA74E00F5C0B8 /* confetti.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = confetti.png; sourceTree = "<group>"; };
 		1E9D6D3D224EA74E00F5C0B8 /* star.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star.png; sourceTree = "<group>"; };
+		1E9ED1E122550E7E000D7C69 /* willowtree_banner.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = willowtree_banner.png; path = ../../../app/src/main/res/drawable/willowtree_banner.png; sourceTree = "<group>"; };
 		1EB9EA7B2238071A008AF004 /* NameGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NameGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EB9EA7E2238071A008AF004 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1EB9EA832238071A008AF004 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 		1EB9EA7D2238071A008AF004 /* NameGame */ = {
 			isa = PBXGroup;
 			children = (
+				1E9ED1E122550E7E000D7C69 /* willowtree_banner.png */,
 				1E9D6D3C224EA74E00F5C0B8 /* confetti.png */,
 				1E9D6D3B224EA74E00F5C0B8 /* diamond.png */,
 				1E9D6D3D224EA74E00F5C0B8 /* star.png */,
@@ -304,6 +307,7 @@
 				1EB9EA892238071B008AF004 /* LaunchScreen.storyboard in Resources */,
 				1E9D6D3F224EA74E00F5C0B8 /* diamond.png in Resources */,
 				1E9D6D3E224EA74E00F5C0B8 /* triangle.png in Resources */,
+				1E9ED1E222550E7E000D7C69 /* willowtree_banner.png in Resources */,
 				1EB9EA862238071B008AF004 /* Assets.xcassets in Resources */,
 				1E9D6D41224EA74E00F5C0B8 /* star.png in Resources */,
 				1EB9EA842238071A008AF004 /* Main.storyboard in Resources */,

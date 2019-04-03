@@ -15,10 +15,6 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.willowtreeapps.common.QuestionPresenter
 import com.willowtreeapps.common.QuestionViewState
 import com.willowtreeapps.common.view.QuestionScreen
-import com.willowtreeapps.namegame.GlideApp
-import com.willowtreeapps.namegame.MainActivity
-import com.willowtreeapps.namegame.NameGameApp
-import com.willowtreeapps.namegame.R
 import kotlinx.android.synthetic.main.fragment_question.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +24,7 @@ import java.lang.IllegalStateException
 import kotlin.coroutines.CoroutineContext
 import android.widget.Button
 import androidx.annotation.ColorRes
+import com.willowtreeapps.namegame.*
 
 
 class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivity.IOnBackPressed {
@@ -44,8 +41,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
     var lastSelectedBtn: Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_question, container, false)
-        return view
+        return inflater.inflate(R.layout.fragment_question, container, false)
     }
 
     override fun onResume() {
@@ -95,10 +91,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
     }
 
     override fun showWrongAnswer(viewState: QuestionViewState) {
-        val selectedBtn = getBtnByNum(viewState.selectedBtnNum)
-        selectedBtn.isSelected = true
-
-        wrongBounceAnimation(viewState) { hideButtonsShowNext(viewState, false) }
+        wrongShakeAnimation(viewState) { hideButtonsShowNext(viewState, false) }
     }
 
     override fun showCorrectAnswerEndGame(viewState: QuestionViewState) {
@@ -107,9 +100,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
     }
 
     override fun showWrongAnswerEndGame(viewState: QuestionViewState) {
-        val selectedBtn = getBtnByNum(viewState.selectedBtnNum)
-        selectedBtn.isSelected = true
-        hideButtonsShowNext(viewState, true)
+        wrongShakeAnimation(viewState) { hideButtonsShowNext(viewState, true) }
     }
 
     private val showButtonsAnimatorSet by lazy {
@@ -122,8 +113,9 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
         set
     }
 
-    private fun wrongBounceAnimation(viewState: QuestionViewState, f: () -> Unit) {
+    private fun wrongShakeAnimation(viewState: QuestionViewState, after: () -> Unit) {
         val selectedBtn = getBtnByNum(viewState.selectedBtnNum)
+        selectedBtn.isSelected = true
         val animScaleX = ObjectAnimator.ofFloat(selectedBtn, View.SCALE_X, 3F, 0.5F, 1F)
         val animScaleY = ObjectAnimator.ofFloat(selectedBtn, View.SCALE_Y, 3F, 0.5F, 1F)
         val upSet = AnimatorSet()
@@ -132,12 +124,15 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
         upSet.duration = 500
         upSet.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(animation: Animator?) {
-                f()
+                after()
             }
         })
         upSet.start()
     }
 
+    /**
+     *  Hides the incorrect buttons and animates the correct name to be centered below profile image
+     */
     private fun hideButtonsShowNext(viewState: QuestionViewState, isEndGame: Boolean) {
 
         val correctBtn = getBtnByNum(viewState.correctBtnNum)
@@ -145,7 +140,6 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
 
         fun View.hideOrMoveAnimation(): AnimatorSet {
             return if (this == correctBtn) {
-
                 val endX = imageView.x + (imageView.width - this.width) / 2
                 val endY = imageView.y + imageView.height
 
@@ -175,8 +169,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
 
         val set = AnimatorSet()
         set.playTogether(anim1, anim2, anim3, anim4)
-        set.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
+        set.onComplete {
                 val btn = if (isEndGame) {
                     btn_end_game
                 } else {
@@ -186,7 +179,6 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
                 btn.alpha = 0F
                 btn.animate().alpha(1f)
             }
-        })
         set.start()
     }
 
