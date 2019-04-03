@@ -8,24 +8,32 @@
 
 import Foundation
 import UIKit
+import main
 
 public extension UIImageView {
-    func downloaded(from url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit) {  // for swift 4.2 syntax just use ===> mode: UIView.ContentMode
+    func downloaded(from url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit, onComplete: @escaping () -> ()) {  // for swift 4.2 syntax just use ===> mode: UIView.ContentMode
         contentMode = mode
         URLSession.shared.dataTask(with: url) { data, response, error in
             guard
-                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
-                let data = data, error == nil,
-                let image = UIImage(data: data)
-                else { return }
+                    let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                    let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+                    let data = data, error == nil,
+                    let image = UIImage(data: data)
+                    else {
+                Logger().d(message: "error fetching image " + url.absoluteString + " " + error!.localizedDescription)
+                return
+            }
             DispatchQueue.main.async() {
                 self.image = image
+                onComplete()
             }
-            }.resume()
+        }.resume()
     }
-    func downloaded(from link: String, contentMode mode: UIView.ContentMode = .scaleAspectFit) {  // for swift 4.2 syntax just use ===> mode: UIView.ContentMode
-        guard let url = URL(string: link) else { return }
-        downloaded(from: url, contentMode: mode)
+
+    func downloaded(from link: String, contentMode mode: UIView.ContentMode = .scaleAspectFit, onComplete: @escaping () -> ()) {  // for swift 4.2 syntax just use ===> mode: UIView.ContentMode
+        guard let url = URL(string: link) else {
+            return
+        }
+        downloaded(from: url, contentMode: mode, onComplete: onComplete)
     }
 }

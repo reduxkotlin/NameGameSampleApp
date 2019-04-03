@@ -12,15 +12,19 @@ class QuestionViewController: UIViewController, QuestionView {
     @IBOutlet weak var button4: UIButton!
     @IBOutlet weak var buttonNext: UIButton!
     @IBOutlet weak var buttonEndGame: UIButton!
-    
+
     @IBAction func onAnswerTap(_ sender: Any) {
         presenter?.namePicked(name: (sender as? UIButton)!.titleLabel!.text!)
     }
-    
-    @IBAction func onNextTreeTap(_ sender: Any) { presenter?.nextTapped() }
-    
-    @IBAction func onEndGameTap(_ sender: Any) { presenter?.endGameTapped() }
-    
+
+    @IBAction func onNextTreeTap(_ sender: Any) {
+        presenter?.nextTapped()
+    }
+
+    @IBAction func onEndGameTap(_ sender: Any) {
+        presenter?.endGameTapped()
+    }
+
     var presenter: QuestionPresenter?
     var confettiView: SAConfettiView?
     var restoreX: CGFloat?
@@ -29,7 +33,7 @@ class QuestionViewController: UIViewController, QuestionView {
     var lastSelectedBtn: UIButton?
     var lastSelectedColor: UIColor?
 
-    
+
     override func viewWillAppear(_ animated: Bool) {
         confettiView = SAConfettiView(frame: self.view.bounds)
         self.view.addSubview(confettiView!)
@@ -37,7 +41,7 @@ class QuestionViewController: UIViewController, QuestionView {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         presenter = appDelegate.gameEngine!.attachView(view: self) as? QuestionPresenter
     }
-    
+
     override func viewDidDisappear(_ animated: Bool) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.gameEngine!.detachView(presenter: presenter!)
@@ -45,34 +49,36 @@ class QuestionViewController: UIViewController, QuestionView {
             presenter?.onBackPressed()
         }
     }
-    
+
     func showProfile(viewState: QuestionViewState) {
         stopCelebration()
         if (!buttonNext.isHidden) {
-            fadeNextButton { self.setProfileAndFadeIn(viewState: viewState) }
+            fadeNextButton {
+                self.setProfileAndFadeIn(viewState: viewState)
+            }
         } else {
             setProfileAndFadeIn(viewState: viewState)
         }
     }
-    
+
     func showCorrectAnswer(viewState: QuestionViewState) {
         hideButtonsShowNext(viewState: viewState, isEndGame: false)
         celebrate()
     }
-    
+
     func showWrongAnswer(viewState: QuestionViewState) {
         wrongShakeAnimation(viewState: viewState, after: { self.hideButtonsShowNext(viewState: viewState, isEndGame: false) })
     }
-    
+
     func showCorrectAnswerEndGame(viewState: QuestionViewState) {
         hideButtonsShowNext(viewState: viewState, isEndGame: true)
         celebrate()
     }
-    
+
     func showWrongAnswerEndGame(viewState: QuestionViewState) {
-        wrongShakeAnimation(viewState: viewState, after: { self.hideButtonsShowNext(viewState: viewState, isEndGame: true)} )
+        wrongShakeAnimation(viewState: viewState, after: { self.hideButtonsShowNext(viewState: viewState, isEndGame: true) })
     }
-    
+
 
     private func wrongShakeAnimation(viewState: QuestionViewState, after: @escaping () -> ()) {
         let selectedBtn = getBtnByNum(num: viewState.selectedBtnNum)
@@ -81,22 +87,22 @@ class QuestionViewController: UIViewController, QuestionView {
         selectedBtn.transform = CGAffineTransform(translationX: 20, y: 0)
         UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
             selectedBtn.transform = CGAffineTransform.identity
-        }, completion: {_ in after()})
+        }, completion: { _ in after() })
     }
-    
+
     /**
      *  Hides the incorrect buttons and animates the correct name to be centered below profile image
      */
     private func hideButtonsShowNext(viewState: QuestionViewState, isEndGame: Bool) {
         let correctBtn = getBtnByNum(num: viewState.correctBtnNum)
         let selectedBtn = getBtnByNum(num: viewState.selectedBtnNum)
-        
+
         func hideOrMoveAnimation(view: UIView) {
             if (view == correctBtn) {
                 view.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
 
                 let p = profileImageView.convert(profileImageView.bounds, to: nil)
-            
+
                 let endX = p.minX + (profileImageView.frame.width - view.frame.size.width) / 2
                 let endY = p.minY + profileImageView.bounds.height
 
@@ -106,17 +112,18 @@ class QuestionViewController: UIViewController, QuestionView {
                 view.alpha = 0
             }
         }
+
         restoreX = correctBtn.frame.origin.x
         restoreY = correctBtn.frame.origin.y
         lastCorrectBtn = correctBtn
         lastSelectedBtn = selectedBtn
-        
-        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut,animations: {
+
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseInOut, animations: {
             hideOrMoveAnimation(view: self.button1)
             hideOrMoveAnimation(view: self.button2)
             hideOrMoveAnimation(view: self.button3)
             hideOrMoveAnimation(view: self.button4)
-        }, completion: {_ in
+        }, completion: { _ in
             var btn: UIButton
             if (isEndGame) {
                 btn = self.buttonEndGame
@@ -125,18 +132,18 @@ class QuestionViewController: UIViewController, QuestionView {
             }
             btn.isHidden = false
             UIView.animate(withDuration: 0.5, animations: {
-                    btn.alpha = 1
+                btn.alpha = 1
             })
         })
     }
-    
+
     private func showButtons() {
         if (restoreX != nil && restoreY != nil) {
+            lastCorrectBtn?.alpha = 0
             lastCorrectBtn?.frame.origin.x = restoreX!
             lastCorrectBtn?.frame.origin.y = restoreY!
-            lastCorrectBtn?.transform = CGAffineTransform(scaleX: 1, y: 1)
-            lastCorrectBtn?.alpha = 0
             lastSelectedBtn?.tintColor = lastSelectedColor
+            lastCorrectBtn?.transform = CGAffineTransform(scaleX: 1, y: 1)
         }
         UIView.animate(withDuration: 0.5, animations: {
             self.button1.alpha = 1.0
@@ -146,31 +153,31 @@ class QuestionViewController: UIViewController, QuestionView {
             self.profileImageView.alpha = 1.0
         })
     }
-    
+
     private func fadeNextButton(after: @escaping () -> ()) {
         UIView.animate(withDuration: 0.5, animations: {
+            self.lastCorrectBtn?.alpha = 0
             self.buttonNext.alpha = 0
             self.profileImageView.alpha = 0
-        }, completion: {_ in
+        }, completion: { _ in
             self.buttonNext.isHidden = true
             after()
         })
     }
-    
+
     private func setProfileAndFadeIn(viewState: QuestionViewState) {
         labelQuestion.text = viewState.title
         button1.setTitle(viewState.button1Text, for: .normal)
         button2.setTitle(viewState.button2Text, for: .normal)
         button3.setTitle(viewState.button3Text, for: .normal)
         button4.setTitle(viewState.button4Text, for: .normal)
-        profileImageView.downloaded(from: viewState.profileImageUrl)
-        showButtons()
+        profileImageView.downloaded(from: viewState.profileImageUrl, onComplete: { self.showButtons() })
     }
-    
+
     private func celebrate() {
         confettiView!.startConfetti()
     }
-    
+
     private func stopCelebration() {
         confettiView!.stopConfetti()
     }
