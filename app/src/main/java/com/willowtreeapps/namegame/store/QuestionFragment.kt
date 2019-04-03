@@ -12,9 +12,8 @@ import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.willowtreeapps.common.QuestionPresenter
 import com.willowtreeapps.common.QuestionViewState
-import com.willowtreeapps.common.view.QuestionScreen
+import com.willowtreeapps.common.ui.QuestionView
 import kotlinx.android.synthetic.main.fragment_question.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,21 +23,22 @@ import java.lang.IllegalStateException
 import kotlin.coroutines.CoroutineContext
 import android.widget.Button
 import androidx.annotation.ColorRes
+import com.willowtreeapps.common.ui.QuestionPresenter
 import com.willowtreeapps.namegame.*
 
 
-class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivity.IOnBackPressed {
+class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.IOnBackPressed {
 
     private var presenter: QuestionPresenter? = null
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main
 
-    var restoreX: Float? = null
-    var restoreY: Float? = null
+    private var restoreX: Float? = null
+    private var restoreY: Float? = null
     @ColorRes
     var lastCorrectBtn: Button? = null
-    var lastSelectedBtn: Button? = null
+    private var lastSelectedBtn: Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_question, container, false)
@@ -46,12 +46,12 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
 
     override fun onResume() {
         super.onResume()
-        presenter = NameGameApp.instance.presenterFactory.attachView(this) as QuestionPresenter
+        presenter = NameGameApp.gameEngine().attachView(this) as QuestionPresenter
     }
 
     override fun onPause() {
         super.onPause()
-        NameGameApp.instance.presenterFactory.detachView(presenter!!)
+        NameGameApp.gameEngine().detachView(presenter!!)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,7 +69,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionScreen, MainActivit
 
 
     override fun onBackPressed(): Boolean {
-        NameGameApp.instance.presenterFactory.detachView(presenter!!)
+        NameGameApp.gameEngine().detachView(presenter!!)
         presenter?.onBackPressed()
         return false
     }

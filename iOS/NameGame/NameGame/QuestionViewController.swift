@@ -3,7 +3,7 @@ import UIKit
 import main
 
 
-class QuestionViewController: UIViewController, QuestionScreen {
+class QuestionViewController: UIViewController, QuestionView {
     @IBOutlet weak var labelQuestion: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var button1: UIButton!
@@ -35,19 +35,19 @@ class QuestionViewController: UIViewController, QuestionScreen {
         self.view.addSubview(confettiView!)
         confettiView?.isUserInteractionEnabled = false
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        presenter = appDelegate.presenterFactory!.attachView(view: self) as? QuestionPresenter
+        presenter = appDelegate.gameEngine!.attachView(view: self) as? QuestionPresenter
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.presenterFactory?.detachView(presenter: presenter!)
+        appDelegate.gameEngine!.detachView(presenter: presenter!)
         if (isMovingFromParent) {
             presenter?.onBackPressed()
         }
     }
     
     func showProfile(viewState: QuestionViewState) {
-        stopCelegration()
+        stopCelebration()
         if (!buttonNext.isHidden) {
             fadeNextButton { self.setProfileAndFadeIn(viewState: viewState) }
         } else {
@@ -171,7 +171,7 @@ class QuestionViewController: UIViewController, QuestionScreen {
         confettiView!.startConfetti()
     }
     
-    private func stopCelegration() {
+    private func stopCelebration() {
         confettiView!.stopConfetti()
     }
 

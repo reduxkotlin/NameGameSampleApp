@@ -5,15 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.willowtreeapps.common.StartPresenter
-import com.willowtreeapps.common.view.StartScreen
+import com.willowtreeapps.common.ui.StartPresenter
+import com.willowtreeapps.common.ui.StartView
 import com.willowtreeapps.namegame.*
 import kotlinx.android.synthetic.main.fragment_start.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlin.coroutines.CoroutineContext
 
-class StartFragment : Fragment(), CoroutineScope, StartScreen {
+class StartFragment : Fragment(), CoroutineScope, StartView {
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main
@@ -34,12 +34,12 @@ class StartFragment : Fragment(), CoroutineScope, StartScreen {
 
     override fun onResume() {
         super.onResume()
-        presenter = NameGameApp.instance.presenterFactory.attachView(this) as StartPresenter
+        presenter = NameGameApp.gameEngine().attachView(this) as StartPresenter
     }
 
     override fun onPause() {
         super.onPause()
-        NameGameApp.instance.presenterFactory.detachView(presenter!!)
+        NameGameApp.gameEngine().detachView(presenter!!)
     }
 
     override fun hideLoading() {
@@ -53,14 +53,4 @@ class StartFragment : Fragment(), CoroutineScope, StartScreen {
             loading_spinner.visibility = View.VISIBLE
         }
     }
-
-//    override fun onStart() {
-//        super.onStart()
-//        presenter = NameGameApp.instance.presenterFactory.attachView(this) as StartPresenter
-//    }
-//
-//    override fun onStop() {
-//        super.onStop()
-//        NameGameApp.instance.presenterFactory.detachView(presenter!!)
-//    }
 }

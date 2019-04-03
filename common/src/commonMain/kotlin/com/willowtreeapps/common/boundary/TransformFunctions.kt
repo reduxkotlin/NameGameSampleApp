@@ -3,6 +3,9 @@ package com.willowtreeapps.common.boundary
 import com.willowtreeapps.common.*
 import com.willowtreeapps.common.repo.Profile
 
+/**
+ * Functions for transforming AppState data into ViewState data to be used by Views.
+ */
 fun AppState.toQuestionViewState(): QuestionViewState {
     val profile = currentQuestionProfile()
     val imageUrl = profile.headshot.url
