@@ -1,16 +1,9 @@
-package com.willowtreeapps.common.view
+package com.willowtreeapps.common.ui
 
-import com.willowtreeapps.common.GameResultsViewState
 import com.willowtreeapps.common.QuestionViewState
+import com.willowtreeapps.common.View
 
-interface View
-
-interface StartScreen : View {
-    fun showLoading()
-    fun hideLoading()
-}
-
-interface QuestionScreen : View {
+interface QuestionView : View {
 
     fun showProfile(viewState: QuestionViewState)
 
@@ -21,8 +14,4 @@ interface QuestionScreen : View {
     fun showCorrectAnswerEndGame(viewState: QuestionViewState)
 
     fun showWrongAnswerEndGame(viewState: QuestionViewState)
-}
-
-interface GameResultsScreen : View {
-    fun showResults(viewState: GameResultsViewState)
 }

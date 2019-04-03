@@ -1,6 +1,5 @@
 package com.willowtreeapps.common.repo
 
-import com.willowtreeapps.common.ProfileId
 import com.willowtreeapps.common.boundary.displayName
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
