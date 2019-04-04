@@ -7,11 +7,11 @@ interface QuestionView : View {
 
     fun showProfile(viewState: QuestionViewState)
 
-    fun showCorrectAnswer(viewState: QuestionViewState)
+    fun showCorrectAnswer(viewState: QuestionViewState, isEndGame: Boolean)
 
-    fun showWrongAnswer(viewState: QuestionViewState)
+    fun showWrongAnswer(viewState: QuestionViewState, isEndGame: Boolean)
 
-    fun showCorrectAnswerEndGame(viewState: QuestionViewState)
+    fun setTimerText(viewState: QuestionViewState)
 
-    fun showWrongAnswerEndGame(viewState: QuestionViewState)
+    fun showTimesUp(viewState: QuestionViewState, isEndGame: Boolean)
 }

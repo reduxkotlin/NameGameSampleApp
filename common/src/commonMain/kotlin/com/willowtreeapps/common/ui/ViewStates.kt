@@ -12,6 +12,7 @@ class QuestionViewState(
         val button3Text: String,
         val button4Text: String,
         val correctBtnNum: Int,
+        val questionTime: Int,
         val selectedBtnNum: Int)
 
 

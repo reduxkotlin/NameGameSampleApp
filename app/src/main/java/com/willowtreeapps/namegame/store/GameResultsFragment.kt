@@ -33,7 +33,7 @@ class GameResultsFragment : Fragment(), CoroutineScope, GameResultsView, MainAct
 
     private fun initViews() {
         btn_start_over.setOnClickListener {
-            NameGameApp.gameEngine().detachView(presenter!!)
+            NameGameApp.gameEngine().detachView(this)
             presenter?.startOverTapped()
         }
     }
@@ -45,7 +45,7 @@ class GameResultsFragment : Fragment(), CoroutineScope, GameResultsView, MainAct
 
     override fun onPause() {
         super.onPause()
-        NameGameApp.gameEngine().detachView(presenter!!)
+        NameGameApp.gameEngine().detachView(this)
     }
 
     override fun showResults(viewState: GameResultsViewState) {

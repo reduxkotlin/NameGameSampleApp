@@ -1,7 +1,5 @@
 package com.beyondeye.reduks
 
-import com.beyondeye.reduks.*
-
 /**
  * builder methods for making the code more clear when defining reduks objects
  * Created by daely on 8/31/2016.
@@ -44,5 +42,47 @@ fun <S> StoreEnhancerFn(storeEnhancerFn:(next: StoreCreator<S>)-> StoreCreator<S
 fun <S> StoreSubscriberFn(subscriberFn: ()->Unit)= StoreSubscriberImpl<S>(subscriberFn)
 fun <S> StoreSubscriberBuilderFn(storeSubscriberBuilderFn:(store: Store<S>)-> StoreSubscriber<S>) = StoreSubscriberBuilderImpl(storeSubscriberBuilderFn)
 fun <S:Any> StoreSubscriberBuilderFn(storeSubscriberBuilderFn2:(store: Store<S>,selector:SelectorBuilder<S>)-> StoreSubscriber<S>) = StoreSubscriberBuilderImpl2(storeSubscriberBuilderFn2)
+class SelectorSubscriberBuilder<S : Any>(val store: Store<S>) {
+    val state: S
+        get() = store.state
+
+    var withAnyChangeFun: (() -> Unit)? = null
+
+    fun withAnyChange(f: () -> Unit) {
+        withAnyChangeFun = f
+    }
+
+    val selectorList = mutableMapOf<Selector<S, Any>, (Any) -> Unit>()
+    fun withSingleField(selector: (S) -> Any, action: (Any) -> Unit) {
+        val selBuilder = SelectorBuilder<S>()
+        val sel = selBuilder.withSingleField(selector)
+        selectorList.put(sel, action)
+    }
+}
+
+/**
+ * Helper function that creates a DSL for subscribing to changes in specific state fields and actions to take
+ * ex:
+ *      SelectorSubscriberFn {
+ *          withSingleField({it.foo}, { actionWhenFooChanges() }
+ *
+ *          withAnyChange {
+ *              //called whenever any change happens to state
+ *          }
+ *      }
+ */
+fun <S : Any> SelectorSubscriberFn(store: Store<S>, selectorSubscriberBuilderInit: SelectorSubscriberBuilder<S>.() -> Unit): StoreSubscriber<S> {
+    val subBuilder = SelectorSubscriberBuilder(store)
+    subBuilder.selectorSubscriberBuilderInit()
+    return StoreSubscriberBuilderFn<S> { store ->
+        StoreSubscriberFn {
+            subBuilder.selectorList.forEach { entry ->
+                entry.key.onChangeIn(store.state) { entry.value(store.state) }
+            }
+            subBuilder.withAnyChangeFun?.invoke()
+        }
+    }.build(store)
+}
+
 
 fun <S> ThunkFn(thunkFn:(dispatcher:  (Any)->Any, state: S)->Any) = ThunkImpl(thunkFn)

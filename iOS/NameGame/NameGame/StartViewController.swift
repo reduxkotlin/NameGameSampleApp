@@ -18,7 +18,7 @@ class StartViewController: UIViewController, StartView {
     
     override func viewDidDisappear(_ animated: Bool) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.gameEngine?.detachView(presenter: presenter!)
+        appDelegate.gameEngine?.detachView(view: self)
     }
     
     func showLoading() {

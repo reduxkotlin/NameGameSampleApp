@@ -1,5 +1,6 @@
 package com.willowtreeapps.common.ui
 
+import com.beyondeye.reduks.SelectorSubscriberFn
 import com.beyondeye.reduks.Store
 import com.beyondeye.reduks.StoreSubscriberBuilderFn
 import com.beyondeye.reduks.StoreSubscriberFn
@@ -9,22 +10,21 @@ import com.willowtreeapps.common.NetworkThunks
 import com.willowtreeapps.common.Presenter
 
 
-class StartPresenter(view: StartView,
-                     val store: Store<AppState>,
-                     private val networkThunks: NetworkThunks) : Presenter {
-    private val subscriber = StoreSubscriberBuilderFn<AppState> { store ->
-        StoreSubscriberFn {
-            val state = store.state
+class StartPresenter(val store: Store<AppState>,
+                     private val networkThunks: NetworkThunks) : Presenter<StartView>() {
+
+    override fun makeSubscriber() = SelectorSubscriberFn(store) {
+        withSingleField({it.isLoadingProfiles}, {
             if (state.isLoadingProfiles) {
-                view.showLoading()
+                view?.showLoading()
             } else {
-                view.hideLoading()
+                view?.hideLoading()
             }
-        }
-    }.build(store)
+        } )
+    }
 
     override fun onStateChange(state: AppState) {
-        subscriber.onStateChange()
+        subscriber?.onStateChange()
     }
 
     fun startGame() {

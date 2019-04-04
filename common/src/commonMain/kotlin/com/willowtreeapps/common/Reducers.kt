@@ -33,6 +33,16 @@ val reducer = ReducerFn<AppState> { state, action ->
         is NextQuestionAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
         is GameCompleteAction -> state.copy(waitingForResultsTap = true, waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
         is StartOverAction, is ResetGameStateAction -> AppState.INITIAL_STATE
+        is StartTimerAction -> state.copy(questionClock = action.initialValue)
+        is StartQuestionTimerAction -> state.copy(questionClock = action.initialValue)
+        is DecrementCountDownAction -> state.copy(questionClock = state.questionClock - 1)
+        is TimesUpAction -> {
+            val status = Question.Status.TIMES_UP
+            val newQuestions = state.questions.toMutableList()
+            newQuestions[state.currentQuestionIndex] = newQuestions[state.currentQuestionIndex].copy(answerName = "", status = status)
+            state.copy(questions = newQuestions, waitingForNextQuestion = true)
+        }
+
         else -> throw AssertionError("Action ${action::class.simpleName} not handled")
     }
 }

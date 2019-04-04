@@ -6,5 +6,6 @@
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="txt_title_size">34sp</dimen>
     <dimen name="txt_subtitle_size">24sp</dimen>
+    <dimen name="txt_timer_size">62sp</dimen>
 
 </resources>

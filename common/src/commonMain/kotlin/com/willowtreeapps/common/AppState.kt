@@ -10,6 +10,7 @@ data class AppState(val isLoadingProfiles: Boolean = false,
                     val numQuestions: Int = 3,
                     val waitingForNextQuestion: Boolean = false,
                     val waitingForResultsTap: Boolean = false,
+                    val questionClock: Int = 0,
                     val questions: List<Question> = listOf()) {
     companion object {
         val INITIAL_STATE = AppState()
@@ -42,7 +43,8 @@ data class Question(val profileId: ProfileId,
     enum class Status {
         UNANSWERED,
         CORRECT,
-        INCORRECT
+        INCORRECT,
+        TIMES_UP
     }
 }
 

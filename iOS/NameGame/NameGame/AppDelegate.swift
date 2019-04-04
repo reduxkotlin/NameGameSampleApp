@@ -10,7 +10,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         let navi: Navigator = IosNavigator()
-        gameEngine = GameEngine(navigator: navi, application: NSObject(), networkContext: UI())
+        gameEngine = GameEngine(navigator: navi, application: NSObject(), networkContext: UI(), uiContext: UI())
         return true
     }
 

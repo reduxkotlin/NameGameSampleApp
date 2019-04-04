@@ -41,6 +41,11 @@
         <item name="android:textSize">@dimen/txt_subtitle_size</item>
     </style>
 
+    <style name="TimerText">
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textSize">@dimen/txt_timer_size</item>
+    </style>
+
     <style name="ChoiceButton" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@drawable/button_color_selector</item>

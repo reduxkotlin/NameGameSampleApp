@@ -20,4 +20,17 @@ sealed class Actions : Action {
     class StartOverAction
     class ResetGameStateAction
 
+    class StartQuestionTimerAction(val initialValue: Int)
+
+    class StartTimerAction(val name: String,
+                           val intervalMs: Long,
+                           val initialValue: Int = 5,
+                           val work: () -> Unit)
+
+    class StopTimerAction
+
+    class DecrementCountDownAction
+    class TimesUpAction
+
 }
+
