@@ -1,0 +1,49 @@
+apply plugin: 'application'
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':common')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.26'
+    implementation "io.ktor:ktor-client-okhttp:$ktorVersion"
+    implementation "io.ktor:ktor-client-json-jvm:$ktorVersion"
+}
+
+task runMain(type: JavaExec) {
+    main = 'com.willowtreeapps.namegame.jvmcli.Main'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+run {
+    systemProperties = System.properties
+}
+
+
+sourceCompatibility = "8"
+targetCompatibility = "8"
+buildscript {
+    ext.kotlin_version = '1.3.30-eap-125'
+    repositories {
+        maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+repositories {
+    maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+    mavenCentral()
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
