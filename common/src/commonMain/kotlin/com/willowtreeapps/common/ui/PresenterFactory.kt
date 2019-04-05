@@ -2,7 +2,6 @@ package com.willowtreeapps.common
 
 import com.beyondeye.reduks.*
 import com.willowtreeapps.common.ui.*
-import kotlinx.coroutines.CoroutineScope
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -99,5 +98,8 @@ abstract class Presenter<T : View?> {
     }
 
     abstract fun makeSubscriber(): StoreSubscriber<AppState>
-    abstract fun onStateChange(state: AppState)
+
+    fun onStateChange(state: AppState) {
+        subscriber?.onStateChange()
+    }
 }

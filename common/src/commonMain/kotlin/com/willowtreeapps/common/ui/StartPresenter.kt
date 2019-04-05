@@ -27,10 +27,6 @@ class StartPresenter(val store: Store<AppState>,
         }
     }
 
-    override fun onStateChange(state: AppState) {
-        subscriber?.onStateChange()
-    }
-
     fun startGame() {
         store.dispatch(Actions.ResetGameStateAction())
         store.dispatch(networkThunks.fetchProfiles())

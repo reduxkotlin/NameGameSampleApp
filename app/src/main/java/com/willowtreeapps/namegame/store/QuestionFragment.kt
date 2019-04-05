@@ -3,7 +3,6 @@ package com.willowtreeapps.namegame.store
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,13 +17,8 @@ import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
 import kotlin.coroutines.CoroutineContext
 import android.widget.Button
-import androidx.annotation.ColorRes
 import androidx.core.content.res.ResourcesCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.willowtreeapps.common.ui.QuestionPresenter
 import com.willowtreeapps.namegame.*
 import kotlinx.coroutines.*
@@ -39,7 +33,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
 
     private var restoreX: Float? = null
     private var restoreY: Float? = null
-    var lastCorrectBtn: Button? = null
+    private var lastCorrectBtn: Button? = null
     private var lastSelectedBtn: Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -198,15 +192,11 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
             txt_results.text = title
             GlideApp.with(this@QuestionFragment).load(profileImageUrl)
                     .transition(DrawableTransitionOptions.withCrossFade())
-                    .listener(object : RequestListener<Drawable> {
-                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
-                            return true
-                        }
-                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                            showButtons()
-                            return false
-                        }
-                    })
+                    .onComplete {
+                        showButtons()
+                        txt_timer.visibility = View.VISIBLE
+                        presenter.profileImageIsVisible()
+                    }
                     .into(imageView)
             button1.text = button1Text
             button2.text = button2Text
@@ -220,7 +210,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
             txt_timer.scaleX = 0f
             txt_timer.scaleY = 0f
             txt_timer.alpha = 1f
-            txt_timer.text = viewState.timerText.toString()
+            txt_timer.text = viewState.timerText
             txt_timer.animate()
                     .scaleX(1f)
                     .scaleY(1f)
@@ -252,7 +242,9 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
                     .withEndAction {
                         showWrongAnswer(viewState, isEndGame)
                         txt_timer.animate().alpha(0f)
-                                .withEndAction { txt_timer.setTextColor(restoreColor)  }
+                                .withEndAction {
+                                    txt_timer.visibility = View.VISIBLE
+                                    txt_timer.setTextColor(restoreColor) }
                     }
 
         }

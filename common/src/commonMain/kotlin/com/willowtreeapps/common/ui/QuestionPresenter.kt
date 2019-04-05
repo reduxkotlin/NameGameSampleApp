@@ -37,11 +37,6 @@ class QuestionPresenter(
         }
     }
 
-
-    override fun onStateChange(state: AppState) {
-        subscriber?.onStateChange()
-    }
-
     fun namePicked(name: String) {
         store.dispatch(Actions.NamePickedAction(name))
         store.dispatch(timerThunks.stopTimer())
@@ -49,11 +44,10 @@ class QuestionPresenter(
 
     fun nextTapped() {
         store.dispatch(Actions.NextQuestionAction())
+    }
+
+    fun profileImageIsVisible() {
         store.dispatch(timerThunks.startCountDownTimer(5))
-//        store.dispatch(Actions.StartTimerAction("questionCounter", 1000, 5) {
-//            Logger.d("timer action function")
-//            store.dispatch(Actions.DecrementCountDownAction())
-//        })
     }
 
     fun endGameTapped() {

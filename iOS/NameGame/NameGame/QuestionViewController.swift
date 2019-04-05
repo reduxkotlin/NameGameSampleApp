@@ -167,7 +167,11 @@ class QuestionViewController: UIViewController, QuestionView {
         button2.setTitle(viewState.button2Text, for: .normal)
         button3.setTitle(viewState.button3Text, for: .normal)
         button4.setTitle(viewState.button4Text, for: .normal)
-        profileImageView.downloaded(from: viewState.profileImageUrl, onComplete: { self.showButtons() })
+        profileImageView.downloaded(from: viewState.profileImageUrl, onComplete: {
+            self.showButtons()
+            self.labelTimer.isHidden = false
+            self.presenter?.profileImageIsVisible()
+        })
     }
 
     func setTimerText(viewState: QuestionViewState) {
@@ -176,7 +180,7 @@ class QuestionViewController: UIViewController, QuestionView {
 
         self.labelTimer.transform = CGAffineTransform(scaleX: 0, y: 0)
         self.labelTimer.alpha = 1
-        self.labelTimer.text = String(viewState.questionTime)
+        self.labelTimer.text = String(viewState.timerText)
         UIView.animate(withDuration: 0.5, animations: {
             self.labelTimer.transform = CGAffineTransform(scaleX: 1, y: 1)
         }, completion: { _ in
@@ -187,17 +191,20 @@ class QuestionViewController: UIViewController, QuestionView {
     }
 
     func showTimesUp(viewState: QuestionViewState, isEndGame: Bool) {
-        labelTimer.text = "TIMES UP!!"
+        self.labelTimer.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+        self.labelTimer.alpha = 1
+        labelTimer.text = viewState.timerText
         let restoreColor = labelTimer.textColor
         labelTimer.textColor = UIColor.red
-        UIView.animate(withDuration: 0.5, animations: {
+        UIView.animate(withDuration: 1, animations: {
             self.labelTimer.transform = CGAffineTransform(scaleX: 1, y: 1)
         }, completion: { _ in
-            UIView.animate(withDuration: 0.3, animations: {
+            UIView.animate(withDuration: 0.5, animations: {
                 self.showWrongAnswer(viewState: viewState, isEndGame: isEndGame)
                 self.labelTimer.alpha = 0
             }, completion: { _ in
                 self.labelTimer.textColor = restoreColor
+                self.labelTimer.isHidden = true
             })
         })
     }

@@ -98,6 +98,32 @@ class ReducersTest {
         assertEquals(Question.Status.INCORRECT, final.currentQuestion?.status)
     }
 
+    @Test
+    fun `mark current round as TIMES when time is up`() {
+        val initial = generateInitialTestState()
+
+        val final = reducer(initial, Actions.TimesUpAction())
+
+        assertEquals(Question.Status.TIMES_UP, final.currentQuestion?.status)
+    }
+
+    @Test
+    fun `decrement timer`() {
+        val initial = generateInitialTestState()
+
+        val final = reducer(initial, Actions.DecrementCountDownAction())
+
+        assertEquals(initial.questionClock - 1, final.questionClock)
+    }
+
+    @Test
+    fun `start question timer with initial value`() {
+        val initial = generateInitialTestState()
+
+        val final = reducer(initial, Actions.StartQuestionTimerAction(10))
+
+        assertEquals(10, final.questionClock)
+    }
 
     private fun generateInitialTestState(): AppState {
         val initialState = reducer(AppState(), Actions.FetchingProfilesSuccessAction(MockRepositoryFactory.getValidResponse()))

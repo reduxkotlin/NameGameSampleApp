@@ -26,7 +26,6 @@ class NetworkThunks(private val networkContext: CoroutineContext,
             if (result.isSuccessful) {
                 Logger.d("Success")
                 store.dispatch(Actions.FetchingProfilesSuccessAction(result.response!!))
-                store.dispatch(timerThunks.startCountDownTimer(5))
             } else {
                 Logger.d("Failure")
                 store.dispatch(Actions.FetchingProfilesFailedAction(result.message!!))

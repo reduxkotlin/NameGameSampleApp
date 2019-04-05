@@ -5,7 +5,6 @@ import com.beyondeye.reduks.middlewares.applyMiddleware
 import com.beyondeye.reduks.middlewares.thunkMiddleware
 import com.willowtreeapps.common.middleware.NavigationMiddleware
 import com.willowtreeapps.common.middleware.Navigator
-import com.willowtreeapps.common.middleware.TimerMiddleware
 import com.willowtreeapps.common.middleware.ViewEffectsMiddleware
 import com.willowtreeapps.common.util.VibrateUtil
 import kotlin.coroutines.CoroutineContext
@@ -15,7 +14,6 @@ class GameEngine(navigator: Navigator, application: Any = Any(),
                  uiContext: CoroutineContext) {
     private val navigationMiddleware = NavigationMiddleware(navigator)
     private val viewEffectsMiddleware = ViewEffectsMiddleware()
-    private val timerMiddleware = TimerMiddleware(uiContext)
     private val presenterFactory by lazy { PresenterFactory(this, networkContext) }
     val vibrateUtil = VibrateUtil(application)
 
@@ -23,8 +21,7 @@ class GameEngine(navigator: Navigator, application: Any = Any(),
         SimpleStore(AppState.INITIAL_STATE, reducer)
                 .applyMiddleware(::thunkMiddleware,
                         viewEffectsMiddleware::dispatch,
-                        navigationMiddleware::dispatch,
-                        timerMiddleware::dispatch)
+                        navigationMiddleware::dispatch)
     }
 
     fun attachView(view: View): Presenter<out View?> = presenterFactory.attachView(view)

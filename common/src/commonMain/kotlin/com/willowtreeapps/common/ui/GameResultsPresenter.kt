@@ -6,16 +6,10 @@ import com.beyondeye.reduks.StoreSubscriberFn
 import com.willowtreeapps.common.Actions
 import com.willowtreeapps.common.AppState
 import com.willowtreeapps.common.Presenter
-import com.willowtreeapps.common.boundary.toGameResultsViewState
-
 
 class GameResultsPresenter(val store: Store<AppState>) : Presenter<GameResultsView>() {
     override fun makeSubscriber(): StoreSubscriber<AppState> {
         return StoreSubscriberFn {  }
-    }
-
-    override fun onStateChange(state: AppState) {
-        view?.showResults(state.toGameResultsViewState())
     }
 
     fun startOverTapped() {

@@ -8,7 +8,7 @@ import kotlin.coroutines.CoroutineContext
 
 class TimerThunks(private val networkContext: CoroutineContext, val store: Store<AppState>) : CoroutineScope {
     override val coroutineContext = networkContext + Job()
-    var timerJob: Job? = null
+    private var timerJob: Job? = null
 
     /**
      * Starts a countdown timer that executes every X ms as specified by the action.
