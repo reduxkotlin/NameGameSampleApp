@@ -27,7 +27,7 @@ fun AppState.toQuestionViewState(): QuestionViewState {
             button3Text = choice3,
             button4Text = choice4,
             correctBtnNum = correctBtnNum,
-            questionTime = questionClock,
+            timerText = timerText,
             selectedBtnNum =  selectedBtnNum ?: -1)
 }
 

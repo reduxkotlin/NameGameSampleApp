@@ -61,13 +61,16 @@ class SelectorSubscriberBuilder<S : Any>(val store: Store<S>) {
 }
 
 /**
- * Helper function that creates a DSL for subscribing to changes in specific state fields and actions to take
+ * Helper function that creates a DSL for subscribing to changes in specific state fields and actions to take.
+ * Inside the lambda there is access to the current state through the var `state`
+ *
  * ex:
  *      SelectorSubscriberFn {
  *          withSingleField({it.foo}, { actionWhenFooChanges() }
  *
  *          withAnyChange {
  *              //called whenever any change happens to state
+ *              view.setMessage(state.barMsg) //state is current state
  *          }
  *      }
  */

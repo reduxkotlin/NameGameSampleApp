@@ -53,4 +53,10 @@ class StartFragment : Fragment(), CoroutineScope, StartView {
             loading_spinner.visibility = View.VISIBLE
         }
     }
+
+    override fun showError(msg: String) {
+        activity?.runOnUiThread {
+            txt_error.text = msg
+        }
+    }
 }

@@ -14,13 +14,17 @@ class StartPresenter(val store: Store<AppState>,
                      private val networkThunks: NetworkThunks) : Presenter<StartView>() {
 
     override fun makeSubscriber() = SelectorSubscriberFn(store) {
-        withSingleField({it.isLoadingProfiles}, {
+        withSingleField({ it.isLoadingProfiles }) {
             if (state.isLoadingProfiles) {
                 view?.showLoading()
             } else {
                 view?.hideLoading()
             }
-        } )
+        }
+
+        withSingleField({ it.errorLoadingProfiles }) {
+            view?.showError(state.errorMsg)
+        }
     }
 
     override fun onStateChange(state: AppState) {

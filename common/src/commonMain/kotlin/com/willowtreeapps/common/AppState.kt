@@ -18,6 +18,9 @@ data class AppState(val isLoadingProfiles: Boolean = false,
 
     fun Question.profile(): Profile = profiles.find { ProfileId(it.id) == this.profileId }!!
 
+    val timerText: String
+        get() = if (questionClock >= 0) questionClock.toString() else "TIME'S UP!!"
+
     val currentQuestion: Question?
         get() = if (questions.size > currentQuestionIndex)
             questions[currentQuestionIndex]

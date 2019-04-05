@@ -1,3 +1,6 @@
+//plugins {
+//      id("org.jetbrains.kotlin.native.cocoapods")
+//}
 repositories {
     maven { url "https://dl.bintray.com/soywiz/soywiz" }
 }
@@ -8,7 +11,10 @@ apply plugin: 'kotlinx-serialization'
 
 
 
+
+
 kotlin {
+
     android {
         compilations.all {
             tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) { task ->

@@ -3,7 +3,8 @@ import UIKit
 import main
 
 class StartViewController: UIViewController, StartView {
-    
+
+    @IBOutlet weak var labelError: UILabel!
     @IBOutlet weak var viewName: UIProgressView!
     var presenter: StartPresenter?
     
@@ -27,6 +28,10 @@ class StartViewController: UIViewController, StartView {
     
     func hideLoading() {
         viewName.isHidden = true
+    }
+
+    func showError(msg: String) {
+        labelError.text = msg
     }
     
     

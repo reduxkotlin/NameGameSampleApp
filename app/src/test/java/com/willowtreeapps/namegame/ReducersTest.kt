@@ -13,7 +13,7 @@ class ReducersTest {
     @Test
     fun `take random N items`() {
         val list = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 1, 2, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
-        val randomList = list.takeRandomDistint(10)
+        val randomList = list.takeRandomDistinct(10)
         assert(randomList.size == 10)
         assert(randomList.distinctBy { it }.size == 10)
     }
@@ -22,7 +22,7 @@ class ReducersTest {
     fun `throw exception on N greater than size`() {
         val list = listOf(1, 2)
         val value = try {
-            list.takeRandomDistint(3)
+            list.takeRandomDistinct(3)
         } catch (e: Exception) {
             e
         }

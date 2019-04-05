@@ -1,10 +1,9 @@
 package com.willowtreeapps.namegame.store
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +21,10 @@ import android.widget.Button
 import androidx.annotation.ColorRes
 import androidx.core.content.res.ResourcesCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.willowtreeapps.common.ui.QuestionPresenter
 import com.willowtreeapps.namegame.*
 import kotlinx.coroutines.*
@@ -36,7 +39,6 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
 
     private var restoreX: Float? = null
     private var restoreY: Float? = null
-    @ColorRes
     var lastCorrectBtn: Button? = null
     private var lastSelectedBtn: Button? = null
 
@@ -114,11 +116,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
             upSet.playTogether(animScaleX, animScaleY)
             upSet.interpolator = BounceInterpolator()
             upSet.duration = 500
-            upSet.addListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator?) {
-                    after()
-                }
-            })
+            upSet.onComplete { after() }
             upSet.start()
         } else {
             after()
@@ -189,13 +187,10 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
     }
 
     private fun fadeNextButton(after: () -> Unit) {
-        btn_next.animate().alpha(0f).setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                btn_next.visibility = View.GONE
-                after()
-                btn_next.animate().setListener(null)
-            }
-        })
+        btn_next.animate().alpha(0f).withEndAction {
+            btn_next.visibility = View.GONE
+            after()
+        }
     }
 
     private fun setProfileAndFadeIn(viewState: QuestionViewState) {
@@ -203,12 +198,20 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
             txt_results.text = title
             GlideApp.with(this@QuestionFragment).load(profileImageUrl)
                     .transition(DrawableTransitionOptions.withCrossFade())
+                    .listener(object : RequestListener<Drawable> {
+                        override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?, isFirstResource: Boolean): Boolean {
+                            return true
+                        }
+                        override fun onResourceReady(resource: Drawable?, model: Any?, target: Target<Drawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
+                            showButtons()
+                            return false
+                        }
+                    })
                     .into(imageView)
             button1.text = button1Text
             button2.text = button2Text
             button3.text = button3Text
             button4.text = button4Text
-            showButtons()
         }
     }
 
@@ -217,7 +220,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
             txt_timer.scaleX = 0f
             txt_timer.scaleY = 0f
             txt_timer.alpha = 1f
-            txt_timer.text = viewState.questionTime.toString()
+            txt_timer.text = viewState.timerText.toString()
             txt_timer.animate()
                     .scaleX(1f)
                     .scaleY(1f)
@@ -238,7 +241,8 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
         activity?.runOnUiThread {
             txt_timer.scaleX = 0f
             txt_timer.scaleY = 0f
-            txt_timer.text = "TIMES UP!!"
+            txt_timer.text = viewState.timerText
+            val restoreColor = txt_timer.currentTextColor
             txt_timer.setTextColor(ResourcesCompat.getColor(context?.resources!!, R.color.red, null))
             txt_timer.animate()
                     .scaleX(1f)
@@ -248,6 +252,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
                     .withEndAction {
                         showWrongAnswer(viewState, isEndGame)
                         txt_timer.animate().alpha(0f)
+                                .withEndAction { txt_timer.setTextColor(restoreColor)  }
                     }
 
         }
