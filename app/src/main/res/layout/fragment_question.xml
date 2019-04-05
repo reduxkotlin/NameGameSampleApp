@@ -34,56 +34,56 @@
       tools:srcCompat="@tools:sample/avatars" />
 
   <Button
-      style="@style/ChoiceButton"
       android:id="@+id/button3"
+      style="@style/ChoiceButton"
       android:layout_width="193dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
       android:layout_marginBottom="32dp"
-      android:text="Button"
       android:alpha="0"
+      android:text="Button"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toStartOf="@+id/button4"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent" />
 
   <Button
-      style="@style/ChoiceButton"
       android:id="@+id/button4"
+      style="@style/ChoiceButton"
       android:layout_width="194dp"
       android:layout_height="wrap_content"
       android:layout_marginEnd="8dp"
       android:layout_marginBottom="32dp"
-      android:text="Button"
       android:alpha="0"
+      android:text="Button"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/button3" />
 
   <Button
-      style="@style/ChoiceButton"
       android:id="@+id/button1"
+      style="@style/ChoiceButton"
       android:layout_width="193dp"
       android:layout_height="wrap_content"
       android:layout_marginStart="8dp"
       android:layout_marginBottom="8dp"
-      android:text="Button"
       android:alpha="0"
+      android:text="Button"
       app:layout_constraintBottom_toTopOf="@+id/button3"
       app:layout_constraintEnd_toStartOf="@+id/button2"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toStartOf="parent" />
 
   <Button
-      style="@style/ChoiceButton"
       android:id="@+id/button2"
+      style="@style/ChoiceButton"
       android:layout_width="194dp"
       android:layout_height="wrap_content"
       android:layout_marginEnd="8dp"
       android:layout_marginBottom="8dp"
-      android:text="Button"
       android:alpha="0"
+      android:text="Button"
       app:layout_constraintBottom_toTopOf="@+id/button4"
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintHorizontal_bias="0.5"
@@ -107,6 +107,7 @@
       app:layout_constraintEnd_toStartOf="@+id/button2"
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/button1" />
+
   <Button
       android:id="@+id/btn_end_game"
       android:layout_width="wrap_content"
@@ -123,6 +124,20 @@
   <nl.dionsegijn.konfetti.KonfettiView
       android:id="@+id/view_konfetti"
       android:layout_width="match_parent"
-      android:layout_height="match_parent" />
+      android:layout_height="match_parent"
+      tools:layout_editor_absoluteX="0dp"
+      tools:layout_editor_absoluteY="0dp" />
+
+  <TextView
+      android:id="@+id/txt_timer"
+      style="@style/TimerText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="22dp"
+      android:text="5"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

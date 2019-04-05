@@ -19,7 +19,7 @@ class GameResultsViewController: UIViewController, GameResultsView {
 
     override func viewDidDisappear(_ animated: Bool) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.gameEngine?.detachView(presenter: presenter!)
+        appDelegate.gameEngine?.detachView(view: self)
     }
 
     func showResults(viewState: GameResultsViewState) {

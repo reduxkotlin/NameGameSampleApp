@@ -21,7 +21,7 @@ val reducer = ReducerFn<AppState> { state, action ->
         }
         is FetchingProfilesFailedAction -> state.copy(isLoadingProfiles = false, errorLoadingProfiles = true, errorMsg = action.message)
         is NamePickedAction -> {
-            val status = if (state.currentQuestionProfile()?.matches(action.name) == true) {
+            val status = if (state.currentQuestionProfile().matches(action.name)) {
                 Question.Status.CORRECT
             } else {
                 Question.Status.INCORRECT
@@ -33,14 +33,23 @@ val reducer = ReducerFn<AppState> { state, action ->
         is NextQuestionAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
         is GameCompleteAction -> state.copy(waitingForResultsTap = true, waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
         is StartOverAction, is ResetGameStateAction -> AppState.INITIAL_STATE
+        is StartQuestionTimerAction -> state.copy(questionClock = action.initialValue)
+        is DecrementCountDownAction -> state.copy(questionClock = state.questionClock - 1)
+        is TimesUpAction -> {
+            val status = Question.Status.TIMES_UP
+            val newQuestions = state.questions.toMutableList()
+            newQuestions[state.currentQuestionIndex] = newQuestions[state.currentQuestionIndex].copy(answerName = "", status = status)
+            state.copy(questions = newQuestions, waitingForNextQuestion = true, questionClock = -1)
+        }
+
         else -> throw AssertionError("Action ${action::class.simpleName} not handled")
     }
 }
 
 fun generateRounds(profiles: List<Profile>, n: Int): List<Question> =
-        profiles.takeRandomDistint(n)
+        profiles.takeRandomDistinct(n)
                 .map {
-                    val choiceList = profiles.takeRandomDistint(3).toMutableList()
+                    val choiceList = profiles.takeRandomDistinct(3).toMutableList()
                     choiceList.add(abs(random.nextInt() % 4), it)
 
                     Question(profileId = ProfileId(it.id), choices = choiceList
@@ -51,12 +60,12 @@ fun generateRounds(profiles: List<Profile>, n: Int): List<Question> =
 private val random = Random(TimeUtil.systemTimeMs())
 
 /**
- * Take N distict elements from the list.  Distict is determined by a comparasion of objects in the
+ * Take N distict elements from the list.  Distinct is determined by a comparision of objects in the
  * list.
  * @throws IllegalStateException when n > number of distict elements.
  * @return New immutable list containing N random elements from the given List.
  */
-fun <T> List<T>.takeRandomDistint(n: Int): List<T> {
+fun <T> List<T>.takeRandomDistinct(n: Int): List<T> {
     val newList = mutableListOf<T>()
     val uniqueItems = this.distinctBy { it }
     if (uniqueItems.size < n) {
@@ -77,3 +86,4 @@ fun <T> List<T>.takeRandomDistint(n: Int): List<T> {
 
 fun <T> List<T>.takeRandom(): T =
         this[random.nextInt(this.size - 1)]
+

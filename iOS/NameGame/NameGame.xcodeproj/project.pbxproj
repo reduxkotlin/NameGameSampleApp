@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		1E19EEA6224019610094EA01 /* StartScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E19EEA5224019610094EA01 /* StartScreenViewController.swift */; };
+		1E19EEA6224019610094EA01 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E19EEA5224019610094EA01 /* StartViewController.swift */; };
 		1E43892D224013860034263E /* IosNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E43892C224013860034263E /* IosNavigator.swift */; };
 		1E43892F224015A80034263E /* QuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E43892E224015A80034263E /* QuestionViewController.swift */; };
 		1E9D6D35224EA56200F5C0B8 /* SAConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9D6D34224EA55800F5C0B8 /* SAConfettiView.swift */; };
@@ -62,7 +62,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		1E19EEA5224019610094EA01 /* StartScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartScreenViewController.swift; sourceTree = "<group>"; };
+		1E19EEA5224019610094EA01 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		1E43892C224013860034263E /* IosNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosNavigator.swift; sourceTree = "<group>"; };
 		1E43892E224015A80034263E /* QuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionViewController.swift; sourceTree = "<group>"; };
 		1E9D6D34224EA55800F5C0B8 /* SAConfettiView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAConfettiView.swift; sourceTree = "<group>"; };
@@ -161,7 +161,7 @@
 				1EB9EA8A2238071B008AF004 /* Info.plist */,
 				1E43892C224013860034263E /* IosNavigator.swift */,
 				1E43892E224015A80034263E /* QuestionViewController.swift */,
-				1E19EEA5224019610094EA01 /* StartScreenViewController.swift */,
+				1E19EEA5224019610094EA01 /* StartViewController.swift */,
 			);
 			path = NameGame;
 			sourceTree = "<group>";
@@ -403,7 +403,7 @@
 				1E43892D224013860034263E /* IosNavigator.swift in Sources */,
 				1E43892F224015A80034263E /* QuestionViewController.swift in Sources */,
 				1EB9EA7F2238071A008AF004 /* AppDelegate.swift in Sources */,
-				1E19EEA6224019610094EA01 /* StartScreenViewController.swift in Sources */,
+				1E19EEA6224019610094EA01 /* StartViewController.swift in Sources */,
 				1E9D6D39224EA64800F5C0B8 /* GameResultsViewController.swift in Sources */,
 				1E9D6D35224EA56200F5C0B8 /* SAConfettiView.swift in Sources */,
 				1E9D6D38224EA64800F5C0B8 /* ImageUtils.swift in Sources */,

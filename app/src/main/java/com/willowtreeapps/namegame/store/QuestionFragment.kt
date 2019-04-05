@@ -1,7 +1,5 @@
 package com.willowtreeapps.namegame.store
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.graphics.Color
@@ -15,29 +13,27 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.willowtreeapps.common.QuestionViewState
 import com.willowtreeapps.common.ui.QuestionView
 import kotlinx.android.synthetic.main.fragment_question.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
-import java.lang.IllegalStateException
 import kotlin.coroutines.CoroutineContext
 import android.widget.Button
-import androidx.annotation.ColorRes
+import androidx.core.content.res.ResourcesCompat
+import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.willowtreeapps.common.ui.QuestionPresenter
 import com.willowtreeapps.namegame.*
+import kotlinx.coroutines.*
 
 
 class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.IOnBackPressed {
 
-    private var presenter: QuestionPresenter? = null
+    private lateinit var presenter: QuestionPresenter
 
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main
 
     private var restoreX: Float? = null
     private var restoreY: Float? = null
-    @ColorRes
-    var lastCorrectBtn: Button? = null
+    private var lastCorrectBtn: Button? = null
     private var lastSelectedBtn: Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -51,7 +47,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
 
     override fun onPause() {
         super.onPause()
-        NameGameApp.gameEngine().detachView(presenter!!)
+        NameGameApp.gameEngine().detachView(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -59,18 +55,18 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
     }
 
     private fun initViews() {
-        button1.setOnClickListener { presenter?.namePicked(button1.text.toString()) }
-        button2.setOnClickListener { presenter?.namePicked(button2.text.toString()) }
-        button3.setOnClickListener { presenter?.namePicked(button3.text.toString()) }
-        button4.setOnClickListener { presenter?.namePicked(button4.text.toString()) }
-        btn_next.setOnClickListener { presenter?.nextTapped() }
-        btn_end_game.setOnClickListener { presenter?.endGameTapped() }
+        button1.setOnClickListener { presenter.namePicked(button1.text.toString()) }
+        button2.setOnClickListener { presenter.namePicked(button2.text.toString()) }
+        button3.setOnClickListener { presenter.namePicked(button3.text.toString()) }
+        button4.setOnClickListener { presenter.namePicked(button4.text.toString()) }
+        btn_next.setOnClickListener { presenter.nextTapped() }
+        btn_end_game.setOnClickListener { presenter.endGameTapped() }
     }
 
 
     override fun onBackPressed(): Boolean {
-        NameGameApp.gameEngine().detachView(presenter!!)
-        presenter?.onBackPressed()
+        NameGameApp.gameEngine().detachView(this)
+        presenter.onBackPressed()
         return false
     }
 
@@ -82,25 +78,16 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
                 setProfileAndFadeIn(viewState)
             }
         }
+
     }
 
-
-    override fun showCorrectAnswer(viewState: QuestionViewState) {
-        hideButtonsShowNext(viewState, false)
+    override fun showCorrectAnswer(viewState: QuestionViewState, isEndGame: Boolean) {
+        hideButtonsShowNext(viewState, isEndGame)
         celebrate()
     }
 
-    override fun showWrongAnswer(viewState: QuestionViewState) {
-        wrongShakeAnimation(viewState) { hideButtonsShowNext(viewState, false) }
-    }
-
-    override fun showCorrectAnswerEndGame(viewState: QuestionViewState) {
-        hideButtonsShowNext(viewState, true)
-        celebrate()
-    }
-
-    override fun showWrongAnswerEndGame(viewState: QuestionViewState) {
-        wrongShakeAnimation(viewState) { hideButtonsShowNext(viewState, true) }
+    override fun showWrongAnswer(viewState: QuestionViewState, isEndGame: Boolean) {
+        wrongShakeAnimation(viewState) { hideButtonsShowNext(viewState, isEndGame) }
     }
 
     private val showButtonsAnimatorSet by lazy {
@@ -115,19 +102,19 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
 
     private fun wrongShakeAnimation(viewState: QuestionViewState, after: () -> Unit) {
         val selectedBtn = getBtnByNum(viewState.selectedBtnNum)
-        selectedBtn.isSelected = true
-        val animScaleX = ObjectAnimator.ofFloat(selectedBtn, View.SCALE_X, 3F, 0.5F, 1F)
-        val animScaleY = ObjectAnimator.ofFloat(selectedBtn, View.SCALE_Y, 3F, 0.5F, 1F)
-        val upSet = AnimatorSet()
-        upSet.playTogether(animScaleX, animScaleY)
-        upSet.interpolator = BounceInterpolator()
-        upSet.duration = 500
-        upSet.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                after()
-            }
-        })
-        upSet.start()
+        if (selectedBtn != null) {
+            selectedBtn.isSelected = true
+            val animScaleX = ObjectAnimator.ofFloat(selectedBtn, View.SCALE_X, 3F, 0.5F, 1F)
+            val animScaleY = ObjectAnimator.ofFloat(selectedBtn, View.SCALE_Y, 3F, 0.5F, 1F)
+            val upSet = AnimatorSet()
+            upSet.playTogether(animScaleX, animScaleY)
+            upSet.interpolator = BounceInterpolator()
+            upSet.duration = 500
+            upSet.onComplete { after() }
+            upSet.start()
+        } else {
+            after()
+        }
     }
 
     /**
@@ -157,8 +144,8 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
                 set
             }
         }
-        restoreX = correctBtn.x
-        restoreY = correctBtn.y
+        restoreX = correctBtn?.x
+        restoreY = correctBtn?.y
         lastCorrectBtn = correctBtn
         lastSelectedBtn = selectedBtn
 
@@ -170,15 +157,15 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
         val set = AnimatorSet()
         set.playTogether(anim1, anim2, anim3, anim4)
         set.onComplete {
-                val btn = if (isEndGame) {
-                    btn_end_game
-                } else {
-                    btn_next
-                }
-                btn.visibility = View.VISIBLE
-                btn.alpha = 0F
-                btn.animate().alpha(1f)
+            val btn = if (isEndGame) {
+                btn_end_game
+            } else {
+                btn_next
             }
+            btn.visibility = View.VISIBLE
+            btn.alpha = 0F
+            btn.animate().alpha(1f)
+        }
         set.start()
     }
 
@@ -194,13 +181,10 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
     }
 
     private fun fadeNextButton(after: () -> Unit) {
-        btn_next.animate().alpha(0f).setListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(animation: Animator?) {
-                btn_next.visibility = View.GONE
-                after()
-                btn_next.animate().setListener(null)
-            }
-        })
+        btn_next.animate().alpha(0f).withEndAction {
+            btn_next.visibility = View.GONE
+            after()
+        }
     }
 
     private fun setProfileAndFadeIn(viewState: QuestionViewState) {
@@ -208,12 +192,61 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
             txt_results.text = title
             GlideApp.with(this@QuestionFragment).load(profileImageUrl)
                     .transition(DrawableTransitionOptions.withCrossFade())
+                    .onComplete {
+                        showButtons()
+                        txt_timer.visibility = View.VISIBLE
+                        presenter.profileImageIsVisible()
+                    }
                     .into(imageView)
             button1.text = button1Text
             button2.text = button2Text
             button3.text = button3Text
             button4.text = button4Text
-            showButtons()
+        }
+    }
+
+    override fun setTimerText(viewState: QuestionViewState) {
+        activity?.runOnUiThread {
+            txt_timer.scaleX = 0f
+            txt_timer.scaleY = 0f
+            txt_timer.alpha = 1f
+            txt_timer.text = viewState.timerText
+            txt_timer.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setInterpolator(FastOutSlowInInterpolator())
+                    .setDuration(500)
+                    .withEndAction {
+                        if (txt_timer != null) {
+                            txt_timer.animate()
+                                    .scaleX(0f)
+                                    .scaleY(0f)
+                                    .duration = 500
+                        }
+                    }
+        }
+    }
+
+    override fun showTimesUp(viewState: QuestionViewState, isEndGame: Boolean) {
+        activity?.runOnUiThread {
+            txt_timer.scaleX = 0f
+            txt_timer.scaleY = 0f
+            txt_timer.text = viewState.timerText
+            val restoreColor = txt_timer.currentTextColor
+            txt_timer.setTextColor(ResourcesCompat.getColor(context?.resources!!, R.color.red, null))
+            txt_timer.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setInterpolator(FastOutSlowInInterpolator())
+                    .setDuration(500)
+                    .withEndAction {
+                        showWrongAnswer(viewState, isEndGame)
+                        txt_timer.animate().alpha(0f)
+                                .withEndAction {
+                                    txt_timer.visibility = View.VISIBLE
+                                    txt_timer.setTextColor(restoreColor) }
+                    }
+
         }
     }
 
@@ -230,12 +263,12 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
                 .burst(200)
     }
 
-    private fun getBtnByNum(num: Int): Button = when (num) {
+    private fun getBtnByNum(num: Int): Button? = when (num) {
         1 -> button1
         2 -> button2
         3 -> button3
         4 -> button4
-        else -> throw IllegalStateException("Invalid correct button index")
+        else -> null//throw IllegalStateException("Invalid button index")
     }
 
 

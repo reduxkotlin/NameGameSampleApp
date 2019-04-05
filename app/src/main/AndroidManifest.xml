@@ -15,7 +15,8 @@
         <activity
             android:name="com.willowtreeapps.namegame.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.TransparentTheme">
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -10,12 +10,16 @@ data class AppState(val isLoadingProfiles: Boolean = false,
                     val numQuestions: Int = 3,
                     val waitingForNextQuestion: Boolean = false,
                     val waitingForResultsTap: Boolean = false,
+                    val questionClock: Int = 0,
                     val questions: List<Question> = listOf()) {
     companion object {
         val INITIAL_STATE = AppState()
     }
 
     fun Question.profile(): Profile = profiles.find { ProfileId(it.id) == this.profileId }!!
+
+    val timerText: String
+        get() = if (questionClock >= 0) questionClock.toString() else "TIME'S UP!!"
 
     val currentQuestion: Question?
         get() = if (questions.size > currentQuestionIndex)
@@ -42,7 +46,8 @@ data class Question(val profileId: ProfileId,
     enum class Status {
         UNANSWERED,
         CORRECT,
-        INCORRECT
+        INCORRECT,
+        TIMES_UP
     }
 }
 

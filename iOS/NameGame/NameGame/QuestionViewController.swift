@@ -12,6 +12,7 @@ class QuestionViewController: UIViewController, QuestionView {
     @IBOutlet weak var button4: UIButton!
     @IBOutlet weak var buttonNext: UIButton!
     @IBOutlet weak var buttonEndGame: UIButton!
+    @IBOutlet weak var labelTimer: UILabel!
 
     @IBAction func onAnswerTap(_ sender: Any) {
         presenter?.namePicked(name: (sender as? UIButton)!.titleLabel!.text!)
@@ -44,7 +45,7 @@ class QuestionViewController: UIViewController, QuestionView {
 
     override func viewDidDisappear(_ animated: Bool) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.gameEngine!.detachView(presenter: presenter!)
+        appDelegate.gameEngine!.detachView(view: self)
         if (isMovingFromParent) {
             presenter?.onBackPressed()
         }
@@ -61,33 +62,27 @@ class QuestionViewController: UIViewController, QuestionView {
         }
     }
 
-    func showCorrectAnswer(viewState: QuestionViewState) {
-        hideButtonsShowNext(viewState: viewState, isEndGame: false)
+    func showCorrectAnswer(viewState: QuestionViewState, isEndGame: Bool) {
+        hideButtonsShowNext(viewState: viewState, isEndGame: isEndGame)
         celebrate()
     }
 
-    func showWrongAnswer(viewState: QuestionViewState) {
-        wrongShakeAnimation(viewState: viewState, after: { self.hideButtonsShowNext(viewState: viewState, isEndGame: false) })
+    func showWrongAnswer(viewState: QuestionViewState, isEndGame: Bool) {
+        wrongShakeAnimation(viewState: viewState, after: { self.hideButtonsShowNext(viewState: viewState, isEndGame: isEndGame) })
     }
-
-    func showCorrectAnswerEndGame(viewState: QuestionViewState) {
-        hideButtonsShowNext(viewState: viewState, isEndGame: true)
-        celebrate()
-    }
-
-    func showWrongAnswerEndGame(viewState: QuestionViewState) {
-        wrongShakeAnimation(viewState: viewState, after: { self.hideButtonsShowNext(viewState: viewState, isEndGame: true) })
-    }
-
 
     private func wrongShakeAnimation(viewState: QuestionViewState, after: @escaping () -> ()) {
         let selectedBtn = getBtnByNum(num: viewState.selectedBtnNum)
-        lastSelectedColor = selectedBtn.tintColor
-        selectedBtn.tintColor = UIColor.red
-        selectedBtn.transform = CGAffineTransform(translationX: 20, y: 0)
-        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
-            selectedBtn.transform = CGAffineTransform.identity
-        }, completion: { _ in after() })
+        if (selectedBtn != nil) {
+            lastSelectedColor = selectedBtn!.tintColor
+            selectedBtn!.tintColor = UIColor.red
+            selectedBtn!.transform = CGAffineTransform(translationX: 20, y: 0)
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.2, initialSpringVelocity: 1, options: .curveEaseInOut, animations: {
+                selectedBtn!.transform = CGAffineTransform.identity
+            }, completion: { _ in after() })
+        } else {
+            after()
+        }
     }
 
     /**
@@ -113,8 +108,8 @@ class QuestionViewController: UIViewController, QuestionView {
             }
         }
 
-        restoreX = correctBtn.frame.origin.x
-        restoreY = correctBtn.frame.origin.y
+        restoreX = correctBtn?.frame.origin.x
+        restoreY = correctBtn?.frame.origin.y
         lastCorrectBtn = correctBtn
         lastSelectedBtn = selectedBtn
 
@@ -131,6 +126,7 @@ class QuestionViewController: UIViewController, QuestionView {
                 btn = self.buttonNext
             }
             btn.isHidden = false
+            btn.alpha = 0
             UIView.animate(withDuration: 0.5, animations: {
                 btn.alpha = 1
             })
@@ -155,8 +151,8 @@ class QuestionViewController: UIViewController, QuestionView {
     }
 
     private func fadeNextButton(after: @escaping () -> ()) {
+        self.lastCorrectBtn!.alpha = 0
         UIView.animate(withDuration: 0.5, animations: {
-            self.lastCorrectBtn?.alpha = 0
             self.buttonNext.alpha = 0
             self.profileImageView.alpha = 0
         }, completion: { _ in
@@ -171,7 +167,46 @@ class QuestionViewController: UIViewController, QuestionView {
         button2.setTitle(viewState.button2Text, for: .normal)
         button3.setTitle(viewState.button3Text, for: .normal)
         button4.setTitle(viewState.button4Text, for: .normal)
-        profileImageView.downloaded(from: viewState.profileImageUrl, onComplete: { self.showButtons() })
+        profileImageView.downloaded(from: viewState.profileImageUrl, onComplete: {
+            self.showButtons()
+            self.labelTimer.isHidden = false
+            self.presenter?.profileImageIsVisible()
+        })
+    }
+
+    func setTimerText(viewState: QuestionViewState) {
+
+        labelTimer.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5);
+
+        self.labelTimer.transform = CGAffineTransform(scaleX: 0, y: 0)
+        self.labelTimer.alpha = 1
+        self.labelTimer.text = String(viewState.timerText)
+        UIView.animate(withDuration: 0.5, animations: {
+            self.labelTimer.transform = CGAffineTransform(scaleX: 1, y: 1)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.5, animations: {
+                self.labelTimer.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+            })
+        })
+    }
+
+    func showTimesUp(viewState: QuestionViewState, isEndGame: Bool) {
+        self.labelTimer.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+        self.labelTimer.alpha = 1
+        labelTimer.text = viewState.timerText
+        let restoreColor = labelTimer.textColor
+        labelTimer.textColor = UIColor.red
+        UIView.animate(withDuration: 1, animations: {
+            self.labelTimer.transform = CGAffineTransform(scaleX: 1, y: 1)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.5, animations: {
+                self.showWrongAnswer(viewState: viewState, isEndGame: isEndGame)
+                self.labelTimer.alpha = 0
+            }, completion: { _ in
+                self.labelTimer.textColor = restoreColor
+                self.labelTimer.isHidden = true
+            })
+        })
     }
 
     private func celebrate() {
@@ -182,7 +217,7 @@ class QuestionViewController: UIViewController, QuestionView {
         confettiView!.stopConfetti()
     }
 
-    func getBtnByNum(num: Int32) -> UIButton {
+    func getBtnByNum(num: Int32) -> UIButton? {
         switch num {
         case 1:
             return button1
@@ -193,7 +228,7 @@ class QuestionViewController: UIViewController, QuestionView {
         case 4:
             return button4
         default:
-            return button4
+            return nil
         }
     }
 }

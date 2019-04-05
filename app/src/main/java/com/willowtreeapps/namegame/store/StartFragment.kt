@@ -18,7 +18,7 @@ class StartFragment : Fragment(), CoroutineScope, StartView {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main
 
-    var presenter: StartPresenter? = null
+    private var presenter: StartPresenter? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_start, container, false)
@@ -39,7 +39,7 @@ class StartFragment : Fragment(), CoroutineScope, StartView {
 
     override fun onPause() {
         super.onPause()
-        NameGameApp.gameEngine().detachView(presenter!!)
+        NameGameApp.gameEngine().detachView(this)
     }
 
     override fun hideLoading() {
@@ -51,6 +51,12 @@ class StartFragment : Fragment(), CoroutineScope, StartView {
     override fun showLoading() {
         activity?.runOnUiThread {
             loading_spinner.visibility = View.VISIBLE
+        }
+    }
+
+    override fun showError(msg: String) {
+        activity?.runOnUiThread {
+            txt_error.text = msg
         }
     }
 }

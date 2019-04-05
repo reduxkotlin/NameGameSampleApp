@@ -12,7 +12,7 @@ class NameGameApp : Application() {
         super.onCreate()
         instance = this
         val navigator = AndroidNavigator()
-        gameEngine = GameEngine(navigator, this, Dispatchers.IO)
+        gameEngine = GameEngine(navigator, this, Dispatchers.IO, Dispatchers.Main)
 
         registerActivityLifecycleCallbacks(navigator)
     }

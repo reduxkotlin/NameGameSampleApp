@@ -1,69 +1,53 @@
 package com.willowtreeapps.common.ui
 
-import com.beyondeye.reduks.SelectorBuilder
-import com.beyondeye.reduks.Store
-import com.beyondeye.reduks.StoreSubscriberBuilderFn
-import com.beyondeye.reduks.StoreSubscriberFn
-import com.willowtreeapps.common.Actions
-import com.willowtreeapps.common.AppState
-import com.willowtreeapps.common.Presenter
-import com.willowtreeapps.common.Question
+import com.beyondeye.reduks.*
+import com.willowtreeapps.common.*
 import com.willowtreeapps.common.boundary.toQuestionViewState
 import com.willowtreeapps.common.util.VibrateUtil
 
 
-class QuestionPresenter(view: QuestionView,
-                        val store: Store<AppState>,
-                        private val vibrateUtil: VibrateUtil) : Presenter {
-    private val subscriber = StoreSubscriberBuilderFn<AppState> { store ->
-        val selBuilder = SelectorBuilder<AppState>()
-        val profileSelector = selBuilder.withSingleField { currentQuestion?.profileId?.id ?: Any() }
-        StoreSubscriberFn {
-            val state = store.state
-            profileSelector.onChangeIn(state) {
-                view.showProfile(state.toQuestionViewState())
-            }
+class QuestionPresenter(
+        val store: Store<AppState>,
+        private val vibrateUtil: VibrateUtil,
+        private val timerThunks: TimerThunks) : Presenter<QuestionView?>() {
 
-            if (state.isGameComplete()) {
-                if (state.waitingForNextQuestion) {
-                    when (state.currentQuestion?.status) {
-                        Question.Status.CORRECT -> {
-                            view.showCorrectAnswerEndGame(state.toQuestionViewState())
-                        }
-                        Question.Status.INCORRECT -> {
-                            vibrateUtil.vibrate()
-                            view.showWrongAnswerEndGame(state.toQuestionViewState())
-                        }
-                        Question.Status.UNANSWERED -> throw IllegalStateException("Question status cannot be Unanswered when waiting for next round == true")
+    override fun makeSubscriber() = SelectorSubscriberFn(store) {
+        withSingleField({ it.questionClock }, { view?.setTimerText(state.toQuestionViewState()) })
+        withSingleField({
+            it.currentQuestion?.profileId?.id ?: Any()
+        }, { view?.showProfile(state.toQuestionViewState()) })
+
+        withSingleField({ it.waitingForNextQuestion }) {
+            if (state.waitingForNextQuestion) {
+                when (state.currentQuestion?.status) {
+                    Question.Status.CORRECT -> {
+                        view?.showCorrectAnswer(state.toQuestionViewState(), state.isGameComplete())
                     }
-                }
-            } else {
-                if (state.waitingForNextQuestion) {
-                    when (state.currentQuestion?.status) {
-                        Question.Status.CORRECT -> {
-                            view.showCorrectAnswer(state.toQuestionViewState())
-                        }
-                        Question.Status.INCORRECT -> {
-                            vibrateUtil.vibrate()
-                            view.showWrongAnswer(state.toQuestionViewState())
-                        }
-                        Question.Status.UNANSWERED -> throw IllegalStateException("Question status cannot be Unanswered when waiting for next round == true")
+                    Question.Status.INCORRECT -> {
+                        vibrateUtil.vibrate()
+                        view?.showWrongAnswer(state.toQuestionViewState(), state.isGameComplete())
                     }
+                    Question.Status.TIMES_UP -> {
+                        vibrateUtil.vibrate()
+                        view?.showTimesUp(state.toQuestionViewState(), state.isGameComplete())
+                    }
+                    Question.Status.UNANSWERED -> throw IllegalStateException("Question status cannot be Unanswered when waiting for next round == true")
                 }
             }
         }
-    }.build(store)
-
-    override fun onStateChange(state: AppState) {
-        subscriber.onStateChange()
     }
 
     fun namePicked(name: String) {
         store.dispatch(Actions.NamePickedAction(name))
+        store.dispatch(timerThunks.stopTimer())
     }
 
     fun nextTapped() {
         store.dispatch(Actions.NextQuestionAction())
+    }
+
+    fun profileImageIsVisible() {
+        store.dispatch(timerThunks.startCountDownTimer(5))
     }
 
     fun endGameTapped() {
@@ -72,6 +56,7 @@ class QuestionPresenter(view: QuestionView,
 
     fun onBackPressed() {
         store.dispatch(Actions.StartOverAction())
+        store.dispatch(timerThunks.stopTimer())
     }
 
 }

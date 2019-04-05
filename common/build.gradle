@@ -1,3 +1,6 @@
+//plugins {
+//      id("org.jetbrains.kotlin.native.cocoapods")
+//}
 repositories {
     maven { url "https://dl.bintray.com/soywiz/soywiz" }
 }
@@ -8,7 +11,10 @@ apply plugin: 'kotlinx-serialization'
 
 
 
+
+
 kotlin {
+
     android {
         compilations.all {
             tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) { task ->
@@ -39,8 +45,8 @@ kotlin {
 
 //         Change to `presets.iosArm64` to deploy the app to iPhone
 //         Change to `presets.iosX64` to deploy the app to iPhone
-//            fromPreset(presets.iosX64, 'ios') {
-            fromPreset(presets.iosArm64, 'ios') {
+            fromPreset(presets.iosX64, 'ios') {
+//            fromPreset(presets.iosArm64, 'ios') {
             compilations.main.outputKinds('FRAMEWORK')
         }
     }

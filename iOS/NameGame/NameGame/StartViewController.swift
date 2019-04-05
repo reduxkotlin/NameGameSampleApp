@@ -3,7 +3,8 @@ import UIKit
 import main
 
 class StartViewController: UIViewController, StartView {
-    
+
+    @IBOutlet weak var labelError: UILabel!
     @IBOutlet weak var viewName: UIProgressView!
     var presenter: StartPresenter?
     
@@ -18,7 +19,7 @@ class StartViewController: UIViewController, StartView {
     
     override func viewDidDisappear(_ animated: Bool) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.gameEngine?.detachView(presenter: presenter!)
+        appDelegate.gameEngine?.detachView(view: self)
     }
     
     func showLoading() {
@@ -27,6 +28,10 @@ class StartViewController: UIViewController, StartView {
     
     func hideLoading() {
         viewName.isHidden = true
+    }
+
+    func showError(msg: String) {
+        labelError.text = msg
     }
     
     
