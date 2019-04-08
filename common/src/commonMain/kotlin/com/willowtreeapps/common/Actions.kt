@@ -22,5 +22,8 @@ sealed class Actions : Action {
     class DecrementCountDownAction
     class TimesUpAction
 
+    class LoadAllSettingsAction
+    class ChangeNumQuestionsSettingsAction(val num: Int)
+
 }
 

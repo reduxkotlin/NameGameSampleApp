@@ -1,30 +1,24 @@
-//plugins {
-//      id("org.jetbrains.kotlin.native.cocoapods")
-//}
 repositories {
     maven { url "https://dl.bintray.com/soywiz/soywiz" }
 }
 
-apply plugin: 'kotlin-multiplatform'
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-multiplatform'
 apply plugin: 'kotlinx-serialization'
-
-
-
-
 
 kotlin {
 
-    android {
-        compilations.all {
-            tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) { task ->
-                kotlinOptions {
-                    freeCompilerArgs = ['-Xuse-experimental=kotlin.Experimental']
-                }
-            }
-        }
-        publishLibraryVariants("release")
-    }
+
+//    android {
+//        compilations.all {
+//            tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) { task ->
+//                kotlinOptions {
+//                    freeCompilerArgs = ['-Xuse-experimental=kotlin.Experimental']
+//                }
+//            }
+//        }
+//        publishLibraryVariants("release")
+//    }
 
 //    iosArm64("ios")
 //    iosX64("iosSim")
@@ -39,24 +33,34 @@ kotlin {
 //    }
 //
     targets {
-        fromPreset(presets.jvm, 'jvm')
+//        fromPreset(presets.jvm, 'jvm')
 
 //        fromPreset(presets.android, 'androidMain')
+        fromPreset(presets.android, 'android')
+        final def iOSTarget = System.getenv('SDK_NAME')?.startsWith("iphoneos") \
+                              ? presets.iosArm64 : presets.iosX64
+
+        fromPreset(iOSTarget, 'ios') {
+            binaries {
+                framework('shared')
+            }
+        }
 
 //         Change to `presets.iosArm64` to deploy the app to iPhone
 //         Change to `presets.iosX64` to deploy the app to iPhone
-            fromPreset(presets.iosX64, 'ios') {
+//            fromPreset(presets.iosX64, 'ios') {
 //            fromPreset(presets.iosArm64, 'ios') {
-            compilations.main.outputKinds('FRAMEWORK')
-        }
+//            compilations.main.outputKinds('FRAMEWORK')
+//        }
     }
     sourceSets {
         commonMain {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+                api 'org.jetbrains.kotlin:kotlin-stdlib'
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serializationVersion"
                 implementation "io.ktor:ktor-client-logging:$ktorVersion"
+                implementation "com.russhwolf:multiplatform-settings:0.2"
 
 
                 implementation "io.ktor:ktor-client-core:$ktorVersion"
@@ -72,7 +76,7 @@ kotlin {
         }
         androidMain {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+                api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
 
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serializationVersion"
@@ -113,17 +117,22 @@ kotlin {
             }
         }
 
-        iosSimMain.dependsOn iosMain
-        iosSimTest.dependsOn iosTest
+//        iosSimMain.dependsOn iosMain
+//        iosSimTest.dependsOn iosTest
     }
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         minSdkVersion 15
     }
     buildTypes {
+        //This is for MultiplatformSettings
+        debug {
+            // MPP libraries don't currently get this resolution automatically
+            matchingFallbacks = ['release']
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -136,7 +145,6 @@ android {
 // Xcode runs this task itself during its build process when we configure it.
 // make sure all Gradle infrastructure exists (gradle.wrapper, gradlew)
 //and gradlw is in executable mode (chmod +x gradlew)
-
 task packForXCode(type: Sync) {
     final File frameworkDir = new File(buildDir, "xcode-frameworks")
     final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
