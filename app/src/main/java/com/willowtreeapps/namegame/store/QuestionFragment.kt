@@ -182,6 +182,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
 
     private fun fadeNextButton(after: () -> Unit) {
         btn_next.animate().alpha(0f).withEndAction {
+            lastCorrectBtn?.alpha = 0f
             btn_next.visibility = View.GONE
             after()
         }

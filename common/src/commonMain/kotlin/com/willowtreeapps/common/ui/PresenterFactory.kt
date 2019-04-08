@@ -8,6 +8,7 @@ import kotlin.coroutines.CoroutineContext
  * PresenterFactory that creates presenters for all views in the application.
  * Each view must attach/detach itself as it becomes visible/not visible.
  * Attaching returns a presenter to the view.
+ * PresenterFactory subscribes to changes in state, and passes state to presenters.
  */
 internal class PresenterFactory(private val gameEngine: GameEngine, networkContext: CoroutineContext) : StoreSubscriber<AppState> {
 
@@ -21,7 +22,7 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     private val gameResultsPresenter by lazy { GameResultsPresenter(gameEngine.appStore) }
 
 
-    fun <T : View?> attachView(view: T): Presenter<out View?> {
+    fun <T : View> attachView(view: T): Presenter<out View?> {
         Logger.d("AttachView: $view")
         if (subscription == null) {
             subscription = gameEngine.appStore.subscribe(this)

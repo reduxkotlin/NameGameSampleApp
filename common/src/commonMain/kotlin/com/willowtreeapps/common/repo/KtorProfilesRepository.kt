@@ -66,8 +66,7 @@ class ProfileListHolder(val profiles: List<Profile>)
 
 class ProfileListHolderSerializer : KSerializer<ProfileListHolder> {
 
-    override val descriptor = object : SerialClassDescImpl("Inner") {
-    }
+    override val descriptor = object : SerialClassDescImpl("Inner") {}
 
     override fun deserialize(input: Decoder): ProfileListHolder {
         val list = input.decodeSerializableValue(Profile.serializer().list)

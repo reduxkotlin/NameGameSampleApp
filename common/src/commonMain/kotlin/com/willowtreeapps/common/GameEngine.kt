@@ -18,7 +18,7 @@ class GameEngine(navigator: Navigator, application: Any = Any(),
     val vibrateUtil = VibrateUtil(application)
 
     val appStore by lazy {
-        SimpleStore(AppState.INITIAL_STATE, reducer)
+        SimpleStore(AppState.INITIAL_STATE, ::reducer)
                 .applyMiddleware(::thunkMiddleware,
                         viewEffectsMiddleware::dispatch,
                         navigationMiddleware::dispatch)
