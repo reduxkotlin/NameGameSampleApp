@@ -12,6 +12,7 @@ class NavigationMiddleware(val navigator: Navigator) {
             is Actions.FetchingProfilesSuccessAction -> navigator.goto(Screen.QUESTION)
             is Actions.GameCompleteAction -> navigator.goto(Screen.GAME_COMPLETE)
             is Actions.StartOverAction -> navigator.goto(Screen.START)
+            is Actions.SettingsTappedAction -> navigator.goto(Screen.SETTINGS)
         }
         return result
     }
@@ -20,7 +21,8 @@ class NavigationMiddleware(val navigator: Navigator) {
 enum class Screen {
     START,
     QUESTION,
-    GAME_COMPLETE
+    GAME_COMPLETE,
+    SETTINGS
 }
 
 interface Navigator {

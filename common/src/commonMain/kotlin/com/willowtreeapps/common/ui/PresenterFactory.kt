@@ -20,6 +20,7 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     private val startPresenter by lazy { StartPresenter(gameEngine.appStore, networkThunks) }
     private val questPresenter by lazy { QuestionPresenter(gameEngine.appStore, gameEngine.vibrateUtil, timerThunks) }
     private val gameResultsPresenter by lazy { GameResultsPresenter(gameEngine.appStore) }
+    private val settingsPresenter by lazy { SettingsPresenter(gameEngine.appStore) }
 
 
     fun <T : View> attachView(view: T): Presenter<out View?> {
@@ -39,6 +40,10 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
             is GameResultsView -> {
                 gameResultsPresenter.attachView(view)
                 gameResultsPresenter
+            }
+            is SettingsView -> {
+                settingsPresenter.attachView(view)
+                settingsPresenter
             }
             else -> throw IllegalStateException("Screen $view not handled")
         }

@@ -8,18 +8,6 @@ apply plugin: 'kotlinx-serialization'
 
 kotlin {
 
-
-//    android {
-//        compilations.all {
-//            tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) { task ->
-//                kotlinOptions {
-//                    freeCompilerArgs = ['-Xuse-experimental=kotlin.Experimental']
-//                }
-//            }
-//        }
-//        publishLibraryVariants("release")
-//    }
-
 //    iosArm64("ios")
 //    iosX64("iosSim")
 //
@@ -60,7 +48,7 @@ kotlin {
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serializationVersion"
                 implementation "io.ktor:ktor-client-logging:$ktorVersion"
-                implementation "com.russhwolf:multiplatform-settings:0.2"
+                implementation "com.russhwolf:multiplatform-settings:$multiplatformSettingsVersion"
 
 
                 implementation "io.ktor:ktor-client-core:$ktorVersion"
