@@ -3,6 +3,7 @@ package com.willowtreeapps.common
 import com.beyondeye.reduks.*
 import com.willowtreeapps.common.ui.*
 import kotlin.coroutines.CoroutineContext
+import kotlin.reflect.KClass
 
 /**
  * PresenterFactory that creates presenters for all views in the application.
@@ -22,9 +23,9 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     private val gameResultsPresenter by lazy { GameResultsPresenter(gameEngine.appStore) }
     private val settingsPresenter by lazy { SettingsPresenter(gameEngine.appStore) }
 
-
     fun <T : View> attachView(view: T): Presenter<out View?> {
         Logger.d("AttachView: $view")
+
         if (subscription == null) {
             subscription = gameEngine.appStore.subscribe(this)
         }
@@ -59,6 +60,8 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
             questPresenter.detachView(view)
         if (view is GameResultsView)
             gameResultsPresenter.detachView(view)
+        if (view is SettingsView)
+            settingsPresenter.detachView(view)
 
         if (hasAttachedViews()) {
             subscription?.unsubscribe()
@@ -76,6 +79,9 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
             questPresenter.onStateChange(gameEngine.appStore.state)
         }
         if (gameResultsPresenter.isAttached()) {
+            gameResultsPresenter.onStateChange(gameEngine.appStore.state)
+        }
+        if (settingsPresenter.isAttached()) {
             gameResultsPresenter.onStateChange(gameEngine.appStore.state)
         }
 //        presenters.forEach { it.onStateChange(gameEngine.appStore.state) }

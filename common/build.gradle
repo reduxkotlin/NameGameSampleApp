@@ -7,39 +7,17 @@ apply plugin: 'kotlin-multiplatform'
 apply plugin: 'kotlinx-serialization'
 
 kotlin {
-
-//    iosArm64("ios")
-//    iosX64("iosSim")
-//
-//    targets.all { target ->
-//        if (target.name == 'android') return // Android handles this differently
-//        compilations.all { compilation ->
-//            tasks[compileKotlinTaskName].kotlinOptions {
-//                freeCompilerArgs = ['-Xuse-experimental=kotlin.Experimental']
-//            }
-//        }
-//    }
-//
     targets {
 //        fromPreset(presets.jvm, 'jvm')
-
-//        fromPreset(presets.android, 'androidMain')
         fromPreset(presets.android, 'android')
         final def iOSTarget = System.getenv('SDK_NAME')?.startsWith("iphoneos") \
                               ? presets.iosArm64 : presets.iosX64
 
         fromPreset(iOSTarget, 'ios') {
             binaries {
-                framework('shared')
+                framework('common')
             }
         }
-
-//         Change to `presets.iosArm64` to deploy the app to iPhone
-//         Change to `presets.iosX64` to deploy the app to iPhone
-//            fromPreset(presets.iosX64, 'ios') {
-//            fromPreset(presets.iosArm64, 'ios') {
-//            compilations.main.outputKinds('FRAMEWORK')
-//        }
     }
     sourceSets {
         commonMain {
@@ -104,9 +82,6 @@ kotlin {
                 implementation "io.ktor:ktor-client-json-native:$ktorVersion"
             }
         }
-
-//        iosSimMain.dependsOn iosMain
-//        iosSimTest.dependsOn iosTest
     }
 }
 
@@ -132,15 +107,16 @@ android {
 // Don't run this task directly,
 // Xcode runs this task itself during its build process when we configure it.
 // make sure all Gradle infrastructure exists (gradle.wrapper, gradlew)
-//and gradlw is in executable mode (chmod +x gradlew)
+//and gradlew is in executable mode (chmod +x gradlew)
 task packForXCode(type: Sync) {
     final File frameworkDir = new File(buildDir, "xcode-frameworks")
     final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
+    final def framework = kotlin.targets.ios.binaries.getFramework("common", mode)
 
     inputs.property "mode", mode
-    dependsOn kotlin.targets.ios.compilations.main.linkTaskName("FRAMEWORK", mode)
+    dependsOn framework.linkTask
 
-    from { kotlin.targets.ios.compilations.main.getBinary("FRAMEWORK", mode).parentFile }
+    from { framework.outputFile.parentFile }
     into frameworkDir
 
     doLast {

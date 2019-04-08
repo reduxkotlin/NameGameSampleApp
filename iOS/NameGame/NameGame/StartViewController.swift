@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
-import main
+import common
 
 class StartViewController: UIViewController, StartView {
 
