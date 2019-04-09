@@ -10,6 +10,7 @@
 		1E19EEA6224019610094EA01 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E19EEA5224019610094EA01 /* StartViewController.swift */; };
 		1E37F67F225C064E00CC126B /* common.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E37F67E225C064E00CC126B /* common.framework */; };
 		1E37F682225C078400CC126B /* common.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1E37F680225C078400CC126B /* common.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		1E37F684225C21A700CC126B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E37F683225C21A700CC126B /* SettingsViewController.swift */; };
 		1E43892D224013860034263E /* IosNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E43892C224013860034263E /* IosNavigator.swift */; };
 		1E43892F224015A80034263E /* QuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E43892E224015A80034263E /* QuestionViewController.swift */; };
 		1E9D6D35224EA56200F5C0B8 /* SAConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9D6D34224EA55800F5C0B8 /* SAConfettiView.swift */; };
@@ -66,6 +67,7 @@
 		1E37F67C225C063C00CC126B /* common.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = common.framework.dSYM; path = "../../common/build/xcode-frameworks/common.framework.dSYM"; sourceTree = "<group>"; };
 		1E37F67E225C064E00CC126B /* common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = common.framework; sourceTree = "<group>"; };
 		1E37F680225C078400CC126B /* common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = common.framework; sourceTree = "<group>"; };
+		1E37F683225C21A700CC126B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		1E43892C224013860034263E /* IosNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosNavigator.swift; sourceTree = "<group>"; };
 		1E43892E224015A80034263E /* QuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionViewController.swift; sourceTree = "<group>"; };
 		1E9D6D34224EA55800F5C0B8 /* SAConfettiView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAConfettiView.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				1E43892C224013860034263E /* IosNavigator.swift */,
 				1E43892E224015A80034263E /* QuestionViewController.swift */,
 				1E19EEA5224019610094EA01 /* StartViewController.swift */,
+				1E37F683225C21A700CC126B /* SettingsViewController.swift */,
 			);
 			path = NameGame;
 			sourceTree = "<group>";
@@ -409,6 +412,7 @@
 				1E9D6D39224EA64800F5C0B8 /* GameResultsViewController.swift in Sources */,
 				1E9D6D35224EA56200F5C0B8 /* SAConfettiView.swift in Sources */,
 				1E9D6D38224EA64800F5C0B8 /* ImageUtils.swift in Sources */,
+				1E37F684225C21A700CC126B /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -583,6 +587,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9W3M6638YZ;
 				ENABLE_BITCODE = NO;
@@ -597,6 +602,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = willowtree.NameGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -606,6 +612,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9W3M6638YZ;
 				ENABLE_BITCODE = NO;
@@ -620,6 +627,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = willowtree.NameGame;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

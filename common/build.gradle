@@ -18,6 +18,12 @@ kotlin {
                 framework('common')
             }
         }
+//        fromPreset(presets.iosArm64, 'ios') {
+//            binaries {
+//                framework('common')
+//            }
+//        }
+
     }
     sourceSets {
         commonMain {
