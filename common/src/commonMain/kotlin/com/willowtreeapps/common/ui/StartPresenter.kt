@@ -2,8 +2,6 @@ package com.willowtreeapps.common.ui
 
 import com.beyondeye.reduks.SelectorSubscriberFn
 import com.beyondeye.reduks.Store
-import com.beyondeye.reduks.StoreSubscriberBuilderFn
-import com.beyondeye.reduks.StoreSubscriberFn
 import com.willowtreeapps.common.Actions
 import com.willowtreeapps.common.AppState
 import com.willowtreeapps.common.NetworkThunks
@@ -30,5 +28,9 @@ class StartPresenter(val store: Store<AppState>,
     fun startGame() {
         store.dispatch(Actions.ResetGameStateAction())
         store.dispatch(networkThunks.fetchProfiles())
+    }
+
+    fun settingsTapped() {
+        store.dispatch(Actions.SettingsTappedAction())
     }
 }

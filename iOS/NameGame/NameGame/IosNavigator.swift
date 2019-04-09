@@ -1,5 +1,5 @@
 import Foundation
-import main
+import common
 import UIKit
 
 
@@ -13,6 +13,8 @@ class IosNavigator: NSObject, Navigator {
             pushViewController(identifier: "gameResultsScreen")
         case Screen.start:
             UIApplication.topViewController()!.navigationController?.popToRootViewController(animated: true)
+        case Screen.settings:
+            presentModal(identifier: "settingsScreen")
         default:
             Logger().d(message: "Unhandled navigation goto: " + screen.name)
         }
@@ -26,6 +28,14 @@ class IosNavigator: NSObject, Navigator {
             //do sth with root view controller
             let navi = rootViewController.navigationController
             navi?.pushViewController(newViewController, animated: true)
+        }
+    }
+
+    private func presentModal(identifier: String) {
+        if let rootViewController = UIApplication.topViewController() {
+            let storyBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+            let modalVC = storyBoard.instantiateViewController(withIdentifier: identifier)
+            rootViewController.present(modalVC, animated: true, completion: nil)
         }
     }
 }

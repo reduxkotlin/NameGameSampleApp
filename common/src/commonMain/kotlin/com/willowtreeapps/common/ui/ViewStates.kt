@@ -2,6 +2,8 @@ package com.willowtreeapps.common
 
 sealed class ViewStates
 
+data class SettingsViewState(val numQuestions: Int)
+
 class QuestionViewState(
         val title: String,
         val profileImageUrl: String,

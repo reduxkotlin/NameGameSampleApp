@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-import main
+import common
 
 public extension UIImageView {
     func downloaded(from url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit, onComplete: @escaping () -> ()) {  // for swift 4.2 syntax just use ===> mode: UIView.ContentMode

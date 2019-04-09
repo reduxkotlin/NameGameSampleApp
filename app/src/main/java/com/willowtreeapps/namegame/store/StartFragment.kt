@@ -30,6 +30,11 @@ class StartFragment : Fragment(), CoroutineScope, StartView {
                 presenter?.startGame()
             }
         }
+        btn_settings.setOnClickListener {
+            activity?.runOnUiThread {
+                presenter?.settingsTapped()
+            }
+        }
     }
 
     override fun onResume() {

@@ -1,5 +1,5 @@
 import Foundation
-import main
+import common
 import UIKit
 
 class GameResultsViewController: UIViewController, GameResultsView {
