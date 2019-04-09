@@ -1,6 +1,6 @@
 import Foundation
 import UIKit
-import main
+import common
 
 class StartViewController: UIViewController, StartView {
 
@@ -10,6 +10,9 @@ class StartViewController: UIViewController, StartView {
     
     @IBAction func viewTapped(_ sender: Any) {
         presenter?.startGame()
+    }
+    @IBAction func settingsTapped(_ sender: Any) {
+        presenter?.settingsTapped()
     }
 
     override func viewDidAppear(_ animated: Bool) {

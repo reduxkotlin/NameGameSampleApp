@@ -23,6 +23,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            // MPP libraries don't currently get this resolution automatically
+            matchingFallbacks = ['release']
+        }
     }
     packagingOptions {
         exclude 'META-INF/*.kotlin_module'
@@ -55,6 +59,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion"
     implementation project(':common')
     implementation 'nl.dionsegijn:konfetti:1.1.2'
+    implementation "com.russhwolf:multiplatform-settings:$multiplatformSettingsVersion"
 
     kapt 'com.github.bumptech.glide:compiler:4.8.0'
     testImplementation 'junit:junit:4.12'

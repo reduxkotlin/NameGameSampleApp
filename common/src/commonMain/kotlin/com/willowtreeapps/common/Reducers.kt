@@ -14,7 +14,7 @@ fun reducer(state: AppState, action: Any): AppState =
         when (action) {
             is FetchingProfilesStartedAction -> state.copy(isLoadingProfiles = true)
             is FetchingProfilesSuccessAction -> {
-                val rounds = generateRounds(action.profiles, state.numQuestions)
+                val rounds = generateRounds(action.profiles, state.settings.numQuestions)
                 state.copy(isLoadingProfiles = false, profiles = action.profiles, questions = rounds)
             }
             is FetchingProfilesFailedAction -> state.copy(isLoadingProfiles = false, errorLoadingProfiles = true, errorMsg = action.message)
@@ -30,7 +30,7 @@ fun reducer(state: AppState, action: Any): AppState =
             }
             is NextQuestionAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
             is GameCompleteAction -> state.copy(waitingForResultsTap = true, waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
-            is StartOverAction, is ResetGameStateAction -> AppState.INITIAL_STATE
+            is StartOverAction, is ResetGameStateAction -> AppState.INITIAL_STATE.copy(settings = state.settings)
             is StartQuestionTimerAction -> state.copy(questionClock = action.initialValue)
             is DecrementCountDownAction -> state.copy(questionClock = state.questionClock - 1)
             is TimesUpAction -> {
@@ -39,6 +39,8 @@ fun reducer(state: AppState, action: Any): AppState =
                 newQuestions[state.currentQuestionIndex] = newQuestions[state.currentQuestionIndex].copy(answerName = "", status = status)
                 state.copy(questions = newQuestions, waitingForNextQuestion = true, questionClock = -1)
             }
+
+            is ChangeNumQuestionsSettingsAction -> state.copy(settings = state.settings.copy(numQuestions = action.num))
 
             else -> throw AssertionError("Action ${action::class.simpleName} not handled")
         }

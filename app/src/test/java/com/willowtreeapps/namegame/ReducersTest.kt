@@ -125,6 +125,16 @@ class ReducersTest {
         assertEquals(10, final.questionClock)
     }
 
+    @Test
+    fun `ChangeNumQuestionsAction should update AppState`() {
+        val initial = generateInitialTestState()
+
+        val final = reducer(initial, Actions.ChangeNumQuestionsSettingsAction(10))
+
+        assertEquals(10, final.settings.numQuestions)
+
+    }
+
     private fun generateInitialTestState(): AppState {
         val initialState = reducer(AppState(), Actions.FetchingProfilesSuccessAction(MockRepositoryFactory.getValidResponse()))
         return initialState

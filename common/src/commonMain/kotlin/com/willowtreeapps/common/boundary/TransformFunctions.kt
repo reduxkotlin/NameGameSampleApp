@@ -21,7 +21,7 @@ fun AppState.toQuestionViewState(): QuestionViewState {
     return QuestionViewState(title = "Who is this?",
             profileImageUrl = "https:$imageUrl",
             currentQuestion = (currentQuestionIndex + 1).toString(),
-            numQuestions = this.numQuestions.toString(),
+            numQuestions = questions.size.toString(),
             button1Text = choice1,
             button2Text = choice2,
             button3Text = choice3,
@@ -35,21 +35,23 @@ fun Profile.displayName() = "$firstName $lastName"
 
 
 fun AppState.toGameResultsViewState(): GameResultsViewState {
-    val percentage = ((numCorrect.toFloat() / numQuestions) * 100).toInt()
+    val percentage = ((numCorrect.toFloat() / questions.size) * 100).toInt()
     val messageText = when (percentage) {
         100 -> perfectScoreResponses.takeRandom()
         in 80..99 -> goodScoreResponses.takeRandom()
         in 50..79 -> okScoreResponses.takeRandom()
         in 10..49 -> badScoreResponses.takeRandom()
         0 -> zeroScoreResponses.takeRandom()
-        else -> throw IllegalStateException("Error in toGameResultsViewState when statement or invalide game state")
+        else -> throw IllegalStateException("Error in toGameResultsViewState when statement or invalid game state")
     }
     return GameResultsViewState(resultsText = gameTotals(),
             messageText = messageText)
 }
 
-//TODO should this be here?
-private fun AppState.roundTotals() = "${currentQuestionIndex + 1} out of $numQuestions"
+fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(this.numQuestions)
 
-private fun AppState.gameTotals() = "$numCorrect out of $numQuestions"
+//TODO should this be here?
+private fun AppState.roundTotals() = "${currentQuestionIndex + 1} out of ${questions.size}"
+
+private fun AppState.gameTotals() = "$numCorrect out of ${questions.size}"
 

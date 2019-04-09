@@ -1,62 +1,38 @@
-//plugins {
-//      id("org.jetbrains.kotlin.native.cocoapods")
-//}
 repositories {
     maven { url "https://dl.bintray.com/soywiz/soywiz" }
 }
 
-apply plugin: 'kotlin-multiplatform'
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-multiplatform'
 apply plugin: 'kotlinx-serialization'
 
-
-
-
-
 kotlin {
+    targets {
+//        fromPreset(presets.jvm, 'jvm')
+        fromPreset(presets.android, 'android')
+        final def iOSTarget = System.getenv('SDK_NAME')?.startsWith("iphoneos") \
+                              ? presets.iosArm64 : presets.iosX64
 
-    android {
-        compilations.all {
-            tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) { task ->
-                kotlinOptions {
-                    freeCompilerArgs = ['-Xuse-experimental=kotlin.Experimental']
-                }
+        fromPreset(iOSTarget, 'ios') {
+            binaries {
+                framework('common')
             }
         }
-        publishLibraryVariants("release")
-    }
-
-//    iosArm64("ios")
-//    iosX64("iosSim")
-//
-//    targets.all { target ->
-//        if (target.name == 'android') return // Android handles this differently
-//        compilations.all { compilation ->
-//            tasks[compileKotlinTaskName].kotlinOptions {
-//                freeCompilerArgs = ['-Xuse-experimental=kotlin.Experimental']
+//        fromPreset(presets.iosArm64, 'ios') {
+//            binaries {
+//                framework('common')
 //            }
 //        }
-//    }
-//
-    targets {
-        fromPreset(presets.jvm, 'jvm')
 
-//        fromPreset(presets.android, 'androidMain')
-
-//         Change to `presets.iosArm64` to deploy the app to iPhone
-//         Change to `presets.iosX64` to deploy the app to iPhone
-            fromPreset(presets.iosX64, 'ios') {
-//            fromPreset(presets.iosArm64, 'ios') {
-            compilations.main.outputKinds('FRAMEWORK')
-        }
     }
     sourceSets {
         commonMain {
             dependencies {
-                implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+                api 'org.jetbrains.kotlin:kotlin-stdlib'
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:$coroutinesVersion"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serializationVersion"
                 implementation "io.ktor:ktor-client-logging:$ktorVersion"
+                implementation "com.russhwolf:multiplatform-settings:$multiplatformSettingsVersion"
 
 
                 implementation "io.ktor:ktor-client-core:$ktorVersion"
@@ -72,7 +48,7 @@ kotlin {
         }
         androidMain {
             dependencies {
-                implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+                api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion"
 
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serializationVersion"
@@ -112,18 +88,20 @@ kotlin {
                 implementation "io.ktor:ktor-client-json-native:$ktorVersion"
             }
         }
-
-        iosSimMain.dependsOn iosMain
-        iosSimTest.dependsOn iosTest
     }
 }
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         minSdkVersion 15
     }
     buildTypes {
+        //This is for MultiplatformSettings
+        debug {
+            // MPP libraries don't currently get this resolution automatically
+            matchingFallbacks = ['release']
+        }
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -135,16 +113,16 @@ android {
 // Don't run this task directly,
 // Xcode runs this task itself during its build process when we configure it.
 // make sure all Gradle infrastructure exists (gradle.wrapper, gradlew)
-//and gradlw is in executable mode (chmod +x gradlew)
-
+//and gradlew is in executable mode (chmod +x gradlew)
 task packForXCode(type: Sync) {
     final File frameworkDir = new File(buildDir, "xcode-frameworks")
     final String mode = project.findProperty("XCODE_CONFIGURATION")?.toUpperCase() ?: 'DEBUG'
+    final def framework = kotlin.targets.ios.binaries.getFramework("common", mode)
 
     inputs.property "mode", mode
-    dependsOn kotlin.targets.ios.compilations.main.linkTaskName("FRAMEWORK", mode)
+    dependsOn framework.linkTask
 
-    from { kotlin.targets.ios.compilations.main.getBinary("FRAMEWORK", mode).parentFile }
+    from { framework.outputFile.parentFile }
     into frameworkDir
 
     doLast {

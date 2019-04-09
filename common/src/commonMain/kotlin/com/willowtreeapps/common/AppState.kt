@@ -7,11 +7,11 @@ data class AppState(val isLoadingProfiles: Boolean = false,
                     val errorLoadingProfiles: Boolean = false,
                     val errorMsg: String = "",
                     val currentQuestionIndex: Int = 0,
-                    val numQuestions: Int = 3,
                     val waitingForNextQuestion: Boolean = false,
                     val waitingForResultsTap: Boolean = false,
                     val questionClock: Int = 0,
-                    val questions: List<Question> = listOf()) {
+                    val questions: List<Question> = listOf(),
+                    val settings: UserSettings = UserSettings.defaults()) {
     companion object {
         val INITIAL_STATE = AppState()
     }
@@ -48,6 +48,12 @@ data class Question(val profileId: ProfileId,
         CORRECT,
         INCORRECT,
         TIMES_UP
+    }
+}
+
+data class UserSettings(val numQuestions: Int) {
+    companion object {
+        fun defaults() = UserSettings(3)
     }
 }
 
