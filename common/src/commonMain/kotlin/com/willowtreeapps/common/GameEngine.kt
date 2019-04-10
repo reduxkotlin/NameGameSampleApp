@@ -20,7 +20,7 @@ class GameEngine(navigator: Navigator,
     private val viewEffectsMiddleware = ViewEffectsMiddleware()
     private val presenterFactory by lazy { PresenterFactory(this, networkContext) }
     val vibrateUtil = VibrateUtil(application)
-    private val settingsMiddleware by lazy {  SettingsMiddleware(LocalStorageSettingsRepository(userSettings(application))) }
+    private val settingsMiddleware by lazy {  SettingsMiddleware(LocalStorageSettingsRepository(userSettings(application)), networkContext) }
 
     val appStore by lazy {
         SimpleStore(AppState.INITIAL_STATE, ::reducer)
