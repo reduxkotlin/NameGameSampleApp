@@ -1,7 +1,6 @@
 package com.willowtreeapps.common
 
 import com.willowtreeapps.common.Actions.*
-import com.willowtreeapps.common.repo.Profile
 import com.willowtreeapps.common.util.TimeUtil
 import kotlin.math.abs
 import kotlin.random.Random
@@ -15,11 +14,11 @@ fun reducer(state: AppState, action: Any): AppState =
             is FetchingProfilesStartedAction -> state.copy(isLoadingProfiles = true)
             is FetchingProfilesSuccessAction -> {
                 val rounds = generateRounds(action.profiles, state.settings.numQuestions)
-                state.copy(isLoadingProfiles = false, profiles = action.profiles, questions = rounds)
+                state.copy(isLoadingProfiles = false, items = action.profiles, questions = rounds)
             }
             is FetchingProfilesFailedAction -> state.copy(isLoadingProfiles = false, errorLoadingProfiles = true, errorMsg = action.message)
             is NamePickedAction -> {
-                val status = if (state.currentQuestionProfile().matches(action.name)) {
+                val status = if (state.currentQuestionItem().matches(action.name)) {
                     Question.Status.CORRECT
                 } else {
                     Question.Status.INCORRECT
@@ -45,14 +44,14 @@ fun reducer(state: AppState, action: Any): AppState =
             else -> throw AssertionError("Action ${action::class.simpleName} not handled")
         }
 
-fun generateRounds(profiles: List<Profile>, n: Int): List<Question> =
+fun generateRounds(profiles: List<Item>, n: Int): List<Question> =
         profiles.takeRandomDistinct(n)
                 .map {
                     val choiceList = profiles.takeRandomDistinct(3).toMutableList()
                     choiceList.add(abs(random.nextInt() % 4), it)
 
-                    Question(profileId = ProfileId(it.id), choices = choiceList
-                            .map { ProfileId(it.id) })
+                    Question(profileId = it.id, choices = choiceList
+                            .map { it.id })
                 }
 
 

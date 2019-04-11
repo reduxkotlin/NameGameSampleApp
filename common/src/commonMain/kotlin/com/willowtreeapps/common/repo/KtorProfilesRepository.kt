@@ -22,7 +22,8 @@ open class KtorProfilesRepository : ProfilesRepository {
     override suspend fun profiles(): GatewayResponse<List<Profile>, GenericError> {
         return try {
             val response: ProfileListHolder = client.get {
-                apiUrl("api/v1.0/profiles")
+
+                apiUrl("api/v1.0/cats")
             }
             GatewayResponse.createSuccess(response.profiles, 200, "Success")
         } catch (e: Exception) {
@@ -53,7 +54,7 @@ open class KtorProfilesRepository : ProfilesRepository {
     }
 
     private fun HttpRequestBuilder.apiUrl(path: String) {
-        header(HttpHeaders.CacheControl, "no-cache")
+        header(HttpHeaders.CacheControl, io.ktor.client.utils.CacheControl.MAX_AGE)
         url {
             takeFrom(baseUrl)
             encodedPath = path

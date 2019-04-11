@@ -6,7 +6,7 @@ import com.willowtreeapps.common.repo.Profile
 sealed class Actions : Action {
 
     class FetchingProfilesStartedAction
-    class FetchingProfilesSuccessAction(val profiles: List<Profile>)
+    class FetchingProfilesSuccessAction(val profiles: List<Item>)
     class FetchingProfilesFailedAction(val message: String)
 
     class NamePickedAction(val name: String)

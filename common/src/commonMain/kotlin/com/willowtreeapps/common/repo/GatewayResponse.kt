@@ -1,5 +1,7 @@
 package com.willowtreeapps.common.repo
 
+import kotlinx.coroutines.delay
+
 
 /**
  * Wrapper around Gateway responses that allows returning an error state with code and message.
@@ -60,12 +62,12 @@ data class GenericError(val message: String)
  * @param ex exception that will be thrown if a success full response is not received
  * @return GatewayResponse will only return GatewayResponse object if it is successful
  */
-fun retrySuccessOrThrow(numRetries: Int, retryWaitInMs: Long, ex: Exception, f: () -> GatewayResponse<*, *>): GatewayResponse<*, *> {
+suspend fun <R, E> retrySuccessOrThrow(numRetries: Int, retryWaitInMs: Long, ex: Exception, f: suspend () -> GatewayResponse<R, E>): GatewayResponse<R, E> {
     val response = f()
     return if (response.isSuccessful) {
         response
     } else if (response.isFailure && numRetries > 0) {
-//        Thread.sleep(retryWaitInMs)
+        delay(retryWaitInMs)
         retrySuccessOrThrow(numRetries - 1, retryWaitInMs * 2, ex, f)
     } else {
         throw ex

@@ -3,7 +3,6 @@ package com.willowtreeapps.common
 import com.beyondeye.reduks.*
 import com.willowtreeapps.common.ui.*
 import kotlin.coroutines.CoroutineContext
-import kotlin.reflect.KClass
 
 /**
  * PresenterFactory that creates presenters for all views in the application.
@@ -14,7 +13,7 @@ import kotlin.reflect.KClass
 internal class PresenterFactory(private val gameEngine: GameEngine, networkContext: CoroutineContext) : StoreSubscriber<AppState> {
 
     private val timerThunks = TimerThunks(networkContext, gameEngine.appStore)
-    private val networkThunks = NetworkThunks(networkContext, gameEngine.appStore, timerThunks)
+    private val networkThunks = NetworkThunks(networkContext, gameEngine.appStore)
     //    private val presenters = mutableSetOf<Presenter>()
     private var subscription: StoreSubscription? = null
 

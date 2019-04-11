@@ -15,29 +15,35 @@ import org.junit.Test
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-class ExampleUnitTest {
+class RepositoriesTest {
     private val repo = KtorProfilesRepository()
 
     @Test
     fun fetchProfiles() {
-        GlobalScope.launch {
-            async {
-                val result = repo.profiles()
-                if (result.isSuccessful) {
-                    assertNotNull(result.response)
-                    assertTrue(result.response?.isNotEmpty() ?: false)
-                } else {
-                    fail("Failure response from profiles repo: ${result.message}")
-                }
-            }.await()
+        val result = runBlocking { repo.profiles() }
+        if (result.isSuccessful) {
+            assertNotNull(result.response)
+            assertTrue(result.response?.isNotEmpty() ?: false)
+        } else {
+            fail("Failure response from cats repo: ${result.message}")
         }
-        Thread.sleep(5000)
     }
 
     @Test
     fun deserializeProfilesResponse() {
         val response = Json.nonstrict.parse(ProfileListHolderSerializer(), MockRepositoryFactory.VALID_RESPONSE_JSON)
         assertNotNull(response.profiles)
+    }
+
+    @Test
+    fun fetchDogs() {
+        val result = runBlocking { repo.profiles() }
+        if (result.isSuccessful) {
+            assertNotNull(result.response)
+            assertTrue(result.response?.isNotEmpty() ?: false)
+        } else {
+            fail("Failure response from cats repo: ${result.message}")
+        }
     }
 }
 

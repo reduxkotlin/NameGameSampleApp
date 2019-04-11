@@ -1,9 +1,10 @@
 package com.willowtreeapps.common
 
+import com.willowtreeapps.common.boundary.displayName
 import com.willowtreeapps.common.repo.Profile
 
 data class AppState(val isLoadingProfiles: Boolean = false,
-                    val profiles: List<Profile> = listOf(),
+                    val items: List<Item> = listOf(),
                     val errorLoadingProfiles: Boolean = false,
                     val errorMsg: String = "",
                     val currentQuestionIndex: Int = 0,
@@ -16,8 +17,6 @@ data class AppState(val isLoadingProfiles: Boolean = false,
         val INITIAL_STATE = AppState()
     }
 
-    fun Question.profile(): Profile = profiles.find { ProfileId(it.id) == this.profileId }!!
-
     val timerText: String
         get() = if (questionClock < 0) "" else if (questionClock >= 0) questionClock.toString() else "TIME'S UP!!"
 
@@ -27,9 +26,9 @@ data class AppState(val isLoadingProfiles: Boolean = false,
         else
             null
 
-    fun getProfile(id: ProfileId?) = profiles.find { it.id == id?.id }
+    fun getItem(id: ProfileId?) = items.find { it.id == id }
 
-    fun currentQuestionProfile() = getProfile(currentQuestion?.profileId)!!
+    fun currentQuestionItem() = getItem(currentQuestion?.profileId)!!
 
     fun isGameComplete(): Boolean = currentQuestionIndex >= questions.size || (currentQuestionIndex == questions.size - 1 && questions[currentQuestionIndex].status != Question.Status.UNANSWERED)
 
@@ -49,6 +48,19 @@ data class Question(val profileId: ProfileId,
         INCORRECT,
         TIMES_UP
     }
+}
+
+data class Item(val id: ProfileId,
+                val imageUrl: String,
+                val firstName: String,
+                val lastName: String) {
+
+    fun displayName() = "$firstName $lastName"
+
+    fun matches(name: String): Boolean {
+        return displayName() == name
+    }
+
 }
 
 data class UserSettings(val numQuestions: Int) {

@@ -7,19 +7,19 @@ import com.willowtreeapps.common.repo.Profile
  * Functions for transforming AppState data into ViewState data to be used by Views.
  */
 fun AppState.toQuestionViewState(): QuestionViewState {
-    val profile = currentQuestionProfile()
-    val imageUrl = profile.headshot.url
-    val choice1 = getProfile(currentQuestion?.choices?.get(0))!!.displayName()
-    val choice2 = getProfile(currentQuestion?.choices?.get(1))!!.displayName()
-    val choice3 = getProfile(currentQuestion?.choices?.get(2))!!.displayName()
-    val choice4 = getProfile(currentQuestion?.choices?.get(3))!!.displayName()
-    val correctBtnNum = currentQuestion?.choices?.indexOfFirst { it.id == profile.id }!! + 1
-    var selectedBtnNum = currentQuestion?.choices?.indexOfFirst { getProfile(it)?.matches(currentQuestion?.answerName ?: "") ?: false}
+    val profile = currentQuestionItem()
+    val imageUrl = profile.imageUrl
+    val choice1 = getItem(currentQuestion?.choices?.get(0))!!.displayName()
+    val choice2 = getItem(currentQuestion?.choices?.get(1))!!.displayName()
+    val choice3 = getItem(currentQuestion?.choices?.get(2))!!.displayName()
+    val choice4 = getItem(currentQuestion?.choices?.get(3))!!.displayName()
+    val correctBtnNum = currentQuestion?.choices?.indexOfFirst { it == profile.id }!! + 1
+    var selectedBtnNum = currentQuestion?.choices?.indexOfFirst { getItem(it)?.matches(currentQuestion?.answerName ?: "") ?: false}
     if (selectedBtnNum != null) {
         selectedBtnNum += 1
     }
     return QuestionViewState(title = "Who is this?",
-            profileImageUrl = "https:$imageUrl",
+            profileImageUrl = imageUrl,
             currentQuestion = (currentQuestionIndex + 1).toString(),
             numQuestions = questions.size.toString(),
             button1Text = choice1,
