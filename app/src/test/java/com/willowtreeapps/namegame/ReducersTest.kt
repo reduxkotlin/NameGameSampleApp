@@ -38,30 +38,30 @@ class ReducersTest {
         val rounds = generateRounds(profiles!!, 10)
 
         assertEquals(10, rounds.size)
-        assertEquals(10, rounds.distinctBy { it.profileId }.size)
+        assertEquals(10, rounds.distinctBy { it.itemId }.size)
     }
 
     @Test
     fun `isLoadingProfiles set true`() {
-        val final = reducer(generateInitialTestState(), Actions.FetchingProfilesStartedAction())
+        val final = reducer(generateInitialTestState(), Actions.FetchingItemsStartedAction())
 
-        assertTrue(final.isLoadingProfiles)
+        assertTrue(final.isLoadingItems)
     }
 
     @Test
     fun `isLoadingProfiles set false on success`() {
-        val initial = generateInitialTestState().copy(isLoadingProfiles = true)
-        val final = reducer(initial, Actions.FetchingProfilesSuccessAction(runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response!!))
+        val initial = generateInitialTestState().copy(isLoadingItems = true)
+        val final = reducer(initial, Actions.FetchingItemsSuccessAction(runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response!!))
 
-        assertFalse(final.isLoadingProfiles)
+        assertFalse(final.isLoadingItems)
     }
 
     @Test
     fun `isLoadingProfiles set false on failure`() {
-        val initial = generateInitialTestState().copy(isLoadingProfiles = true)
-        val final = reducer(initial, Actions.FetchingProfilesFailedAction("Test failure"))
+        val initial = generateInitialTestState().copy(isLoadingItems = true)
+        val final = reducer(initial, Actions.FetchingItemsFailedAction("Test failure"))
 
-        assertFalse(final.isLoadingProfiles)
+        assertFalse(final.isLoadingItems)
     }
 
     @Test
@@ -138,7 +138,7 @@ class ReducersTest {
     }
 
     private fun generateInitialTestState(): AppState {
-        val initialState = reducer(AppState(), Actions.FetchingProfilesSuccessAction(runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response!!))
+        val initialState = reducer(AppState(), Actions.FetchingItemsSuccessAction(runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response!!))
         return initialState
     }
 }

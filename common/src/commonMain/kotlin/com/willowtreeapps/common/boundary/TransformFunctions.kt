@@ -1,25 +1,24 @@
 package com.willowtreeapps.common.boundary
 
 import com.willowtreeapps.common.*
-import com.willowtreeapps.common.repo.Profile
 
 /**
  * Functions for transforming AppState data into ViewState data to be used by Views.
  */
 fun AppState.toQuestionViewState(): QuestionViewState {
-    val profile = currentQuestionItem()
-    val imageUrl = profile.imageUrl
+    val item = currentQuestionItem()
+    val imageUrl = item.imageUrl
     val choice1 = getItem(currentQuestion?.choices?.get(0))!!.displayName()
     val choice2 = getItem(currentQuestion?.choices?.get(1))!!.displayName()
     val choice3 = getItem(currentQuestion?.choices?.get(2))!!.displayName()
     val choice4 = getItem(currentQuestion?.choices?.get(3))!!.displayName()
-    val correctBtnNum = currentQuestion?.choices?.indexOfFirst { it == profile.id }!! + 1
+    val correctBtnNum = currentQuestion?.choices?.indexOfFirst { it == item.id }!! + 1
     var selectedBtnNum = currentQuestion?.choices?.indexOfFirst { getItem(it)?.matches(currentQuestion?.answerName ?: "") ?: false}
     if (selectedBtnNum != null) {
         selectedBtnNum += 1
     }
     return QuestionViewState(title = "Who is this?",
-            profileImageUrl = imageUrl,
+            itemImageUrl = imageUrl,
             currentQuestion = (currentQuestionIndex + 1).toString(),
             numQuestions = questions.size.toString(),
             button1Text = choice1,
@@ -30,9 +29,6 @@ fun AppState.toQuestionViewState(): QuestionViewState {
             timerText = timerText,
             selectedBtnNum =  selectedBtnNum ?: -1)
 }
-
-fun Profile.displayName() = "$firstName $lastName"
-
 
 fun AppState.toGameResultsViewState(): GameResultsViewState {
     val percentage = ((numCorrect.toFloat() / questions.size) * 100).toInt()

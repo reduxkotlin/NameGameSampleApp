@@ -191,7 +191,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
     private fun setProfileAndFadeIn(viewState: QuestionViewState) {
         with(viewState) {
             txt_results.text = title
-            GlideApp.with(this@QuestionFragment).load(profileImageUrl)
+            GlideApp.with(this@QuestionFragment).load(itemImageUrl)
                     .transition(DrawableTransitionOptions.withCrossFade())
                     .onComplete {
                         showButtons()

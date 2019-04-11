@@ -26,14 +26,14 @@ class NetworkThunks(private val networkContext: CoroutineContext,
         val repo = repoForCategory(categoryId)
         Logger.d("Fetching StoreInfo and Feed")
         launch {
-            store.dispatch(Actions.FetchingProfilesStartedAction())
+            store.dispatch(Actions.FetchingItemsStartedAction())
             val result = repo.fetchItems()
             if (result.isSuccessful) {
                 Logger.d("Success")
-                store.dispatch(Actions.FetchingProfilesSuccessAction(result.response!!))
+                store.dispatch(Actions.FetchingItemsSuccessAction(result.response!!))
             } else {
                 Logger.d("Failure")
-                store.dispatch(Actions.FetchingProfilesFailedAction(result.message!!))
+                store.dispatch(Actions.FetchingItemsFailedAction(result.message!!))
             }
             Logger.d("DONE")
         }

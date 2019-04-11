@@ -1,8 +1,8 @@
 package com.willowtreeapps.common
 
-data class AppState(val isLoadingProfiles: Boolean = false,
+data class AppState(val isLoadingItems: Boolean = false,
                     val items: List<Item> = listOf(),
-                    val errorLoadingProfiles: Boolean = false,
+                    val errorLoadingItems: Boolean = false,
                     val errorMsg: String = "",
                     val currentQuestionIndex: Int = 0,
                     val waitingForNextQuestion: Boolean = false,
@@ -23,9 +23,9 @@ data class AppState(val isLoadingProfiles: Boolean = false,
         else
             null
 
-    fun getItem(id: ProfileId?) = items.find { it.id == id }
+    fun getItem(id: ItemId?) = items.find { it.id == id }
 
-    fun currentQuestionItem() = getItem(currentQuestion?.profileId)!!
+    fun currentQuestionItem() = getItem(currentQuestion?.itemId)!!
 
     fun isGameComplete(): Boolean = currentQuestionIndex >= questions.size || (currentQuestionIndex == questions.size - 1 && questions[currentQuestionIndex].status != Question.Status.UNANSWERED)
 
@@ -33,10 +33,10 @@ data class AppState(val isLoadingProfiles: Boolean = false,
         get() = questions.count { it.status == Question.Status.CORRECT }
 }
 
-inline class ProfileId(val id: String)
+inline class ItemId(val id: String)
 
-data class Question(val profileId: ProfileId,
-                    val choices: List<ProfileId>,
+data class Question(val itemId: ItemId,
+                    val choices: List<ItemId>,
                     val status: Status = Status.UNANSWERED,
                     val answerName: String? = null) {
     enum class Status {
@@ -47,7 +47,7 @@ data class Question(val profileId: ProfileId,
     }
 }
 
-data class Item(val id: ProfileId,
+data class Item(val id: ItemId,
                 val imageUrl: String,
                 val firstName: String,
                 val lastName: String) {

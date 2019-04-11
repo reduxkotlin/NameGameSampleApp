@@ -11,12 +11,12 @@ import kotlin.random.Random
  */
 fun reducer(state: AppState, action: Any): AppState =
         when (action) {
-            is FetchingProfilesStartedAction -> state.copy(isLoadingProfiles = true)
-            is FetchingProfilesSuccessAction -> {
-                val rounds = generateRounds(action.profiles, state.settings.numQuestions)
-                state.copy(isLoadingProfiles = false, items = action.profiles, questions = rounds)
+            is FetchingItemsStartedAction -> state.copy(isLoadingItems = true)
+            is FetchingItemsSuccessAction -> {
+                val rounds = generateRounds(action.items, state.settings.numQuestions)
+                state.copy(isLoadingItems = false, items = action.items, questions = rounds)
             }
-            is FetchingProfilesFailedAction -> state.copy(isLoadingProfiles = false, errorLoadingProfiles = true, errorMsg = action.message)
+            is FetchingItemsFailedAction -> state.copy(isLoadingItems = false, errorLoadingItems = true, errorMsg = action.message)
             is NamePickedAction -> {
                 val status = if (state.currentQuestionItem().matches(action.name)) {
                     Question.Status.CORRECT
@@ -46,13 +46,13 @@ fun reducer(state: AppState, action: Any): AppState =
             else -> throw AssertionError("Action ${action::class.simpleName} not handled")
         }
 
-fun generateRounds(profiles: List<Item>, n: Int): List<Question> =
-        profiles.takeRandomDistinct(n)
-                .map {
-                    val choiceList = profiles.takeRandomDistinct(3).toMutableList()
-                    choiceList.add(abs(random.nextInt() % 4), it)
+fun generateRounds(items: List<Item>, n: Int): List<Question> =
+        items.takeRandomDistinct(n)
+                .map { item ->
+                    val choiceList = items.takeRandomDistinct(3).toMutableList()
+                    choiceList.add(abs(random.nextInt() % 4), item)
 
-                    Question(profileId = it.id, choices = choiceList
+                    Question(itemId = item.id, choices = choiceList
                             .map { it.id })
                 }
 

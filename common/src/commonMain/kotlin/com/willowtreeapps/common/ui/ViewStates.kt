@@ -7,7 +7,7 @@ data class SettingsViewState(val numQuestions: Int,
 
 class QuestionViewState(
         val title: String,
-        val profileImageUrl: String,
+        val itemImageUrl: String,
         val currentQuestion: String,
         val numQuestions: String,
         val button1Text: String,

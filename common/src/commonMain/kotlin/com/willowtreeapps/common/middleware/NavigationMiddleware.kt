@@ -9,7 +9,7 @@ class NavigationMiddleware(val navigator: Navigator) {
     fun dispatch(store: Store<AppState>, nextDispatcher: (Any) -> Any, action: Any): Any {
         val result = nextDispatcher(action)
         when (action) {
-            is Actions.FetchingProfilesSuccessAction -> navigator.goto(Screen.QUESTION)
+            is Actions.FetchingItemsSuccessAction -> navigator.goto(Screen.QUESTION)
             is Actions.GameCompleteAction -> navigator.goto(Screen.GAME_COMPLETE)
             is Actions.StartOverAction -> navigator.goto(Screen.START)
             is Actions.SettingsTappedAction -> navigator.goto(Screen.SETTINGS)
