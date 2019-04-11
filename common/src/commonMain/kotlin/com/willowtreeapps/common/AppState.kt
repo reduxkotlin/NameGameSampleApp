@@ -1,8 +1,5 @@
 package com.willowtreeapps.common
 
-import com.willowtreeapps.common.boundary.displayName
-import com.willowtreeapps.common.repo.Profile
-
 data class AppState(val isLoadingProfiles: Boolean = false,
                     val items: List<Item> = listOf(),
                     val errorLoadingProfiles: Boolean = false,
@@ -63,9 +60,24 @@ data class Item(val id: ProfileId,
 
 }
 
-data class UserSettings(val numQuestions: Int) {
+enum class QuestionCategoryId(val displayName: String) {
+    WILLOW_TREE("WillowTree"),
+    DOGS("Dogs"),
+    CATS("Cats");
+
     companion object {
-        fun defaults() = UserSettings(3)
+        val displayNameList by lazy {
+            values().map { it.displayName }
+        }
+
+        fun fromOrdinal(ordinal: Int) = values()[ordinal]
+    }
+}
+
+data class UserSettings(val numQuestions: Int,
+                        val categoryId: QuestionCategoryId) {
+    companion object {
+        fun defaults() = UserSettings(3, categoryId = QuestionCategoryId.CATS)
     }
 }
 

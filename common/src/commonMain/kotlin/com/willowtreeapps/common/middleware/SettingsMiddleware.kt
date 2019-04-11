@@ -4,6 +4,7 @@ import com.beyondeye.reduks.Store
 import com.willowtreeapps.common.Actions
 import com.willowtreeapps.common.Actions.ChangeNumQuestionsSettingsAction
 import com.willowtreeapps.common.AppState
+import com.willowtreeapps.common.UserSettings
 import com.willowtreeapps.common.repo.LocalStorageSettingsRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -22,10 +23,13 @@ class SettingsMiddleware(private val settings: LocalStorageSettingsRepository,
     fun dispatch(store: Store<AppState>, nextDispatcher: (Any) -> Any, action: Any): Any {
         launch {
             when (action) {
-                is ChangeNumQuestionsSettingsAction -> settings.saveNumRounds(action.num)
+                is ChangeNumQuestionsSettingsAction -> settings.numRounds = action.num
+
+                is Actions.ChangeCategorySettingsAction -> settings.categoryId = action.categoryId
 
                 is Actions.LoadAllSettingsAction -> {
-                    store.dispatch(ChangeNumQuestionsSettingsAction(settings.loadNumRounds()))
+                    val settings = UserSettings(numQuestions = settings.numRounds, categoryId = settings.categoryId)
+                    store.dispatch(Actions.SettingsLoadedAction(settings))
                 }
             }
         }

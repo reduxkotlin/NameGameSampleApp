@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.willowtreeapps.common.QuestionCategoryId
 import com.willowtreeapps.common.SettingsViewState
 import com.willowtreeapps.common.ui.SettingsPresenter
 import com.willowtreeapps.common.ui.SettingsView
@@ -41,6 +42,13 @@ class SettingsDialogFragment: DialogFragment(), SettingsView {
         numberPicker.setOnValueChangedListener { _, _, newVal ->
             presenter?.numQuestionsChanged(newVal)
         }
+
+        categoryPicker.displayedValues = QuestionCategoryId.displayNameList.toTypedArray()
+        categoryPicker.maxValue = 0
+        categoryPicker.maxValue = QuestionCategoryId.displayNameList.toTypedArray().size - 1
+        categoryPicker.setOnValueChangedListener { _, _, newVal ->
+            presenter?.categoryChanged(QuestionCategoryId.fromOrdinal(newVal))
+        }
         btn_ok.setOnClickListener { dismiss() }
     }
 
@@ -56,5 +64,6 @@ class SettingsDialogFragment: DialogFragment(), SettingsView {
 
     override fun showSettings(viewState: SettingsViewState) {
         numberPicker.value = viewState.numQuestions
+        categoryPicker.value = QuestionCategoryId.values().indexOf(viewState.categoryId)
     }
 }

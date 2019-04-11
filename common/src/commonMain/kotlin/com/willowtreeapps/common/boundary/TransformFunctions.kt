@@ -48,7 +48,7 @@ fun AppState.toGameResultsViewState(): GameResultsViewState {
             messageText = messageText)
 }
 
-fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(this.numQuestions)
+fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(this.numQuestions, this.categoryId)
 
 //TODO should this be here?
 private fun AppState.roundTotals() = "${currentQuestionIndex + 1} out of ${questions.size}"

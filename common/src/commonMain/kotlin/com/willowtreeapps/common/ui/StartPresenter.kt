@@ -27,7 +27,7 @@ class StartPresenter(val store: Store<AppState>,
 
     fun startGame() {
         store.dispatch(Actions.ResetGameStateAction())
-        store.dispatch(networkThunks.fetchProfiles())
+        store.dispatch(networkThunks.fetchItems(store.state.settings.categoryId))
     }
 
     fun settingsTapped() {

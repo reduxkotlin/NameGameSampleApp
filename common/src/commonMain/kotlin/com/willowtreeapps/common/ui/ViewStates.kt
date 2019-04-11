@@ -2,7 +2,8 @@ package com.willowtreeapps.common
 
 sealed class ViewStates
 
-data class SettingsViewState(val numQuestions: Int)
+data class SettingsViewState(val numQuestions: Int,
+                             val categoryId: QuestionCategoryId)
 
 class QuestionViewState(
         val title: String,

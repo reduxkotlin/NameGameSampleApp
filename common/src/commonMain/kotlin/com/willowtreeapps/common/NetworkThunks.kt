@@ -15,9 +15,15 @@ class NetworkThunks(private val networkContext: CoroutineContext,
     override val coroutineContext: CoroutineContext
         get() = networkContext + job
 
-    private val repo = CatItemRepository()
+    //TODO cache the repositories
+    private fun repoForCategory(categoryId: QuestionCategoryId) = when (categoryId) {
+        QuestionCategoryId.WILLOW_TREE -> ProfileItemRepository()
+        QuestionCategoryId.CATS -> CatItemRepository()
+        QuestionCategoryId.DOGS -> DogItemRepository()
+    }
 
-    fun fetchProfiles(): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+    fun fetchItems(categoryId: QuestionCategoryId): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+        val repo = repoForCategory(categoryId)
         Logger.d("Fetching StoreInfo and Feed")
         launch {
             store.dispatch(Actions.FetchingProfilesStartedAction())

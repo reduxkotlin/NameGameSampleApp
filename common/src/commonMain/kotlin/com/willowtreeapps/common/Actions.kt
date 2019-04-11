@@ -25,7 +25,9 @@ sealed class Actions : Action {
 
     class SettingsTappedAction
     class LoadAllSettingsAction
+    class SettingsLoadedAction(val settings: UserSettings)
     class ChangeNumQuestionsSettingsAction(val num: Int)
+    class ChangeCategorySettingsAction(val categoryId: QuestionCategoryId)
 
 }
 
