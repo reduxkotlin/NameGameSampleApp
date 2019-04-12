@@ -17,7 +17,7 @@ fun AppState.toQuestionViewState(): QuestionViewState {
     if (selectedBtnNum != null) {
         selectedBtnNum += 1
     }
-    return QuestionViewState(title = "Who is this?",
+    return QuestionViewState(title = questionTitle,
             itemImageUrl = imageUrl,
             currentQuestion = (currentQuestionIndex + 1).toString(),
             numQuestions = questions.size.toString(),

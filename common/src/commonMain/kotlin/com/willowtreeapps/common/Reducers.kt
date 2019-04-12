@@ -13,8 +13,11 @@ fun reducer(state: AppState, action: Any): AppState =
         when (action) {
             is FetchingItemsStartedAction -> state.copy(isLoadingItems = true)
             is FetchingItemsSuccessAction -> {
-                val rounds = generateRounds(action.items, state.settings.numQuestions)
-                state.copy(isLoadingItems = false, items = action.items, questions = rounds)
+                val rounds = generateRounds(action.itemsHolder.items, state.settings.numQuestions)
+                state.copy(isLoadingItems = false,
+                        items = action.itemsHolder.items,
+                        questionTitle = action.itemsHolder.questionTitle,
+                        questions = rounds)
             }
             is FetchingItemsFailedAction -> state.copy(isLoadingItems = false, errorLoadingItems = true, errorMsg = action.message)
             is NamePickedAction -> {

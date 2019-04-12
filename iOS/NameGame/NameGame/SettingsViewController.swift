@@ -23,10 +23,12 @@ class SettingsViewController: UIViewController,
     }
 
     @IBOutlet weak var numPicker: UIPickerView!
+    @IBOutlet weak var categoryPicker: UIPickerView!
 
     var presenter: SettingsPresenter?
 
     let pickerData: [Int] = Array(1...20)
+//    let categoryData: [String] =
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +36,7 @@ class SettingsViewController: UIViewController,
         numPicker.delegate = self
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         presenter = appDelegate.gameEngine?.attachView(view: self) as! SettingsPresenter?
+    
     }
 
     override func viewDidDisappear(_ animated: Bool) {

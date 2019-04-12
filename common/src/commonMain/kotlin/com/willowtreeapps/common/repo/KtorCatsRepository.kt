@@ -1,5 +1,6 @@
 package com.willowtreeapps.common.repo
 
+import com.willowtreeapps.common.util.profile
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
@@ -35,13 +36,18 @@ open class KtorCatsRepository(private val networkContext: CoroutineContext) : Co
             val response: CatBreedListHolder = client.get {
                 apiUrl(ALL_BREEDS_PATH)
             }
-            val listOfBreeds = response.cats.map {
-                val image = retrySuccessOrThrow(2, 2000, Exception(), suspend { image(it.id) } )
-                Cat(id = it.id,
-                        breed = it.name,
-                        altNames = it.alt_names?.split(",") ?: listOf(),
-                        imageUrl = image.response?.first()?.url!!
+
+            val listOfBreeds = profile("fetch all ${response.cats.size} cat image data") {
+                response.cats.map {
+                    async {
+                        val image = retrySuccessOrThrow(2, 2000, Exception(), suspend { image(it.id) })
+                        Cat(id = it.id,
+                                breed = it.name,
+                                altNames = it.alt_names?.split(",") ?: listOf(),
+                                imageUrl = image.response?.first()?.url!!
                         )
+                    }
+                }.awaitAll()
             }
             GatewayResponse.createSuccess(listOfBreeds, 200, "Success")
         } catch (e: Exception) {
@@ -136,6 +142,7 @@ class CatBreedListHolderSerializer : KSerializer<CatBreedListHolder> {
     }
 
 }
+
 class CatImageListHolderSerializer : KSerializer<CatImageListHolder> {
 
     override val descriptor = object : SerialClassDescImpl("Inner") {}

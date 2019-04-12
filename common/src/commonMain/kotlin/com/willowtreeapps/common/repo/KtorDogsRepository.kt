@@ -1,5 +1,6 @@
 package com.willowtreeapps.common.repo
 
+import com.willowtreeapps.common.util.profile
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
@@ -35,29 +36,31 @@ open class KtorDogsRepository(private val networkContext: CoroutineContext) : Co
             val response: DogResponse = client.get {
                 apiUrl(ALL_BREEDS_PATH)
             }
-            val listOfBreeds = response.message.map { breed ->
-                if (breed.value.isNotEmpty()) {
-                    breed.value.map { subBreed ->
-                        async {
+            val listOfBreeds = profile("fetching all ${response.message.keys.size} dog image data") {
+                response.message.map { breed ->
+                    if (breed.value.isNotEmpty()) {
+                        breed.value.map { subBreed ->
+                            async {
+                                val dogImageResponse = retrySuccessOrThrow(
+                                        numRetries = 3,
+                                        retryWaitInMs = 2000,
+                                        f = suspend { randomSubBreedImage(breed.key, subBreed) },
+                                        ex = Exception("Unable to fetch image for $subBreed"))
+                                Dog(breed = breed.key, subBreed = subBreed, imageUrl = dogImageResponse.response?.message!!)
+                            }
+                        }
+                    } else {
+                        listOf(async {
                             val dogImageResponse = retrySuccessOrThrow(
                                     numRetries = 3,
                                     retryWaitInMs = 2000,
-                                    f = suspend { randomSubBreedImage(breed.key, subBreed) },
-                                    ex = Exception("Unable to fetch image for $subBreed"))
-                            Dog(breed = breed.key, subBreed = subBreed, imageUrl = dogImageResponse.response?.message!!)
-                        }
+                                    f = suspend { randomBreedImage(breed.key) },
+                                    ex = Exception("Unable to fetch image for $breed"))
+                            Dog(breed = breed.key, imageUrl = dogImageResponse.response?.message!!)
+                        })
                     }
-                } else {
-                    listOf(async {
-                        val dogImageResponse = retrySuccessOrThrow(
-                                numRetries = 3,
-                                retryWaitInMs = 2000,
-                                f = suspend { randomBreedImage(breed.key) },
-                                ex = Exception("Unable to fetch image for $breed"))
-                        Dog(breed = breed.key, imageUrl = dogImageResponse.response?.message!!)
-                    })
-                }
-            }.flatten().awaitAll()
+                }.flatten().awaitAll()
+            }
 
             GatewayResponse.createSuccess(listOfBreeds, 200, "Success")
         } catch (e: Exception) {

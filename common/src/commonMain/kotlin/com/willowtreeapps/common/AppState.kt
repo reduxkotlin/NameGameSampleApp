@@ -8,6 +8,7 @@ data class AppState(val isLoadingItems: Boolean = false,
                     val waitingForNextQuestion: Boolean = false,
                     val waitingForResultsTap: Boolean = false,
                     val questionClock: Int = -1,
+                    val questionTitle: String = "",
                     val questions: List<Question> = listOf(),
                     val settings: UserSettings = UserSettings.defaults()) {
     companion object {
@@ -15,7 +16,11 @@ data class AppState(val isLoadingItems: Boolean = false,
     }
 
     val timerText: String
-        get() = if (questionClock < 0) "" else if (questionClock >= 0) questionClock.toString() else "TIME'S UP!!"
+        get() = when {
+            questionClock < 0 -> ""
+            questionClock > 0 -> questionClock.toString()
+            else -> "TIME'S UP!!"
+        }
 
     val currentQuestion: Question?
         get() = if (questions.size > currentQuestionIndex)

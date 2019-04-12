@@ -1,12 +1,13 @@
 package com.willowtreeapps.common
 
 import com.beyondeye.reduks.Action
+import com.willowtreeapps.common.repo.ItemsHolder
 import com.willowtreeapps.common.repo.Profile
 
 sealed class Actions : Action {
 
     class FetchingItemsStartedAction
-    class FetchingItemsSuccessAction(val items: List<Item>)
+    class FetchingItemsSuccessAction(val itemsHolder: ItemsHolder)
     class FetchingItemsFailedAction(val message: String)
 
     class NamePickedAction(val name: String)
