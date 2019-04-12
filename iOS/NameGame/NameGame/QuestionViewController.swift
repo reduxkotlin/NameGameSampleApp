@@ -169,7 +169,6 @@ class QuestionViewController: UIViewController, QuestionView {
         button4.setTitle(viewState.button4Text, for: .normal)
         profileImageView.downloaded(from: viewState.itemImageUrl, onComplete: {
             self.showButtons()
-//            self.labelTimer.isHidden = false
             self.presenter?.profileImageIsVisible()
         })
     }

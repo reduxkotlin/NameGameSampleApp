@@ -34,8 +34,8 @@ class ReducersTest {
     @Test
     fun `generate N distinct random rounds`() {
 
-        val profiles = runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response
-        val rounds = generateRounds(profiles!!, 10)
+        val itemHolder = runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response
+        val rounds = generateRounds(itemHolder?.items!!, 10)
 
         assertEquals(10, rounds.size)
         assertEquals(10, rounds.distinctBy { it.itemId }.size)

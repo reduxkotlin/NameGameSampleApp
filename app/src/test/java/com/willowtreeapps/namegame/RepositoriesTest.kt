@@ -7,6 +7,7 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.parse
 import org.junit.Assert.*
+import org.junit.Ignore
 import org.junit.Test
 
 
@@ -18,6 +19,7 @@ import org.junit.Test
 class RepositoriesTest {
     private val repo = KtorProfilesRepository()
 
+    @Ignore
     @Test
     fun fetchProfiles() {
         val result = runBlocking { repo.profiles() }
@@ -35,6 +37,7 @@ class RepositoriesTest {
         assertNotNull(response.profiles)
     }
 
+    @Ignore
     @Test
     fun fetchDogs() {
         val result = runBlocking { repo.profiles() }
