@@ -583,7 +583,7 @@
 					"$(SRCROOT)",
 				);
 				"FRAMEWORK_SEARCH_PATHS[arch=*]" = (
-					"$(SRCROOT)/../../common/build/bin/ios/mainDebugFramework",
+					"$(SRCROOT)/../../common/build/xcode-frameworks",
 					"$(PROJECT_DIR)",
 					"$(SRCROOT)",
 				);

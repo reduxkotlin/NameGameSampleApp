@@ -51,6 +51,7 @@ open class KtorCatsRepository(private val networkContext: CoroutineContext) : Co
             }
             GatewayResponse.createSuccess(listOfBreeds, 200, "Success")
         } catch (e: Exception) {
+            com.willowtreeapps.common.Logger.d("FAILURE FETCHING CAT IMAGES:  ${e.message}")
             GatewayResponse.createError(GenericError(e.message
                     ?: "Failure"), 500, e.message ?: "failure")
         }

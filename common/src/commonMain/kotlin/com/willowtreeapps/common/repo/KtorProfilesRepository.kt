@@ -23,7 +23,7 @@ open class KtorProfilesRepository : ProfilesRepository {
         return try {
             val response: ProfileListHolder = client.get {
 
-                apiUrl("api/v1.0/cats")
+                apiUrl("api/v1.0/profiles")
             }
             GatewayResponse.createSuccess(response.profiles, 200, "Success")
         } catch (e: Exception) {

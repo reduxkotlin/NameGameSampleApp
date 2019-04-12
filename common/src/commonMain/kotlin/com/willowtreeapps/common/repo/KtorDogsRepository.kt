@@ -1,5 +1,6 @@
 package com.willowtreeapps.common.repo
 
+import com.willowtreeapps.common.util.TimeUtil
 import com.willowtreeapps.common.util.profile
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
@@ -41,56 +42,66 @@ open class KtorDogsRepository(private val networkContext: CoroutineContext) : Co
                     if (breed.value.isNotEmpty()) {
                         breed.value.map { subBreed ->
                             async {
-                                val dogImageResponse = retrySuccessOrThrow(
-                                        numRetries = 3,
-                                        retryWaitInMs = 2000,
-                                        f = suspend { randomSubBreedImage(breed.key, subBreed) },
-                                        ex = Exception("Unable to fetch image for $subBreed"))
-                                Dog(breed = breed.key, subBreed = subBreed, imageUrl = dogImageResponse.response?.message!!)
+                                val dogImageResponse =
+                                        try {
+                                            randomSubBreedImage(breed.key, subBreed)
+                                        } catch (e: Exception) {
+                                            GatewayResponse.createSuccess<DogImageResponse, GenericError>(DogImageResponse("200", ""), 200, "")
+                                        }
+                                Dog(breed = breed.key.capitalize(), subBreed = subBreed.capitalize(), imageUrl = dogImageResponse.response?.message!!)
                             }
                         }
                     } else {
-                        listOf(async {
-                            val dogImageResponse = retrySuccessOrThrow(
-                                    numRetries = 3,
-                                    retryWaitInMs = 2000,
-                                    f = suspend { randomBreedImage(breed.key) },
-                                    ex = Exception("Unable to fetch image for $breed"))
-                            Dog(breed = breed.key, imageUrl = dogImageResponse.response?.message!!)
-                        })
-                    }
-                }.flatten().awaitAll()
-            }
 
+                        listOf(
+                                async {
+                                    val dogImageResponse =
+                                            try {
+                                                randomBreedImage(breed.key)
+                                            } catch (e: Exception) {
+                                                com.willowtreeapps.common.Logger.d("Failure fetching image: ${e.message}")
+                                                GatewayResponse.createSuccess<DogImageResponse, GenericError>(DogImageResponse("200", ""), 200, "")
+                                            }
+                                    Dog(breed = breed.key, imageUrl = dogImageResponse.response?.message!!)
+                                }
+                        )
+                    }
+                }.flatten()
+                        .awaitAll()
+            }
             GatewayResponse.createSuccess(listOfBreeds, 200, "Success")
         } catch (e: Exception) {
+            com.willowtreeapps.common.Logger.d("Failure fetching dogs: $e")
+            com.willowtreeapps.common.Logger.d("Failure fetching dogs: ${e::class.qualifiedName}")
             GatewayResponse.createError(GenericError(e.message
                     ?: "Failure"), 500, e.message ?: "failure")
         }
     }
 
     suspend fun randomBreedImage(breed: String): GatewayResponse<DogImageResponse, GenericError> {
-        return try {
-            val response: DogImageResponse = client.get {
-                apiUrl(randomBreedImagePath(breed))
-            }
-            GatewayResponse.createSuccess(response, 200, "Success")
-        } catch (e: Exception) {
-            GatewayResponse.createError(GenericError(e.message
-                    ?: "Failure"), 500, e.message ?: "failure")
+//        return try {
+        val response: DogImageResponse = client.get {
+            apiUrl(randomBreedImagePath(breed))
         }
+        return GatewayResponse.createSuccess(response, 200, "Success")
+//        } catch (e: Exception) {
+//            com.willowtreeapps.common.Logger.d("Failure fetching breed image: ${e.message}")
+//            GatewayResponse.createError(GenericError(e.message
+//                    ?: "Failure"), 500, e.message ?: "failure")
+//        }
     }
 
     suspend fun randomSubBreedImage(breed: String, subBreed: String): GatewayResponse<DogImageResponse, GenericError> {
-        return try {
-            val response: DogImageResponse = client.get {
-                apiUrl(randomSubBreedImagePath(breed, subBreed))
-            }
-            GatewayResponse.createSuccess(response, 200, "Success")
-        } catch (e: Exception) {
-            GatewayResponse.createError(GenericError(e.message
-                    ?: "Failure"), 500, e.message ?: "failure")
+//        return try {
+        val response: DogImageResponse = client.get {
+            apiUrl(randomSubBreedImagePath(breed, subBreed))
         }
+        return GatewayResponse.createSuccess(response, 200, "Success")
+//        } catch (e: Exception) {
+//            com.willowtreeapps.common.Logger.d("Failure fetching subbreed image: ${e.message}")
+//            GatewayResponse.createError(GenericError(e.message
+//                    ?: "Failure"), 500, e.message ?: "failure")
+//        }
     }
 
     private val client by lazy {
@@ -100,6 +111,7 @@ open class KtorDogsRepository(private val networkContext: CoroutineContext) : Co
                 install(JsonFeature) {
                     serializer = KotlinxSerializer(Json.nonstrict).apply {
                         setMapper(DogResponse::class, DogResponse.serializer())
+                        setMapper(DogImageResponse::class, DogImageResponse.serializer())
                     }
                 }
                 install(Logging) {
