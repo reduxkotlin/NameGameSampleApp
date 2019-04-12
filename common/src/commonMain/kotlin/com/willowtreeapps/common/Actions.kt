@@ -1,13 +1,14 @@
 package com.willowtreeapps.common
 
 import com.beyondeye.reduks.Action
+import com.willowtreeapps.common.repo.ItemsHolder
 import com.willowtreeapps.common.repo.Profile
 
 sealed class Actions : Action {
 
-    class FetchingProfilesStartedAction
-    class FetchingProfilesSuccessAction(val profiles: List<Profile>)
-    class FetchingProfilesFailedAction(val message: String)
+    class FetchingItemsStartedAction
+    class FetchingItemsSuccessAction(val itemsHolder: ItemsHolder)
+    class FetchingItemsFailedAction(val message: String)
 
     class NamePickedAction(val name: String)
 
@@ -25,7 +26,9 @@ sealed class Actions : Action {
 
     class SettingsTappedAction
     class LoadAllSettingsAction
+    class SettingsLoadedAction(val settings: UserSettings)
     class ChangeNumQuestionsSettingsAction(val num: Int)
+    class ChangeCategorySettingsAction(val categoryId: QuestionCategoryId)
 
 }
 

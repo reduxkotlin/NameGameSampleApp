@@ -1,6 +1,5 @@
 package com.willowtreeapps.common.repo
 
-import com.willowtreeapps.common.boundary.displayName
 import kotlinx.serialization.Optional
 import kotlinx.serialization.Serializable
 
@@ -11,7 +10,7 @@ interface ProfilesRepository {
 
 @Serializable
 data class Profile(
-        //consider using ProfileId inline class once supported in kotlinx.serialization
+        //consider using ItemId inline class once supported in kotlinx.serialization
         val id: String,
         val type: String,
         val slug: String,
@@ -23,9 +22,6 @@ data class Profile(
         @Optional
         val socialLinks: List<SocialLinks>? = null) {
 
-    fun matches(name: String): Boolean {
-        return displayName() == name
-    }
 }
 
 @Serializable

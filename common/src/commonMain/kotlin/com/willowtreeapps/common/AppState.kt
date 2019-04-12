@@ -1,25 +1,26 @@
 package com.willowtreeapps.common
 
-import com.willowtreeapps.common.repo.Profile
-
-data class AppState(val isLoadingProfiles: Boolean = false,
-                    val profiles: List<Profile> = listOf(),
-                    val errorLoadingProfiles: Boolean = false,
+data class AppState(val isLoadingItems: Boolean = false,
+                    val items: List<Item> = listOf(),
+                    val errorLoadingItems: Boolean = false,
                     val errorMsg: String = "",
                     val currentQuestionIndex: Int = 0,
                     val waitingForNextQuestion: Boolean = false,
                     val waitingForResultsTap: Boolean = false,
                     val questionClock: Int = -1,
+                    val questionTitle: String = "",
                     val questions: List<Question> = listOf(),
                     val settings: UserSettings = UserSettings.defaults()) {
     companion object {
         val INITIAL_STATE = AppState()
     }
 
-    fun Question.profile(): Profile = profiles.find { ProfileId(it.id) == this.profileId }!!
-
     val timerText: String
-        get() = if (questionClock < 0) "" else if (questionClock >= 0) questionClock.toString() else "TIME'S UP!!"
+        get() = when {
+            questionClock < 0 -> ""
+            questionClock > 0 -> questionClock.toString()
+            else -> "TIME'S UP!!"
+        }
 
     val currentQuestion: Question?
         get() = if (questions.size > currentQuestionIndex)
@@ -27,9 +28,9 @@ data class AppState(val isLoadingProfiles: Boolean = false,
         else
             null
 
-    fun getProfile(id: ProfileId?) = profiles.find { it.id == id?.id }
+    fun getItem(id: ItemId?) = items.find { it.id == id }
 
-    fun currentQuestionProfile() = getProfile(currentQuestion?.profileId)!!
+    fun currentQuestionItem() = getItem(currentQuestion?.itemId)!!
 
     fun isGameComplete(): Boolean = currentQuestionIndex >= questions.size || (currentQuestionIndex == questions.size - 1 && questions[currentQuestionIndex].status != Question.Status.UNANSWERED)
 
@@ -37,10 +38,10 @@ data class AppState(val isLoadingProfiles: Boolean = false,
         get() = questions.count { it.status == Question.Status.CORRECT }
 }
 
-inline class ProfileId(val id: String)
+inline class ItemId(val id: String)
 
-data class Question(val profileId: ProfileId,
-                    val choices: List<ProfileId>,
+data class Question(val itemId: ItemId,
+                    val choices: List<ItemId>,
                     val status: Status = Status.UNANSWERED,
                     val answerName: String? = null) {
     enum class Status {
@@ -51,9 +52,37 @@ data class Question(val profileId: ProfileId,
     }
 }
 
-data class UserSettings(val numQuestions: Int) {
+data class Item(val id: ItemId,
+                val imageUrl: String,
+                val firstName: String,
+                val lastName: String) {
+
+    fun displayName() = "$firstName $lastName"
+
+    fun matches(name: String): Boolean {
+        return displayName() == name
+    }
+
+}
+
+enum class QuestionCategoryId(val displayName: String) {
+    WILLOW_TREE("WillowTree"),
+    DOGS("Dogs"),
+    CATS("Cats");
+
     companion object {
-        fun defaults() = UserSettings(3)
+        val displayNameList by lazy {
+            values().map { it.displayName }
+        }
+
+        fun fromOrdinal(ordinal: Int) = values()[ordinal]
+    }
+}
+
+data class UserSettings(val numQuestions: Int,
+                        val categoryId: QuestionCategoryId) {
+    companion object {
+        fun defaults() = UserSettings(3, categoryId = QuestionCategoryId.CATS)
     }
 }
 

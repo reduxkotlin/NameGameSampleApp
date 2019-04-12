@@ -14,7 +14,7 @@ class QuestionPresenter(
     override fun makeSubscriber() = SelectorSubscriberFn(store) {
         withSingleField({ it.questionClock }, { view?.setTimerText(state.toQuestionViewState()) })
         withSingleField({
-            it.currentQuestion?.profileId?.id ?: Any()
+            it.currentQuestion?.itemId?.id ?: Any()
         }, { view?.showProfile(state.toQuestionViewState()) })
 
         withSingleField({ it.waitingForNextQuestion }) {

@@ -7,6 +7,6 @@ import kotlin.coroutines.CoroutineContext
 
 actual object PlatformDispatcher : CoroutineDispatcher() {
     override fun dispatch(context: CoroutineContext, block: Runnable) {
-        Dispatchers.Main.dispatch(context, block)
+        Dispatchers.IO.dispatch(context, block)
     }
 }

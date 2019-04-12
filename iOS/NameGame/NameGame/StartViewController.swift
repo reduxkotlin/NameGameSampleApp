@@ -5,17 +5,23 @@ import common
 class StartViewController: UIViewController, StartView {
 
     @IBOutlet weak var labelError: UILabel!
-    @IBOutlet weak var viewName: UIProgressView!
+    @IBOutlet weak var progressView: UIProgressView!
     var presenter: StartPresenter?
     
     @IBAction func viewTapped(_ sender: Any) {
         presenter?.startGame()
+        progressView.setProgress(0, animated: false)
+        UIView.animate(withDuration: 3) {
+            self.progressView.setProgress(1.0, animated: true)
+        }
+        
     }
     @IBAction func settingsTapped(_ sender: Any) {
         presenter?.settingsTapped()
     }
 
     override func viewDidAppear(_ animated: Bool) {
+        self.progressView.progress = 0;
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         presenter = appDelegate.gameEngine?.attachView(view: self) as? StartPresenter
     }
@@ -26,11 +32,11 @@ class StartViewController: UIViewController, StartView {
     }
     
     func showLoading() {
-        viewName.isHidden = false
+        progressView.isHidden = false
     }
     
     func hideLoading() {
-        viewName.isHidden = true
+        progressView.isHidden = true
     }
 
     func showError(msg: String) {

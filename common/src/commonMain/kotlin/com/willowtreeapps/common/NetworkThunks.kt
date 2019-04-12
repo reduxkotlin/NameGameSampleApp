@@ -1,7 +1,7 @@
 package com.willowtreeapps.common
 
 import com.beyondeye.reduks.*
-import com.willowtreeapps.common.repo.KtorProfilesRepository
+import com.willowtreeapps.common.repo.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -10,25 +10,30 @@ import kotlin.coroutines.CoroutineContext
  * actions.  This allows dispatching a loading, success, and failure state.
  */
 class NetworkThunks(private val networkContext: CoroutineContext,
-                    val store: Store<AppState>,
-                    private val timerThunks: TimerThunks) : CoroutineScope {
+                    val store: Store<AppState>) : CoroutineScope {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = networkContext + job
 
-    private val repo = KtorProfilesRepository()
+    //TODO cache the repositories
+    private fun repoForCategory(categoryId: QuestionCategoryId) = when (categoryId) {
+        QuestionCategoryId.WILLOW_TREE -> ProfileItemRepository()
+        QuestionCategoryId.CATS -> CatItemRepository()
+        QuestionCategoryId.DOGS -> DogItemRepository()
+    }
 
-    fun fetchProfiles(): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+    fun fetchItems(categoryId: QuestionCategoryId): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+        val repo = repoForCategory(categoryId)
         Logger.d("Fetching StoreInfo and Feed")
         launch {
-            store.dispatch(Actions.FetchingProfilesStartedAction())
-            val result = repo.profiles()
+            store.dispatch(Actions.FetchingItemsStartedAction())
+            val result = repo.fetchItems()
             if (result.isSuccessful) {
                 Logger.d("Success")
-                store.dispatch(Actions.FetchingProfilesSuccessAction(result.response!!))
+                store.dispatch(Actions.FetchingItemsSuccessAction(result.response!!))
             } else {
                 Logger.d("Failure")
-                store.dispatch(Actions.FetchingProfilesFailedAction(result.message!!))
+                store.dispatch(Actions.FetchingItemsFailedAction(result.message!!))
             }
             Logger.d("DONE")
         }

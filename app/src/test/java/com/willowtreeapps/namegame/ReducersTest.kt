@@ -1,8 +1,9 @@
 package com.willowtreeapps.namegame
 
 import com.willowtreeapps.common.*
-import com.willowtreeapps.common.boundary.displayName
 import com.willowtreeapps.common.repo.MockRepositoryFactory
+import com.willowtreeapps.common.repo.ProfileItemRepository
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
 import java.lang.Exception
@@ -32,34 +33,35 @@ class ReducersTest {
 
     @Test
     fun `generate N distinct random rounds`() {
-        val profiles = MockRepositoryFactory.getValidResponse()
-        val rounds = generateRounds(profiles, 10)
+
+        val itemHolder = runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response
+        val rounds = generateRounds(itemHolder?.items!!, 10)
 
         assertEquals(10, rounds.size)
-        assertEquals(10, rounds.distinctBy { it.profileId }.size)
+        assertEquals(10, rounds.distinctBy { it.itemId }.size)
     }
 
     @Test
     fun `isLoadingProfiles set true`() {
-        val final = reducer(generateInitialTestState(), Actions.FetchingProfilesStartedAction())
+        val final = reducer(generateInitialTestState(), Actions.FetchingItemsStartedAction())
 
-        assertTrue(final.isLoadingProfiles)
+        assertTrue(final.isLoadingItems)
     }
 
     @Test
     fun `isLoadingProfiles set false on success`() {
-        val initial = generateInitialTestState().copy(isLoadingProfiles = true)
-        val final = reducer(initial, Actions.FetchingProfilesSuccessAction(MockRepositoryFactory.getValidResponse()))
+        val initial = generateInitialTestState().copy(isLoadingItems = true)
+        val final = reducer(initial, Actions.FetchingItemsSuccessAction(runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response!!))
 
-        assertFalse(final.isLoadingProfiles)
+        assertFalse(final.isLoadingItems)
     }
 
     @Test
     fun `isLoadingProfiles set false on failure`() {
-        val initial = generateInitialTestState().copy(isLoadingProfiles = true)
-        val final = reducer(initial, Actions.FetchingProfilesFailedAction("Test failure"))
+        val initial = generateInitialTestState().copy(isLoadingItems = true)
+        val final = reducer(initial, Actions.FetchingItemsFailedAction("Test failure"))
 
-        assertFalse(final.isLoadingProfiles)
+        assertFalse(final.isLoadingItems)
     }
 
     @Test
@@ -81,7 +83,7 @@ class ReducersTest {
     @Test
     fun `mark current round as CORRECT when name matches`() {
         val initial = generateInitialTestState()
-        val answer = initial.currentQuestionProfile().displayName()
+        val answer = initial.currentQuestionItem().displayName()
 
         val final = reducer(initial, Actions.NamePickedAction(answer))
 
@@ -136,7 +138,7 @@ class ReducersTest {
     }
 
     private fun generateInitialTestState(): AppState {
-        val initialState = reducer(AppState(), Actions.FetchingProfilesSuccessAction(MockRepositoryFactory.getValidResponse()))
+        val initialState = reducer(AppState(), Actions.FetchingItemsSuccessAction(runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response!!))
         return initialState
     }
 }

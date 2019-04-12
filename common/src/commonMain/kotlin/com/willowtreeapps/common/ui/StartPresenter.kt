@@ -12,22 +12,22 @@ class StartPresenter(val store: Store<AppState>,
                      private val networkThunks: NetworkThunks) : Presenter<StartView>() {
 
     override fun makeSubscriber() = SelectorSubscriberFn(store) {
-        withSingleField({ it.isLoadingProfiles }) {
-            if (state.isLoadingProfiles) {
+        withSingleField({ it.isLoadingItems }) {
+            if (state.isLoadingItems) {
                 view?.showLoading()
             } else {
                 view?.hideLoading()
             }
         }
 
-        withSingleField({ it.errorLoadingProfiles }) {
+        withSingleField({ it.errorLoadingItems }) {
             view?.showError(state.errorMsg)
         }
     }
 
     fun startGame() {
         store.dispatch(Actions.ResetGameStateAction())
-        store.dispatch(networkThunks.fetchProfiles())
+        store.dispatch(networkThunks.fetchItems(store.state.settings.categoryId))
     }
 
     fun settingsTapped() {

@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		1E19EEA6224019610094EA01 /* StartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E19EEA5224019610094EA01 /* StartViewController.swift */; };
-		1E37F67F225C064E00CC126B /* common.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E37F67E225C064E00CC126B /* common.framework */; };
-		1E37F682225C078400CC126B /* common.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1E37F680225C078400CC126B /* common.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1E37F684225C21A700CC126B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E37F683225C21A700CC126B /* SettingsViewController.swift */; };
+		1E37F6862260E34900CC126B /* common.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E37F6852260E34900CC126B /* common.framework */; };
+		1E37F6872260E34900CC126B /* common.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1E37F6852260E34900CC126B /* common.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		1E43892D224013860034263E /* IosNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E43892C224013860034263E /* IosNavigator.swift */; };
 		1E43892F224015A80034263E /* QuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E43892E224015A80034263E /* QuestionViewController.swift */; };
 		1E9D6D35224EA56200F5C0B8 /* SAConfettiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E9D6D34224EA55800F5C0B8 /* SAConfettiView.swift */; };
@@ -27,8 +27,6 @@
 		1EB9EA892238071B008AF004 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9EA872238071B008AF004 /* LaunchScreen.storyboard */; };
 		1EB9EA942238071B008AF004 /* NameGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9EA932238071B008AF004 /* NameGameTests.swift */; };
 		1EB9EA9F2238071C008AF004 /* NameGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9EA9E2238071C008AF004 /* NameGameUITests.swift */; };
-		D794BC0580F8ABAD74AEC0E7 /* Pods_NameGameTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53A3C83D4D3C38CDD08E0A5E /* Pods_NameGameTests.framework */; };
-		EB73C32D7A5026680B6E058F /* Pods_NameGameUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACB48F17499F8632BF88AB6B /* Pods_NameGameUITests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,7 +53,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				1E37F682225C078400CC126B /* common.framework in Embed Frameworks */,
+				1E37F6872260E34900CC126B /* common.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -65,9 +63,8 @@
 /* Begin PBXFileReference section */
 		1E19EEA5224019610094EA01 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		1E37F67C225C063C00CC126B /* common.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = common.framework.dSYM; path = "../../common/build/xcode-frameworks/common.framework.dSYM"; sourceTree = "<group>"; };
-		1E37F67E225C064E00CC126B /* common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = common.framework; sourceTree = "<group>"; };
-		1E37F680225C078400CC126B /* common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = common.framework; sourceTree = "<group>"; };
 		1E37F683225C21A700CC126B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		1E37F6852260E34900CC126B /* common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = common.framework; path = "../../common/build/xcode-frameworks/common.framework"; sourceTree = "<group>"; };
 		1E43892C224013860034263E /* IosNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosNavigator.swift; sourceTree = "<group>"; };
 		1E43892E224015A80034263E /* QuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionViewController.swift; sourceTree = "<group>"; };
 		1E9D6D34224EA55800F5C0B8 /* SAConfettiView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SAConfettiView.swift; sourceTree = "<group>"; };
@@ -90,10 +87,6 @@
 		1EB9EA9A2238071C008AF004 /* NameGameUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NameGameUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EB9EA9E2238071C008AF004 /* NameGameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameGameUITests.swift; sourceTree = "<group>"; };
 		1EB9EAA02238071C008AF004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		1EB9EAAD22382510008AF004 /* NameGame */ = {isa = PBXFileReference; lastKnownFileType = folder; name = NameGame; path = ../..; sourceTree = "<group>"; };
-		53A3C83D4D3C38CDD08E0A5E /* Pods_NameGameTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NameGameTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		ACB48F17499F8632BF88AB6B /* Pods_NameGameUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NameGameUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CEC3584174F51CF5ECAE2ED7 /* Pods_NameGame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NameGame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,7 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1E37F67F225C064E00CC126B /* common.framework in Frameworks */,
+				1E37F6862260E34900CC126B /* common.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,7 +102,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D794BC0580F8ABAD74AEC0E7 /* Pods_NameGameTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,7 +109,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EB73C32D7A5026680B6E058F /* Pods_NameGameUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,8 +118,7 @@
 		1EB9EA722238071A008AF004 = {
 			isa = PBXGroup;
 			children = (
-				1E37F67E225C064E00CC126B /* common.framework */,
-				1E37F680225C078400CC126B /* common.framework */,
+				1E37F6852260E34900CC126B /* common.framework */,
 				1EB9EA7D2238071A008AF004 /* NameGame */,
 				1EB9EA922238071B008AF004 /* NameGameTests */,
 				1EB9EA9D2238071C008AF004 /* NameGameUITests */,
@@ -193,10 +183,6 @@
 			isa = PBXGroup;
 			children = (
 				1E37F67C225C063C00CC126B /* common.framework.dSYM */,
-				1EB9EAAD22382510008AF004 /* NameGame */,
-				CEC3584174F51CF5ECAE2ED7 /* Pods_NameGame.framework */,
-				53A3C83D4D3C38CDD08E0A5E /* Pods_NameGameTests.framework */,
-				ACB48F17499F8632BF88AB6B /* Pods_NameGameUITests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -592,8 +578,14 @@
 				DEVELOPMENT_TEAM = 9W3M6638YZ;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(SRCROOT)/../../common/build/bin/ios/mainDebugFramework",
+					"$(SRCROOT)/../../common/build/xcode-frameworks/**",
 					"$(PROJECT_DIR)",
+					"$(SRCROOT)",
+				);
+				"FRAMEWORK_SEARCH_PATHS[arch=*]" = (
+					"$(SRCROOT)/../../common/build/xcode-frameworks",
+					"$(PROJECT_DIR)",
+					"$(SRCROOT)",
 				);
 				INFOPLIST_FILE = NameGame/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

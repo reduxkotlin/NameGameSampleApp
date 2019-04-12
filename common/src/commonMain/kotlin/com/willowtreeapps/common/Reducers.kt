@@ -1,7 +1,6 @@
 package com.willowtreeapps.common
 
 import com.willowtreeapps.common.Actions.*
-import com.willowtreeapps.common.repo.Profile
 import com.willowtreeapps.common.util.TimeUtil
 import kotlin.math.abs
 import kotlin.random.Random
@@ -12,14 +11,17 @@ import kotlin.random.Random
  */
 fun reducer(state: AppState, action: Any): AppState =
         when (action) {
-            is FetchingProfilesStartedAction -> state.copy(isLoadingProfiles = true)
-            is FetchingProfilesSuccessAction -> {
-                val rounds = generateRounds(action.profiles, state.settings.numQuestions)
-                state.copy(isLoadingProfiles = false, profiles = action.profiles, questions = rounds)
+            is FetchingItemsStartedAction -> state.copy(isLoadingItems = true)
+            is FetchingItemsSuccessAction -> {
+                val rounds = generateRounds(action.itemsHolder.items, state.settings.numQuestions)
+                state.copy(isLoadingItems = false,
+                        items = action.itemsHolder.items,
+                        questionTitle = action.itemsHolder.questionTitle,
+                        questions = rounds)
             }
-            is FetchingProfilesFailedAction -> state.copy(isLoadingProfiles = false, errorLoadingProfiles = true, errorMsg = action.message)
+            is FetchingItemsFailedAction -> state.copy(isLoadingItems = false, errorLoadingItems = true, errorMsg = action.message)
             is NamePickedAction -> {
-                val status = if (state.currentQuestionProfile().matches(action.name)) {
+                val status = if (state.currentQuestionItem().matches(action.name)) {
                     Question.Status.CORRECT
                 } else {
                     Question.Status.INCORRECT
@@ -41,18 +43,20 @@ fun reducer(state: AppState, action: Any): AppState =
             }
 
             is ChangeNumQuestionsSettingsAction -> state.copy(settings = state.settings.copy(numQuestions = action.num))
+            is ChangeCategorySettingsAction -> state.copy(settings = state.settings.copy(categoryId = action.categoryId))
+            is SettingsLoadedAction -> state.copy(settings = action.settings)
 
             else -> throw AssertionError("Action ${action::class.simpleName} not handled")
         }
 
-fun generateRounds(profiles: List<Profile>, n: Int): List<Question> =
-        profiles.takeRandomDistinct(n)
-                .map {
-                    val choiceList = profiles.takeRandomDistinct(3).toMutableList()
-                    choiceList.add(abs(random.nextInt() % 4), it)
+fun generateRounds(items: List<Item>, n: Int): List<Question> =
+        items.takeRandomDistinct(n)
+                .map { item ->
+                    val choiceList = items.takeRandomDistinct(3).toMutableList()
+                    choiceList.add(abs(random.nextInt() % 4), item)
 
-                    Question(profileId = ProfileId(it.id), choices = choiceList
-                            .map { ProfileId(it.id) })
+                    Question(itemId = item.id, choices = choiceList
+                            .map { it.id })
                 }
 
 

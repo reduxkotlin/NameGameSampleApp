@@ -167,9 +167,8 @@ class QuestionViewController: UIViewController, QuestionView {
         button2.setTitle(viewState.button2Text, for: .normal)
         button3.setTitle(viewState.button3Text, for: .normal)
         button4.setTitle(viewState.button4Text, for: .normal)
-        profileImageView.downloaded(from: viewState.profileImageUrl, onComplete: {
+        profileImageView.downloaded(from: viewState.itemImageUrl, onComplete: {
             self.showButtons()
-            self.labelTimer.isHidden = false
             self.presenter?.profileImageIsVisible()
         })
     }
@@ -204,7 +203,7 @@ class QuestionViewController: UIViewController, QuestionView {
                 self.labelTimer.alpha = 0
             }, completion: { _ in
                 self.labelTimer.textColor = restoreColor
-                self.labelTimer.isHidden = true
+                self.labelTimer.alpha = 0
             })
         })
     }

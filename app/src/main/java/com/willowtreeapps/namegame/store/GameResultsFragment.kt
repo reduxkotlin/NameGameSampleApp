@@ -49,7 +49,7 @@ class GameResultsFragment : Fragment(), CoroutineScope, GameResultsView, MainAct
     }
 
     override fun showResults(viewState: GameResultsViewState) {
-        txt_results.text = viewState.resultsText
+        txt_questionTitle.text = viewState.resultsText
         txt_message.text = viewState.messageText
     }
 
