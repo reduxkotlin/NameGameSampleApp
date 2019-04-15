@@ -100,7 +100,9 @@ abstract class Presenter<T : View<*>?> {
 
     open fun attachView(view: T) {
         Logger.d("Presenter attachView: $view")
-        subscriber = makeSubscriber()
+        if (subscriber == null) {
+            subscriber = makeSubscriber()
+        }
         this.view = view
     }
 
@@ -116,4 +118,9 @@ abstract class Presenter<T : View<*>?> {
     fun onStateChange(state: AppState) {
         subscriber?.onStateChange()
     }
+
+    //on Android, this is when the view has been destroyed and must be recreated. (onConfig change, etc)
+    //the state has not change, but the views must be set to the existing AppState
+    abstract fun recreateView()
+
 }

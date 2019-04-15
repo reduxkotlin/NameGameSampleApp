@@ -10,6 +10,10 @@ import com.willowtreeapps.common.boundary.toViewState
 
 class SettingsPresenter(val store: Store<AppState>): Presenter<SettingsView>() {
 
+    override fun recreateView() {
+        view?.showSettings(store.state.settings.toViewState())
+    }
+
     override fun makeSubscriber() = SelectorSubscriberFn(store){
         withSingleField({ it.settings}) { view?.showSettings(state.settings.toViewState())}
     }

@@ -6,7 +6,6 @@ data class AppState(val isLoadingItems: Boolean = false,
                     val errorMsg: String = "",
                     val currentQuestionIndex: Int = 0,
                     val waitingForNextQuestion: Boolean = false,
-                    val waitingForResultsTap: Boolean = false,
                     val questionClock: Int = -1,
                     val questionTitle: String = "",
                     val questions: List<Question> = listOf(),
@@ -33,6 +32,8 @@ data class AppState(val isLoadingItems: Boolean = false,
     fun currentQuestionItem() = getItem(currentQuestion?.itemId)!!
 
     fun isGameComplete(): Boolean = currentQuestionIndex >= questions.size || (currentQuestionIndex == questions.size - 1 && questions[currentQuestionIndex].status != Question.Status.UNANSWERED)
+
+    fun isCurrentQuestionAnswered(): Boolean = currentQuestion?.status != Question.Status.UNANSWERED
 
     val numCorrect: Int
         get() = questions.count { it.status == Question.Status.CORRECT }
@@ -85,4 +86,3 @@ data class UserSettings(val numQuestions: Int,
         fun defaults() = UserSettings(3, categoryId = QuestionCategoryId.CATS)
     }
 }
-

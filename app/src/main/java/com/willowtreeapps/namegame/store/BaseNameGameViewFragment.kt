@@ -1,6 +1,8 @@
 package com.willowtreeapps.namegame.store
 
+import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.willowtreeapps.common.Logger
 import com.willowtreeapps.common.Presenter
 import com.willowtreeapps.common.View
 import com.willowtreeapps.common.ui.GameResultsPresenter
@@ -14,10 +16,24 @@ open class BaseNameGameViewFragment<TPresenter: Presenter<*>>: Fragment(), Corou
         get() = Dispatchers.Main
 
     override lateinit var presenter: TPresenter
+    private var viewRecreated: Boolean = false
+
+    override fun onViewCreated(view: android.view.View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (savedInstanceState == null)
+            Logger.d("savedInstanceState == null")
+        else {
+            Logger.d("savedInstanceState != null")
+            viewRecreated = true
+        }
+    }
 
     override fun onResume() {
         super.onResume()
         NameGameApp.gameEngine().attachView(this)
+        if (viewRecreated) {
+            presenter.recreateView()
+        }
     }
 
     override fun onPause() {

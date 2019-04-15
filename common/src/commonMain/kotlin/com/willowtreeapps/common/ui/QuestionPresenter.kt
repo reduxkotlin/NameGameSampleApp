@@ -11,6 +11,11 @@ class QuestionPresenter(
         private val vibrateUtil: VibrateUtil,
         private val timerThunks: TimerThunks) : Presenter<QuestionView>() {
 
+    override fun recreateView() {
+        view?.showProfileNotAnimated(store.state.toQuestionViewState())
+    }
+
+    //TODO consider SelectorSubscriberFn take coroutineContext as param so activity.runOnUiThread is not needed
     override fun makeSubscriber() = SelectorSubscriberFn(store) {
         withSingleField({ it.questionClock }, { view?.setTimerText(state.toQuestionViewState()) })
         withSingleField({
@@ -47,7 +52,9 @@ class QuestionPresenter(
     }
 
     fun profileImageIsVisible() {
-        store.dispatch(timerThunks.startCountDownTimer(5))
+        if (!store.state.isCurrentQuestionAnswered()) {
+            store.dispatch(timerThunks.startCountDownTimer(5))
+        }
     }
 
     fun endGameTapped() {
