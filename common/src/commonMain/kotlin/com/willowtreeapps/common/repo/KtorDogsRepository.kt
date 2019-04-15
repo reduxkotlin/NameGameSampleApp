@@ -62,7 +62,7 @@ open class KtorDogsRepository(private val networkContext: CoroutineContext) : Co
                                                 com.willowtreeapps.common.Logger.d("Failure fetching image: ${e.message}")
                                                 GatewayResponse.createSuccess<DogImageResponse, GenericError>(DogImageResponse("200", ""), 200, "")
                                             }
-                                    Dog(breed = breed.key, imageUrl = dogImageResponse.response?.message!!)
+                                    Dog(breed = breed.key.capitalize(), imageUrl = dogImageResponse.response?.message!!)
                                 }
                         )
                     }

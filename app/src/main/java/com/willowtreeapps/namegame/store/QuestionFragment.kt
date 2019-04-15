@@ -87,7 +87,9 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
     }
 
     override fun showWrongAnswer(viewState: QuestionViewState, isEndGame: Boolean) {
-        wrongShakeAnimation(viewState) { hideButtonsShowNext(viewState, isEndGame) }
+        activity?.runOnUiThread {
+            wrongShakeAnimation(viewState) { hideButtonsShowNext(viewState, isEndGame) }
+        }
     }
 
     private val showButtonsAnimatorSet by lazy {
@@ -234,7 +236,7 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
             txt_timer.scaleY = 0f
             txt_timer.text = viewState.timerText
             val restoreColor = txt_timer.currentTextColor
-            txt_timer.setTextColor(ResourcesCompat.getColor(context?.resources!!, R.color.red, null))
+            txt_timer.setTextColor(ResourcesCompat.getColor(context?.resources!!, R.color.red, activity?.theme))
             txt_timer.animate()
                     .scaleX(1f)
                     .scaleY(1f)
