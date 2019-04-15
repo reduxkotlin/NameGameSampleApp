@@ -11,4 +11,10 @@ __iOS Build & Tests____
 
 A Kotlin multiplatform (Android/iOS) WT name game.
 
-More to come....
+## Architecture
+
+App uses an MVP arch with a redux store as the 'Model'.  This approach allows maximum reuse of code and a simple contract for the platforms to satisfy.  
+
+![](https://storage.googleapis.com/treestorage/Kotlin%20MPP%20Demo%20Arch.png)
+
+WIP...
