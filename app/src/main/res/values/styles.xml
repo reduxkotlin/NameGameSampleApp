@@ -53,5 +53,10 @@
 
     </style>
 
+    <style name="SettingsLabelText">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
 </resources>
 

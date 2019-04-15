@@ -3,7 +3,7 @@ package com.willowtreeapps.common.ui
 import com.willowtreeapps.common.QuestionViewState
 import com.willowtreeapps.common.View
 
-interface QuestionView : View {
+interface QuestionView : View<QuestionPresenter> {
 
     fun showProfile(viewState: QuestionViewState)
 

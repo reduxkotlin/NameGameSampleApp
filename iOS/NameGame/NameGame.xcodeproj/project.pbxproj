@@ -27,6 +27,7 @@
 		1EB9EA892238071B008AF004 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9EA872238071B008AF004 /* LaunchScreen.storyboard */; };
 		1EB9EA942238071B008AF004 /* NameGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9EA932238071B008AF004 /* NameGameTests.swift */; };
 		1EB9EA9F2238071C008AF004 /* NameGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9EA9E2238071C008AF004 /* NameGameUITests.swift */; };
+		1ED273982264E64C0094EE0D /* BaseNameGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED273972264E64C0094EE0D /* BaseNameGameViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		1EB9EA9A2238071C008AF004 /* NameGameUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NameGameUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EB9EA9E2238071C008AF004 /* NameGameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameGameUITests.swift; sourceTree = "<group>"; };
 		1EB9EAA02238071C008AF004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1ED273972264E64C0094EE0D /* BaseNameGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNameGameViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +159,7 @@
 				1E43892E224015A80034263E /* QuestionViewController.swift */,
 				1E19EEA5224019610094EA01 /* StartViewController.swift */,
 				1E37F683225C21A700CC126B /* SettingsViewController.swift */,
+				1ED273972264E64C0094EE0D /* BaseNameGameViewController.swift */,
 			);
 			path = NameGame;
 			sourceTree = "<group>";
@@ -392,6 +395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E43892D224013860034263E /* IosNavigator.swift in Sources */,
+				1ED273982264E64C0094EE0D /* BaseNameGameViewController.swift in Sources */,
 				1E43892F224015A80034263E /* QuestionViewController.swift in Sources */,
 				1EB9EA7F2238071A008AF004 /* AppDelegate.swift in Sources */,
 				1E19EEA6224019610094EA01 /* StartViewController.swift in Sources */,

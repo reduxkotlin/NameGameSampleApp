@@ -9,7 +9,7 @@ import com.willowtreeapps.common.util.VibrateUtil
 class QuestionPresenter(
         val store: Store<AppState>,
         private val vibrateUtil: VibrateUtil,
-        private val timerThunks: TimerThunks) : Presenter<QuestionView?>() {
+        private val timerThunks: TimerThunks) : Presenter<QuestionView>() {
 
     override fun makeSubscriber() = SelectorSubscriberFn(store) {
         withSingleField({ it.questionClock }, { view?.setTimerText(state.toQuestionViewState()) })
