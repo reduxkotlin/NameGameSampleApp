@@ -18,7 +18,7 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     private var subscription: StoreSubscription? = null
 
     private val startPresenter by lazy { StartPresenter(gameEngine.appStore, networkThunks) }
-    private val questPresenter by lazy { QuestionPresenter(gameEngine.appStore, gameEngine.vibrateUtil, timerThunks) }
+    private val questionPresenter by lazy { QuestionPresenter(gameEngine.appStore, gameEngine.vibrateUtil, timerThunks) }
     private val gameResultsPresenter by lazy { GameResultsPresenter(gameEngine.appStore) }
     private val settingsPresenter by lazy { SettingsPresenter(gameEngine.appStore) }
 
@@ -34,8 +34,8 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
                 startPresenter
             }
             is QuestionView -> {
-                questPresenter.attachView(view)
-                questPresenter
+                questionPresenter.attachView(view)
+                questionPresenter
             }
             is GameResultsView -> {
                 gameResultsPresenter.attachView(view)
@@ -56,7 +56,7 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
         if (view is StartView)
             startPresenter.detachView(view)
         if (view is QuestionView)
-            questPresenter.detachView(view)
+            questionPresenter.detachView(view)
         if (view is GameResultsView)
             gameResultsPresenter.detachView(view)
         if (view is SettingsView)
@@ -68,14 +68,14 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
         }
     }
 
-    private fun hasAttachedViews() = !startPresenter.isAttached() && !questPresenter.isAttached() && !gameResultsPresenter.isAttached()
+    private fun hasAttachedViews() = !startPresenter.isAttached() && !questionPresenter.isAttached() && !gameResultsPresenter.isAttached()
 
     override fun onStateChange() {
         if (startPresenter.isAttached()) {
             startPresenter.onStateChange(gameEngine.appStore.state)
         }
-        if (questPresenter.isAttached()) {
-            questPresenter.onStateChange(gameEngine.appStore.state)
+        if (questionPresenter.isAttached()) {
+            questionPresenter.onStateChange(gameEngine.appStore.state)
         }
         if (gameResultsPresenter.isAttached()) {
             gameResultsPresenter.onStateChange(gameEngine.appStore.state)

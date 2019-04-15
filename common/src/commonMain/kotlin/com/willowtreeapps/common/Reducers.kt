@@ -9,7 +9,7 @@ import kotlin.random.Random
  * Reducers and functions used by reducers are in this file.  Functions must be pure functions without
  * side effects.
  */
-fun reducer(state: AppState, action: Any): AppState =
+internal fun reducer(state: AppState, action: Any): AppState =
         when (action) {
             is FetchingItemsStartedAction -> state.copy(isLoadingItems = true)
             is FetchingItemsSuccessAction -> {

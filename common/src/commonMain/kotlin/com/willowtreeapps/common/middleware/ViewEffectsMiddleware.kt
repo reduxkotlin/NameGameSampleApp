@@ -16,7 +16,7 @@ typealias ViewEffectsSubscriber = (ViewEffect) -> Unit
  *
  *  Must be unsubscribed to avoid leaks.
  */
-class ViewEffectsMiddleware {
+internal class ViewEffectsMiddleware {
     private val viewEffectsSubscribers = mutableSetOf<ViewEffectsSubscriber>()
 
     fun subscribeToViewEffects(subscriber: ViewEffectsSubscriber) {
