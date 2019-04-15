@@ -14,7 +14,7 @@ import kotlin.coroutines.CoroutineContext
 /**
  * Save and Loads user settings from local storage
  */
-class SettingsMiddleware(private val settings: LocalStorageSettingsRepository,
+internal class SettingsMiddleware(private val settings: LocalStorageSettingsRepository,
                          private val backgroundContext: CoroutineContext): CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = backgroundContext + Job()

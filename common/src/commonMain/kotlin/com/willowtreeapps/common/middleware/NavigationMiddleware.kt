@@ -4,7 +4,7 @@ import com.beyondeye.reduks.Store
 import com.willowtreeapps.common.Actions
 import com.willowtreeapps.common.AppState
 
-class NavigationMiddleware(val navigator: Navigator) {
+internal class NavigationMiddleware(private val navigator: Navigator) {
 
     fun dispatch(store: Store<AppState>, nextDispatcher: (Any) -> Any, action: Any): Any {
         val result = nextDispatcher(action)
