@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import com.willowtreeapps.common.GameResultsViewState
 import com.willowtreeapps.common.ui.GameResultsPresenter
 import com.willowtreeapps.common.ui.GameResultsView
@@ -12,16 +11,8 @@ import com.willowtreeapps.namegame.MainActivity
 import com.willowtreeapps.namegame.NameGameApp
 import com.willowtreeapps.namegame.R
 import kotlinx.android.synthetic.main.fragment_game_results.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlin.coroutines.CoroutineContext
 
-class GameResultsFragment : Fragment(), CoroutineScope, GameResultsView, MainActivity.IOnBackPressed {
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
-
-    private var presenter: GameResultsPresenter? = null
+class GameResultsFragment : BaseNameGameViewFragment<GameResultsPresenter>(), GameResultsView, MainActivity.IOnBackPressed {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_game_results, container, false)
@@ -34,18 +25,8 @@ class GameResultsFragment : Fragment(), CoroutineScope, GameResultsView, MainAct
     private fun initViews() {
         btn_start_over.setOnClickListener {
             NameGameApp.gameEngine().detachView(this)
-            presenter?.startOverTapped()
+            presenter.startOverTapped()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        presenter = NameGameApp.gameEngine().attachView(this) as GameResultsPresenter
-    }
-
-    override fun onPause() {
-        super.onPause()
-        NameGameApp.gameEngine().detachView(this)
     }
 
     override fun showResults(viewState: GameResultsViewState) {
@@ -54,7 +35,7 @@ class GameResultsFragment : Fragment(), CoroutineScope, GameResultsView, MainAct
     }
 
     override fun onBackPressed(): Boolean {
-        presenter?.onBackPressed()
+        presenter.onBackPressed()
         return false
     }
 

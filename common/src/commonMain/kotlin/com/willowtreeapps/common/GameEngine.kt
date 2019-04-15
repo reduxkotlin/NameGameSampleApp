@@ -33,7 +33,7 @@ class GameEngine(navigator: Navigator,
     init {
         appStore.dispatch(Actions.LoadAllSettingsAction())
     }
-    fun attachView(view: View): Presenter<out View?> = presenterFactory.attachView(view)
+    fun <T: Presenter<*>>attachView(view: View<T>) = presenterFactory.attachView(view as View<Presenter<*>>)
 
-    fun detachView(view: View) = presenterFactory.detachView(view)
+    fun detachView(view: View<*>) = presenterFactory.detachView(view)
 }

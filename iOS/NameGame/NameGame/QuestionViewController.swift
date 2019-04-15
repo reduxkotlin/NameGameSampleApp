@@ -3,7 +3,7 @@ import UIKit
 import common
 
 
-class QuestionViewController: UIViewController, QuestionView {
+class QuestionViewController: BaseNameViewController<QuestionPresenter>, QuestionView {
     @IBOutlet weak var labelQuestion: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var button1: UIButton!
@@ -15,18 +15,17 @@ class QuestionViewController: UIViewController, QuestionView {
     @IBOutlet weak var labelTimer: UILabel!
 
     @IBAction func onAnswerTap(_ sender: Any) {
-        presenter?.namePicked(name: (sender as? UIButton)!.titleLabel!.text!)
+        getPresenter()?.namePicked(name: (sender as? UIButton)!.titleLabel!.text!)
     }
 
     @IBAction func onNextTreeTap(_ sender: Any) {
-        presenter?.nextTapped()
+        getPresenter()?.nextTapped()
     }
 
     @IBAction func onEndGameTap(_ sender: Any) {
-        presenter?.endGameTapped()
+        getPresenter()?.endGameTapped()
     }
 
-    var presenter: QuestionPresenter?
     var confettiView: SAConfettiView?
     var restoreX: CGFloat?
     var restoreY: CGFloat?
@@ -39,15 +38,14 @@ class QuestionViewController: UIViewController, QuestionView {
         confettiView = SAConfettiView(frame: self.view.bounds)
         self.view.addSubview(confettiView!)
         confettiView?.isUserInteractionEnabled = false
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        presenter = appDelegate.gameEngine!.attachView(view: self) as? QuestionPresenter
+        super.viewWillAppear(animated)
+
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.gameEngine!.detachView(view: self)
+        super.viewDidDisappear(animated)
         if (isMovingFromParent) {
-            presenter?.onBackPressed()
+            getPresenter()?.onBackPressed()
         }
     }
 
@@ -169,7 +167,7 @@ class QuestionViewController: UIViewController, QuestionView {
         button4.setTitle(viewState.button4Text, for: .normal)
         profileImageView.downloaded(from: viewState.itemImageUrl, onComplete: {
             self.showButtons()
-            self.presenter?.profileImageIsVisible()
+            self.getPresenter()?.profileImageIsVisible()
         })
     }
 

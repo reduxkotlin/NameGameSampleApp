@@ -22,12 +22,13 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     private val gameResultsPresenter by lazy { GameResultsPresenter(gameEngine.appStore) }
     private val settingsPresenter by lazy { SettingsPresenter(gameEngine.appStore) }
 
-    fun <T : View> attachView(view: T): Presenter<out View?> {
+    fun <T : View<Presenter<*>>> attachView(view: T) {
         Logger.d("AttachView: $view")
 
         if (subscription == null) {
             subscription = gameEngine.appStore.subscribe(this)
         }
+        //TODO find generic way to handle
         val presenter = when (view) {
             is StartView -> {
                 startPresenter.attachView(view)
@@ -47,11 +48,11 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
             }
             else -> throw IllegalStateException("Screen $view not handled")
         }
+        view.presenter = presenter
         presenter.onStateChange(gameEngine.appStore.state)
-        return presenter
     }
 
-    fun detachView(view: View) {
+    fun detachView(view: View<*>) {
         Logger.d("DetachView: $view")
         if (view is StartView)
             startPresenter.detachView(view)
@@ -87,9 +88,11 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     }
 }
 
-interface View
+interface View<TPresenter> {
+    var presenter: TPresenter
+}
 
-abstract class Presenter<T : View?> {
+abstract class Presenter<T : View<*>?> {
     var view: T? = null
     var subscriber: StoreSubscriber<AppState>? = null
 

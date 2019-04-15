@@ -8,28 +8,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.BounceInterpolator
-import androidx.fragment.app.Fragment
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.willowtreeapps.common.QuestionViewState
 import com.willowtreeapps.common.ui.QuestionView
 import kotlinx.android.synthetic.main.fragment_question.*
 import nl.dionsegijn.konfetti.models.Shape
 import nl.dionsegijn.konfetti.models.Size
-import kotlin.coroutines.CoroutineContext
 import android.widget.Button
 import androidx.core.content.res.ResourcesCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.willowtreeapps.common.ui.QuestionPresenter
 import com.willowtreeapps.namegame.*
-import kotlinx.coroutines.*
 
 
-class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.IOnBackPressed {
-
-    private lateinit var presenter: QuestionPresenter
-
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Main
+class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), QuestionView, MainActivity.IOnBackPressed {
 
     private var restoreX: Float? = null
     private var restoreY: Float? = null
@@ -38,16 +30,6 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_question, container, false)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        presenter = NameGameApp.gameEngine().attachView(this) as QuestionPresenter
-    }
-
-    override fun onPause() {
-        super.onPause()
-        NameGameApp.gameEngine().detachView(this)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -164,9 +146,11 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
             } else {
                 btn_next
             }
-            btn.visibility = View.VISIBLE
-            btn.alpha = 0F
-            btn.animate().alpha(1f)
+            if (btn != null) {
+                btn.visibility = View.VISIBLE
+                btn.alpha = 0F
+                btn.animate().alpha(1f)
+            }
         }
         set.start()
     }
@@ -247,7 +231,8 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
                         txt_timer.animate().alpha(0f)
                                 .withEndAction {
                                     txt_timer.visibility = View.VISIBLE
-                                    txt_timer.setTextColor(restoreColor) }
+                                    txt_timer.setTextColor(restoreColor)
+                                }
                     }
 
         }
@@ -273,6 +258,4 @@ class QuestionFragment : Fragment(), CoroutineScope, QuestionView, MainActivity.
         4 -> button4
         else -> null//throw IllegalStateException("Invalid button index")
     }
-
-
 }

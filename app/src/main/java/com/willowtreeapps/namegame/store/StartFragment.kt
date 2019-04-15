@@ -18,7 +18,7 @@ class StartFragment : Fragment(), CoroutineScope, StartView {
     override val coroutineContext: CoroutineContext
         get() = Dispatchers.Main
 
-    private var presenter: StartPresenter? = null
+    override lateinit var presenter: StartPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_start, container, false)
@@ -39,7 +39,7 @@ class StartFragment : Fragment(), CoroutineScope, StartView {
 
     override fun onResume() {
         super.onResume()
-        presenter = NameGameApp.gameEngine().attachView(this) as StartPresenter
+        NameGameApp.gameEngine().attachView(this)
     }
 
     override fun onPause() {

@@ -5,7 +5,6 @@ import android.app.Application
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
-import com.willowtreeapps.common.Actions
 import com.willowtreeapps.common.middleware.Navigator
 import com.willowtreeapps.common.middleware.Screen
 import com.willowtreeapps.namegame.store.SettingsDialogFragment
