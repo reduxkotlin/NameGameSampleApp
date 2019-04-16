@@ -10,6 +10,11 @@ class GameResultsViewController: BaseNameViewController<GameResultsPresenter>, G
         getPresenter()?.startOverTapped()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.hidesBackButton = true
+    }
+
     func showResults(viewState: GameResultsViewState) {
         titleLabel.text = viewState.resultsText
         msgLabel.text = viewState.messageText

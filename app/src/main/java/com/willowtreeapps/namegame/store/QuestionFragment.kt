@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.animation.BounceInterpolator
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.willowtreeapps.common.QuestionViewState
@@ -17,6 +18,7 @@ import nl.dionsegijn.konfetti.models.Size
 import android.widget.Button
 import androidx.core.content.res.ResourcesCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import com.willowtreeapps.common.Logger
 import com.willowtreeapps.common.ui.QuestionPresenter
 import com.willowtreeapps.namegame.*
 
@@ -33,6 +35,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initViews()
     }
 
@@ -52,6 +55,65 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
         return false
     }
 
+    override fun showProfileNotAnimated(viewState: QuestionViewState) {
+        view?.viewTreeObserver?.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                Logger.d("viewState: $viewState")
+                GlideApp.with(this@QuestionFragment).load(viewState.itemImageUrl)
+                        .into(imageView)
+                txt_question_title.text = viewState.title
+                when {
+                    viewState.nextButtonVisible -> {
+                        txt_timer.visibility = View.GONE
+                        btn_next.visibility = View.VISIBLE
+                        btn_next.alpha = 1f
+                        btn_end_game.visibility = View.GONE
+                        btn_end_game.alpha = 0f
+                        showCorrectButton(viewState.correctBtnNum)
+                        setButtonText(viewState)
+                    }
+                    viewState.endButtonVisible -> {
+                        txt_timer.visibility = View.GONE
+                        btn_next.visibility = View.GONE
+                        btn_next.alpha = 0f
+                        btn_end_game.visibility = View.VISIBLE
+                        btn_end_game.alpha = 1f
+                        showCorrectButton(viewState.correctBtnNum)
+                        setButtonText(viewState)
+                    }
+                    else -> {
+                        txt_timer.text = viewState.timerText
+                        setButtonText(viewState)
+                        setAllButtonsVisible()
+                        btn_next.visibility = View.GONE
+                        btn_next.alpha = 0f
+                        btn_end_game.visibility = View.GONE
+                        btn_end_game.alpha = 1f
+                        //start timer again
+                        presenter.profileImageIsVisible()
+                    }
+
+                }
+                view?.viewTreeObserver?.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
+
+    private fun showCorrectButton(correctBtnNum: Int) {
+        val correctBtn = getBtnByNum(correctBtnNum)
+        if (correctBtn != null) {
+            correctBtn.visibility = View.VISIBLE
+            correctBtn.alpha = 1f
+            restoreX = correctBtn.x
+            restoreY = correctBtn.y
+            correctBtn.x = correctBtnX(correctBtn)
+            correctBtn.y = correctBtnY()
+            correctBtn.scaleX = 2f
+            correctBtn.scaleY = 2f
+            lastCorrectBtn = correctBtn
+        }
+    }
+
     override fun showProfile(viewState: QuestionViewState) {
         activity?.runOnUiThread {
             if (btn_next.visibility == View.VISIBLE) {
@@ -60,7 +122,6 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
                 setProfileAndFadeIn(viewState)
             }
         }
-
     }
 
     override fun showCorrectAnswer(viewState: QuestionViewState, isEndGame: Boolean) {
@@ -101,6 +162,9 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
         }
     }
 
+    private fun correctBtnX(btn: Button) = imageView.x + (imageView.width - btn.width) / 2
+    private fun correctBtnY() = imageView.y + imageView.height
+
     /**
      *  Hides the incorrect buttons and animates the correct name to be centered below profile image
      */
@@ -109,10 +173,10 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
         val correctBtn = getBtnByNum(viewState.correctBtnNum)
         val selectedBtn = getBtnByNum(viewState.selectedBtnNum)
 
-        fun View.hideOrMoveAnimation(): AnimatorSet {
+        fun Button.hideOrMoveAnimation(): AnimatorSet {
             return if (this == correctBtn) {
-                val endX = imageView.x + (imageView.width - this.width) / 2
-                val endY = imageView.y + imageView.height
+                val endX = correctBtnX(this)
+                val endY = correctBtnY()
 
                 val animX = ObjectAnimator.ofFloat(this, View.X, endX)
                 val animY = ObjectAnimator.ofFloat(this, View.Y, endY)
@@ -133,26 +197,29 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
         lastCorrectBtn = correctBtn
         lastSelectedBtn = selectedBtn
 
-        val anim1 = button1.hideOrMoveAnimation()
-        val anim2 = button2.hideOrMoveAnimation()
-        val anim3 = button3.hideOrMoveAnimation()
-        val anim4 = button4.hideOrMoveAnimation()
+        val anim1 = button1?.hideOrMoveAnimation()
+        val anim2 = button2?.hideOrMoveAnimation()
+        val anim3 = button3?.hideOrMoveAnimation()
+        val anim4 = button4?.hideOrMoveAnimation()
 
-        val set = AnimatorSet()
-        set.playTogether(anim1, anim2, anim3, anim4)
-        set.onComplete {
-            val btn = if (isEndGame) {
-                btn_end_game
-            } else {
-                btn_next
+        //TODO replace with isViewCreated fun
+        if (anim1 != null) {
+            val set = AnimatorSet()
+            set.playTogether(anim1, anim2, anim3, anim4)
+            set.onComplete {
+                val btn = if (isEndGame) {
+                    btn_end_game
+                } else {
+                    btn_next
+                }
+                if (btn != null) {
+                    btn.visibility = View.VISIBLE
+                    btn.alpha = 0F
+                    btn.animate().alpha(1f)
+                }
             }
-            if (btn != null) {
-                btn.visibility = View.VISIBLE
-                btn.alpha = 0F
-                btn.animate().alpha(1f)
-            }
+            set.start()
         }
-        set.start()
     }
 
     private fun showButtons() {
@@ -169,27 +236,46 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     private fun fadeNextButton(after: () -> Unit) {
         btn_next.animate().alpha(0f).withEndAction {
             lastCorrectBtn?.alpha = 0f
-            btn_next.visibility = View.GONE
+            btn_next?.visibility = View.GONE
             after()
         }
     }
 
     private fun setProfileAndFadeIn(viewState: QuestionViewState) {
         with(viewState) {
-            txt_question_title.text = title
-            GlideApp.with(this@QuestionFragment).load(itemImageUrl)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .onComplete {
-                        showButtons()
-                        txt_timer.visibility = View.VISIBLE
-                        presenter.profileImageIsVisible()
-                    }
-                    .into(imageView)
+            if (txt_question_title != null) {
+                txt_question_title.text = title
+                GlideApp.with(this@QuestionFragment).load(itemImageUrl)
+                        .transition(DrawableTransitionOptions.withCrossFade())
+                        .onComplete {
+                            showButtons()
+                            txt_timer.visibility = View.VISIBLE
+                            presenter.profileImageIsVisible()
+                        }
+                        .into(imageView)
+                setButtonText(viewState)
+            }
+        }
+    }
+
+    private fun setButtonText(viewState: QuestionViewState) {
+        with(viewState) {
             button1.text = button1Text
             button2.text = button2Text
             button3.text = button3Text
             button4.text = button4Text
         }
+    }
+
+    private fun setAllButtonsVisible() {
+        button1.visibility = View.VISIBLE
+        button2.visibility = View.VISIBLE
+        button3.visibility = View.VISIBLE
+        button4.visibility = View.VISIBLE
+        button1.alpha = 1f
+        button2.alpha = 1f
+        button3.alpha = 1f
+        button4.alpha = 1f
     }
 
     override fun setTimerText(viewState: QuestionViewState) {
@@ -228,10 +314,10 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
                     .setDuration(500)
                     .withEndAction {
                         showWrongAnswer(viewState, isEndGame)
-                        txt_timer.animate().alpha(0f)
-                                .withEndAction {
-                                    txt_timer.visibility = View.VISIBLE
-                                    txt_timer.setTextColor(restoreColor)
+                        txt_timer?.animate()?.alpha(0f)
+                                ?.withEndAction {
+                                    txt_timer?.visibility = View.VISIBLE
+                                    txt_timer?.setTextColor(restoreColor)
                                 }
                     }
 

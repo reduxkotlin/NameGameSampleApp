@@ -10,6 +10,9 @@ import com.willowtreeapps.common.Presenter
 
 class StartPresenter(val store: Store<AppState>,
                      private val networkThunks: NetworkThunks) : Presenter<StartView>() {
+    override fun recreateView() {
+        //no-op
+    }
 
     override fun makeSubscriber() = SelectorSubscriberFn(store) {
         withSingleField({ it.isLoadingItems }) {

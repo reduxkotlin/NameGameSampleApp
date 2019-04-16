@@ -4,6 +4,8 @@ import common
 
 
 class QuestionViewController: BaseNameViewController<QuestionPresenter>, QuestionView {
+    
+    
     @IBOutlet weak var labelQuestion: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var button1: UIButton!
@@ -227,6 +229,10 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
         default:
             return nil
         }
+    }
+    
+    func showProfileNotAnimated(viewState: QuestionViewState) {
+        //not needed on iOS
     }
 }
 

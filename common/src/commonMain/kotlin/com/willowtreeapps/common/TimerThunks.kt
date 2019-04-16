@@ -16,19 +16,22 @@ class TimerThunks(private val backgroundContext: CoroutineContext, val store: St
      * the timer and start the new one.
      */
     fun startCountDownTimer(initialValue: Int): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
-        if (timerJob == null || timerJob?.isActive == false) {
+        if (timerJob == null || timerJob?.isCompleted == true) {
+            Logger.d("Launching new Timer")
             store.dispatch(Actions.StartQuestionTimerAction(initialValue))
             timerJob = launchTimer(1000, CoroutineScope(coroutineContext)) {
-
                 if (store.state.questionClock > 0) {
                     store.dispatch(Actions.DecrementCountDownAction())
                 } else {
                     store.dispatch(Actions.TimesUpAction())
                     timerJob?.cancel()
+
                 }
             }
+            timerJob?.invokeOnCompletion {
+                Logger.d("TIMERJOB is complete: ${it?.message}")
+            }
         }
-        Any()
     }
 
     fun stopTimer() {

@@ -8,6 +8,11 @@ import com.willowtreeapps.common.Presenter
 import com.willowtreeapps.common.boundary.toGameResultsViewState
 
 class GameResultsPresenter(val store: Store<AppState>) : Presenter<GameResultsView>() {
+
+    override fun recreateView() {
+        view?.showResults(store.state.toGameResultsViewState())
+    }
+
     override fun makeSubscriber() = SelectorSubscriberFn(store) {
         withAnyChange { view?.showResults(state.toGameResultsViewState()) }
     }

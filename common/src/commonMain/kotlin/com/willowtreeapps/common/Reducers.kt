@@ -31,7 +31,7 @@ internal fun reducer(state: AppState, action: Any): AppState =
                 state.copy(questions = newQuestions, waitingForNextQuestion = true)
             }
             is NextQuestionAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
-            is GameCompleteAction -> state.copy(waitingForResultsTap = true, waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
+            is GameCompleteAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
             is StartOverAction, is ResetGameStateAction -> AppState.INITIAL_STATE.copy(settings = state.settings)
             is StartQuestionTimerAction -> state.copy(questionClock = action.initialValue)
             is DecrementCountDownAction -> state.copy(questionClock = state.questionClock - 1)

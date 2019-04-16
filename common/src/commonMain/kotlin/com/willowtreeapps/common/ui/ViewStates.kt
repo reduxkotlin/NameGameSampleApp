@@ -5,7 +5,7 @@ sealed class ViewStates
 data class SettingsViewState(val numQuestions: Int,
                              val categoryId: QuestionCategoryId)
 
-class QuestionViewState(
+data class QuestionViewState(
         val title: String,
         val itemImageUrl: String,
         val currentQuestion: String,
@@ -15,6 +15,8 @@ class QuestionViewState(
         val button3Text: String,
         val button4Text: String,
         val correctBtnNum: Int,
+        val nextButtonVisible: Boolean,
+        val endButtonVisible: Boolean,
         val timerText: String,
         val selectedBtnNum: Int)
 

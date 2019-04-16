@@ -26,6 +26,8 @@ fun AppState.toQuestionViewState(): QuestionViewState {
             button3Text = choice3,
             button4Text = choice4,
             correctBtnNum = correctBtnNum,
+            nextButtonVisible = this.waitingForNextQuestion && !isGameComplete(),
+            endButtonVisible = isGameComplete(),
             timerText = timerText,
             selectedBtnNum =  selectedBtnNum ?: -1)
 }
