@@ -39,7 +39,6 @@ jobs:
           command: ./gradlew build
       - store_artifacts:
           path: android/build/outputs/reports/
-          path: android/build/outputs/reports/
       - store_test_results:
           path: android/build/test-results
       - run:
