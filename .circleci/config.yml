@@ -38,14 +38,15 @@ jobs:
           name: Build and Run JVM Unit Tests
           command: ./gradlew build
       - store_artifacts:
-          path: app/build/outputs/reports/
+          path: android/build/outputs/reports/
+          path: android/build/outputs/reports/
       - store_test_results:
-          path: app/build/test-results
+          path: android/build/test-results
       - run:
           name: Move APKs to workspace
           command: |
             mkdir -p /tmp/workspace/apk
-            cp -r app/build/outputs/apk/* /tmp/workspace/apk/
+            cp -r android/build/outputs/apk/* /tmp/workspace/apk/
       - persist_to_workspace:
           root: *workspace_root
           paths:
