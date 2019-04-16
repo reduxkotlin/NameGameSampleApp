@@ -39,7 +39,7 @@ An MVP arch is used with a redux store as the 'Model'.  This approach allows max
     User interaction -> Dispatch Action -> new state (reduce) -> view rendered by presenter
     
 ## "Dumb Views"
-Views in this arch are truely 'dumb' - they should contain nearly no logic.  They are responsible for rendering the view based on the `ViewState` given to them by the presenter. 
+Views in this arch are truely 'dumb' - they should contain nearly no logic.  They are responsible for rendering the view based on the `ViewState` given to them by the presenter. They are implemented for each platform and utilize native UI SDKs and libs for each platform.  Android uses Fragments and iOS uses UIViewControllers.
 
 ## Presenters
 
