@@ -35,7 +35,6 @@ class NetworkThunks(private val networkContext: CoroutineContext,
                 Logger.d("Failure")
                 store.dispatch(Actions.FetchingItemsFailedAction(result.message!!))
             }
-            Logger.d("DONE")
         }
     }
 }

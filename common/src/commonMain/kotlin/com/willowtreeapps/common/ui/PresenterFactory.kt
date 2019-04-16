@@ -24,7 +24,6 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
 
     fun <T : View<Presenter<*>>> attachView(view: T) {
         Logger.d("AttachView: $view")
-
         if (subscription == null) {
             subscription = gameEngine.appStore.subscribe(this)
         }
