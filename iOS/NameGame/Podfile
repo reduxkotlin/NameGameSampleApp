@@ -8,10 +8,6 @@ target 'NameGame' do
 
   # Pods for NameGame
 
-  target 'NameGameTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
 
   target 'NameGameUITests' do
     inherit! :search_paths

@@ -26,8 +26,12 @@
 		1EB9EA862238071B008AF004 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9EA852238071B008AF004 /* Assets.xcassets */; };
 		1EB9EA892238071B008AF004 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1EB9EA872238071B008AF004 /* LaunchScreen.storyboard */; };
 		1EB9EA942238071B008AF004 /* NameGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9EA932238071B008AF004 /* NameGameTests.swift */; };
-		1EB9EA9F2238071C008AF004 /* NameGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EB9EA9E2238071C008AF004 /* NameGameUITests.swift */; };
 		1ED273982264E64C0094EE0D /* BaseNameGameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED273972264E64C0094EE0D /* BaseNameGameViewController.swift */; };
+		1ED2739D22660A560094EE0D /* NameGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED2739C22660A560094EE0D /* NameGameUITests.swift */; };
+		1ED273AD22660CFE0094EE0D /* NameGameTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ED273AC22660CFE0094EE0D /* NameGameTests.swift */; };
+		39C7A84D324862D88D52B08F /* Pods_NameGameTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C435497E57B26B3C5C38A850 /* Pods_NameGameTests.framework */; };
+		4C99F92CBEFDEFEA34932EBF /* Pods_NameGameUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7B000730C94A459D36DD44F4 /* Pods_NameGameUITests.framework */; };
+		D2DA6197A59BA1C72436D809 /* Pods_NameGame.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BDB87376C9BE19ED50D010CE /* Pods_NameGame.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +66,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		147DDD9FCB23EB6E2457D2ED /* Pods-NameGame.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NameGame.debug.xcconfig"; path = "Target Support Files/Pods-NameGame/Pods-NameGame.debug.xcconfig"; sourceTree = "<group>"; };
 		1E19EEA5224019610094EA01 /* StartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartViewController.swift; sourceTree = "<group>"; };
 		1E37F67C225C063C00CC126B /* common.framework.dSYM */ = {isa = PBXFileReference; lastKnownFileType = wrapper.dsym; name = common.framework.dSYM; path = "../../common/build/xcode-frameworks/common.framework.dSYM"; sourceTree = "<group>"; };
 		1E37F683225C21A700CC126B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -86,9 +91,19 @@
 		1EB9EA932238071B008AF004 /* NameGameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameGameTests.swift; sourceTree = "<group>"; };
 		1EB9EA952238071B008AF004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EB9EA9A2238071C008AF004 /* NameGameUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NameGameUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		1EB9EA9E2238071C008AF004 /* NameGameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameGameUITests.swift; sourceTree = "<group>"; };
 		1EB9EAA02238071C008AF004 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1ED273972264E64C0094EE0D /* BaseNameGameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseNameGameViewController.swift; sourceTree = "<group>"; };
+		1ED2739B22660A550094EE0D /* NameGameUITests-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NameGameUITests-Bridging-Header.h"; sourceTree = "<group>"; };
+		1ED2739C22660A560094EE0D /* NameGameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameGameUITests.swift; sourceTree = "<group>"; };
+		1ED273AC22660CFE0094EE0D /* NameGameTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameGameTests.swift; sourceTree = "<group>"; };
+		2FF125D4FD60A40A0A8AE043 /* Pods-NameGameUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NameGameUITests.release.xcconfig"; path = "Target Support Files/Pods-NameGameUITests/Pods-NameGameUITests.release.xcconfig"; sourceTree = "<group>"; };
+		788E25026E87CE73E9C34255 /* Pods-NameGameTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NameGameTests.debug.xcconfig"; path = "Target Support Files/Pods-NameGameTests/Pods-NameGameTests.debug.xcconfig"; sourceTree = "<group>"; };
+		7B000730C94A459D36DD44F4 /* Pods_NameGameUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NameGameUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5ED998BA790D768D99AA5B0 /* Pods-NameGameUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NameGameUITests.debug.xcconfig"; path = "Target Support Files/Pods-NameGameUITests/Pods-NameGameUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B24159B77BA754BFAD0FE88E /* Pods-NameGameTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NameGameTests.release.xcconfig"; path = "Target Support Files/Pods-NameGameTests/Pods-NameGameTests.release.xcconfig"; sourceTree = "<group>"; };
+		BDB87376C9BE19ED50D010CE /* Pods_NameGame.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NameGame.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C435497E57B26B3C5C38A850 /* Pods_NameGameTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NameGameTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D9DC0EFBDBFDFEACFC949EF3 /* Pods-NameGame.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NameGame.release.xcconfig"; path = "Target Support Files/Pods-NameGame/Pods-NameGame.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +112,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E37F6862260E34900CC126B /* common.framework in Frameworks */,
+				D2DA6197A59BA1C72436D809 /* Pods_NameGame.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,6 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				39C7A84D324862D88D52B08F /* Pods_NameGameTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4C99F92CBEFDEFEA34932EBF /* Pods_NameGameUITests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,6 +144,7 @@
 				1EB9EA9D2238071C008AF004 /* NameGameUITests */,
 				1EB9EA7C2238071A008AF004 /* Products */,
 				1EB9EAAC2238250F008AF004 /* Frameworks */,
+				C1C02D1BBE18C39554DCFAB6 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -169,6 +188,7 @@
 			children = (
 				1EB9EA932238071B008AF004 /* NameGameTests.swift */,
 				1EB9EA952238071B008AF004 /* Info.plist */,
+				1ED273AC22660CFE0094EE0D /* NameGameTests.swift */,
 			);
 			path = NameGameTests;
 			sourceTree = "<group>";
@@ -176,8 +196,9 @@
 		1EB9EA9D2238071C008AF004 /* NameGameUITests */ = {
 			isa = PBXGroup;
 			children = (
-				1EB9EA9E2238071C008AF004 /* NameGameUITests.swift */,
 				1EB9EAA02238071C008AF004 /* Info.plist */,
+				1ED2739C22660A560094EE0D /* NameGameUITests.swift */,
+				1ED2739B22660A550094EE0D /* NameGameUITests-Bridging-Header.h */,
 			);
 			path = NameGameUITests;
 			sourceTree = "<group>";
@@ -186,8 +207,24 @@
 			isa = PBXGroup;
 			children = (
 				1E37F67C225C063C00CC126B /* common.framework.dSYM */,
+				BDB87376C9BE19ED50D010CE /* Pods_NameGame.framework */,
+				C435497E57B26B3C5C38A850 /* Pods_NameGameTests.framework */,
+				7B000730C94A459D36DD44F4 /* Pods_NameGameUITests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		C1C02D1BBE18C39554DCFAB6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				147DDD9FCB23EB6E2457D2ED /* Pods-NameGame.debug.xcconfig */,
+				D9DC0EFBDBFDFEACFC949EF3 /* Pods-NameGame.release.xcconfig */,
+				788E25026E87CE73E9C34255 /* Pods-NameGameTests.debug.xcconfig */,
+				B24159B77BA754BFAD0FE88E /* Pods-NameGameTests.release.xcconfig */,
+				A5ED998BA790D768D99AA5B0 /* Pods-NameGameUITests.debug.xcconfig */,
+				2FF125D4FD60A40A0A8AE043 /* Pods-NameGameUITests.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,6 +234,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1EB9EAA32238071C008AF004 /* Build configuration list for PBXNativeTarget "NameGame" */;
 			buildPhases = (
+				277D0BB52D26BF640FE16445 /* [CP] Check Pods Manifest.lock */,
 				1EB9EAB62238485B008AF004 /* ShellScript */,
 				1EB9EA772238071A008AF004 /* Sources */,
 				1EB9EA782238071A008AF004 /* Frameworks */,
@@ -269,6 +307,7 @@
 					};
 					1EB9EA992238071C008AF004 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1010;
 						TestTargetID = 1EB9EA7A2238071A008AF004;
 					};
 				};
@@ -343,6 +382,28 @@
 			shellPath = /bin/sh;
 			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#move to the xcode-frameworks folder\n#cd \"$SRCROOT/../../common/build/xcode-frameworks\"\ncd \"$SRCROOT/../../\"\n\n#run the gradle task\n./gradlew :common:build -PXCODE_CONFIGURATION=${CONFIGURATION}\n";
 		};
+		277D0BB52D26BF640FE16445 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NameGame-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 		5103126C9BF956C7ADB08E88 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -410,6 +471,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1ED273AD22660CFE0094EE0D /* NameGameTests.swift in Sources */,
 				1EB9EA942238071B008AF004 /* NameGameTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -418,7 +480,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1EB9EA9F2238071C008AF004 /* NameGameUITests.swift in Sources */,
+				1ED2739D22660A560094EE0D /* NameGameUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,6 +637,7 @@
 		};
 		1EB9EAA42238071C008AF004 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 147DDD9FCB23EB6E2457D2ED /* Pods-NameGame.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -606,6 +669,7 @@
 		};
 		1EB9EAA52238071C008AF004 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D9DC0EFBDBFDFEACFC949EF3 /* Pods-NameGame.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -631,6 +695,7 @@
 		};
 		1EB9EAA72238071C008AF004 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 788E25026E87CE73E9C34255 /* Pods-NameGameTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -651,6 +716,7 @@
 		};
 		1EB9EAA82238071C008AF004 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B24159B77BA754BFAD0FE88E /* Pods-NameGameTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -671,8 +737,10 @@
 		};
 		1EB9EAAA2238071C008AF004 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A5ED998BA790D768D99AA5B0 /* Pods-NameGameUITests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = NameGameUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -682,6 +750,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = willowtree.NameGameUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "NameGameUITests/NameGameUITests-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = NameGame;
@@ -690,8 +760,10 @@
 		};
 		1EB9EAAB2238071C008AF004 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2FF125D4FD60A40A0A8AE043 /* Pods-NameGameUITests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				INFOPLIST_FILE = NameGameUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -701,6 +773,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = willowtree.NameGameUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "NameGameUITests/NameGameUITests-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = NameGame;
