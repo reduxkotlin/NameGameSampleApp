@@ -2,12 +2,13 @@ package com.willowtreeapps.namegame.store
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.view.*
 import android.view.animation.BounceInterpolator
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.willowtreeapps.common.QuestionViewState
@@ -21,6 +22,7 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.willowtreeapps.common.Logger
 import com.willowtreeapps.common.ui.QuestionPresenter
 import com.willowtreeapps.namegame.*
+import java.util.*
 
 
 class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), QuestionView, MainActivity.IOnBackPressed {
@@ -343,5 +345,54 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
         3 -> button3
         4 -> button4
         else -> null//throw IllegalStateException("Invalid button index")
+    }
+
+
+    private fun startSpeechToText() {
+
+        val speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity!!)
+        val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+
+        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(bundle: Bundle) {}
+
+            override fun onBeginningOfSpeech() {}
+
+            override fun onRmsChanged(v: Float) {}
+
+            override fun onBufferReceived(bytes: ByteArray) {}
+
+            override fun onEndOfSpeech() {}
+
+            override fun onError(i: Int) {}
+
+            override fun onResults(bundle: Bundle) {
+                val matches = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)//getting all the matches
+                //displaying the first match
+//                if (matches != null)
+            }
+
+            override fun onPartialResults(bundle: Bundle) {}
+
+            override fun onEvent(i: Int, bundle: Bundle) {}
+        })
+
+        btn_end_game.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_UP -> {
+                    speechRecognizer.stopListening()
+//                    editText.hint = getString(R.string.text_hint)
+                }
+
+                MotionEvent.ACTION_DOWN -> {
+                    speechRecognizer.startListening(speechRecognizerIntent)
+//                    editText.setText("")
+//                    editText.hint = "Listening..."
+                }
+            }
+            false
+        }
     }
 }

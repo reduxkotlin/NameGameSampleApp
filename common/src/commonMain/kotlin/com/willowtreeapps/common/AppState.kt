@@ -63,7 +63,6 @@ data class Item(val id: ItemId,
     fun matches(name: String): Boolean {
         return displayName() == name
     }
-
 }
 
 enum class QuestionCategoryId(val displayName: String) {
@@ -81,7 +80,8 @@ enum class QuestionCategoryId(val displayName: String) {
 }
 
 data class UserSettings(val numQuestions: Int,
-                        val categoryId: QuestionCategoryId) {
+                        val categoryId: QuestionCategoryId,
+                        val microphoneMode: Boolean = false) {
     companion object {
         fun defaults() = UserSettings(3, categoryId = QuestionCategoryId.CATS)
     }

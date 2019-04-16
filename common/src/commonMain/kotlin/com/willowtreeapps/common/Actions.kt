@@ -29,6 +29,7 @@ sealed class Actions : Action {
     class SettingsLoadedAction(val settings: UserSettings)
     class ChangeNumQuestionsSettingsAction(val num: Int)
     class ChangeCategorySettingsAction(val categoryId: QuestionCategoryId)
+    class ChangeMicrophoneModeSettingsAction(val enabled: Boolean)
 
 }
 

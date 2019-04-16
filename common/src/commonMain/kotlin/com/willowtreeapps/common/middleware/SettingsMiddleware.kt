@@ -31,6 +31,8 @@ internal class SettingsMiddleware(private val settings: LocalStorageSettingsRepo
                     val settings = UserSettings(numQuestions = settings.numRounds, categoryId = settings.categoryId)
                     store.dispatch(Actions.SettingsLoadedAction(settings))
                 }
+
+                is Actions.ChangeMicrophoneModeSettingsAction ->  settings.microphoneMode = action.enabled
             }
         }
         return nextDispatcher(action)

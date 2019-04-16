@@ -14,6 +14,10 @@ class MyAppGlideModule : AppGlideModule()
 
 class MainActivity : AppCompatActivity() {
 
+    companion object {
+        const val RECORD_REQUEST_CODE = 52
+    }
+
     interface IOnBackPressed {
         fun onBackPressed(): Boolean
     }
@@ -37,4 +41,6 @@ class MainActivity : AppCompatActivity() {
 //            (currentFragment as IOnBackPressed).onBackPressed()
         super.onBackPressed()
     }
+
+
 }

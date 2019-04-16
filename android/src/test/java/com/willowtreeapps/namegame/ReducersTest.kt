@@ -134,7 +134,15 @@ class ReducersTest {
         val final = reducer(initial, Actions.ChangeNumQuestionsSettingsAction(10))
 
         assertEquals(10, final.settings.numQuestions)
+    }
 
+    @Test
+    fun `ChangeMicrophoneModeAction should update settings`() {
+        val initial = generateInitialTestState()
+
+        val final = reducer(initial, Actions.ChangeMicrophoneModeSettingsAction(true))
+
+        assertEquals(true, final.settings.microphoneMode)
     }
 
     private fun generateInitialTestState(): AppState {

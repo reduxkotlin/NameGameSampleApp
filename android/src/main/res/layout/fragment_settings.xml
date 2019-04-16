@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:layout_height="400dp"
+    android:layout_height="450dp"
     android:minWidth="300dp"
     android:minHeight="400dp">
 
@@ -39,9 +39,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <Switch
+        android:id="@+id/switch_mic"
+        android:layout_width="180dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Voice mode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txt_num_questions" />
+
     <TextView
+        android:id="@+id/txt_num_questions2"
         style="@style/SettingsLabelText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Category"
+        app:layout_constraintEnd_toEndOf="@+id/categoryPicker"
+        app:layout_constraintStart_toStartOf="@+id/categoryPicker"
+        app:layout_constraintTop_toBottomOf="@+id/categoryPicker" />
+
+    <TextView
         android:id="@+id/txt_num_questions"
+        style="@style/SettingsLabelText"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -50,15 +72,4 @@
         app:layout_constraintEnd_toEndOf="@+id/numberPicker"
         app:layout_constraintStart_toStartOf="@+id/numberPicker"
         app:layout_constraintTop_toBottomOf="@+id/numberPicker" />
-
-    <TextView
-        style="@style/SettingsLabelText"
-        android:id="@+id/txt_num_questions2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Category"
-        app:layout_constraintEnd_toEndOf="@+id/categoryPicker"
-        app:layout_constraintStart_toStartOf="@+id/categoryPicker"
-        app:layout_constraintTop_toBottomOf="@+id/categoryPicker" />
 </androidx.constraintlayout.widget.ConstraintLayout>

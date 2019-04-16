@@ -44,6 +44,7 @@ fun reducer(state: AppState, action: Any): AppState =
 
             is ChangeNumQuestionsSettingsAction -> state.copy(settings = state.settings.copy(numQuestions = action.num))
             is ChangeCategorySettingsAction -> state.copy(settings = state.settings.copy(categoryId = action.categoryId))
+            is ChangeMicrophoneModeSettingsAction -> state.copy(settings = state.settings.copy(microphoneMode = action.enabled))
             is SettingsLoadedAction -> state.copy(settings = action.settings)
 
             else -> throw AssertionError("Action ${action::class.simpleName} not handled")

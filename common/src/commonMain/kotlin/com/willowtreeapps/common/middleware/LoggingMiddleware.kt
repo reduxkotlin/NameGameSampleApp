@@ -7,6 +7,6 @@ import com.willowtreeapps.common.Logger
 
 fun loggerMiddleware(store: Store<AppState>, nextDispatcher: (Any) -> Any, action: Any): Any {
     val result = nextDispatcher(action)
-    Logger.d("DISPATCH action: ${action::class.simpleName}")
+    Logger.d("DISPATCH action: ${action::class.simpleName}: $action")
     return result
 }

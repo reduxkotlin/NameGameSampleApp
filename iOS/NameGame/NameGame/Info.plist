@@ -45,5 +45,9 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Speech recognition is used to answer questions.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Speech recognition is used to answer questions.</string>
 </dict>
 </plist>

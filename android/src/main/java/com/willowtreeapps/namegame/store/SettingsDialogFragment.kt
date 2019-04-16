@@ -1,19 +1,24 @@
 package com.willowtreeapps.namegame.store
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import com.willowtreeapps.common.Logger
 import com.willowtreeapps.common.QuestionCategoryId
 import com.willowtreeapps.common.SettingsViewState
 import com.willowtreeapps.common.ui.SettingsPresenter
 import com.willowtreeapps.common.ui.SettingsView
+import com.willowtreeapps.namegame.MainActivity
 import com.willowtreeapps.namegame.NameGameApp
 import com.willowtreeapps.namegame.R
 import kotlinx.android.synthetic.main.fragment_settings.*
 
-class SettingsDialogFragment: DialogFragment(), SettingsView {
+class SettingsDialogFragment : DialogFragment(), SettingsView {
 
     override lateinit var presenter: SettingsPresenter
 
@@ -42,6 +47,9 @@ class SettingsDialogFragment: DialogFragment(), SettingsView {
             presenter.categoryChanged(QuestionCategoryId.fromOrdinal(newVal))
         }
         btn_ok.setOnClickListener { dismiss() }
+        switch_mic.setOnCheckedChangeListener { buttonView, isChecked ->
+            presenter.microphoneModeChanged(isChecked)
+        }
     }
 
     override fun onResume() {
@@ -57,5 +65,38 @@ class SettingsDialogFragment: DialogFragment(), SettingsView {
     override fun showSettings(viewState: SettingsViewState) {
         numberPicker.value = viewState.numQuestions
         categoryPicker.value = QuestionCategoryId.values().indexOf(viewState.categoryId)
+    }
+
+    override fun askForMicPermissions() {
+        setupPermissions()
+    }
+
+    private fun setupPermissions() {
+        val permission = ContextCompat.checkSelfPermission(activity!!,
+                Manifest.permission.RECORD_AUDIO)
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Logger.d("Permission to record denied")
+            makeRequest()
+        }
+    }
+
+    private fun makeRequest() {
+        requestPermissions(
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                MainActivity.RECORD_REQUEST_CODE)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            MainActivity.RECORD_REQUEST_CODE -> {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    presenter.microphonePermissionDenied()
+                } else {
+                    presenter.microphonePermissionGranted()
+                }
+            }
+        }
     }
 }

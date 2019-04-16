@@ -25,4 +25,20 @@ class SettingsPresenter(val store: Store<AppState>): Presenter<SettingsView>() {
     fun categoryChanged(categoryId: QuestionCategoryId) {
         store.dispatch(Actions.ChangeCategorySettingsAction(categoryId))
     }
+
+    fun microphoneModeChanged(enabled: Boolean) {
+        if (enabled) {
+            view?.askForMicPermissions()
+        } else {
+            store.dispatch(Actions.ChangeMicrophoneModeSettingsAction(false))
+        }
+    }
+
+    fun microphonePermissionGranted() {
+        store.dispatch(Actions.ChangeMicrophoneModeSettingsAction(true))
+    }
+
+    fun microphonePermissionDenied() {
+        store.dispatch(Actions.ChangeMicrophoneModeSettingsAction(false))
+    }
 }

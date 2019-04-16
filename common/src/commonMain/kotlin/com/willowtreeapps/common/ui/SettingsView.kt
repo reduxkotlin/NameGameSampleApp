@@ -5,4 +5,5 @@ import com.willowtreeapps.common.View
 
 interface SettingsView: View<SettingsPresenter> {
     fun showSettings(viewState: SettingsViewState)
+    fun askForMicPermissions()
 }
