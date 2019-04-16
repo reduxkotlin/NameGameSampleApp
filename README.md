@@ -30,7 +30,7 @@ The iOS workspace in `/iOS/NameGame` can be open and ran from xCode or AppCode. 
 
 ## Architecture
 
-A `GameEngine` object holds the state of the app in a redux store and provides a methods for views (fragments/UIViewControllers) to "attach".  The `GameEngine` is initialized in the Application class on Android, and the AppDelegate on iOS.  Each view must attach/detach from the GameEngine when it is visible.  `GameEngine.attachView(view)` returns the appropriate presenter for the view.
+A `GameEngine` object holds the state of the app in a redux store and provides a methods for views (fragments/UIViewControllers) to "attach".  The `GameEngine` is initialized in the Application class on Android, and the AppDelegate on iOS.  Because this `GameEngine` and the store is created at the application scope, the application state survives between ViewControllers/Fragments and rotation.  Each view must attach/detach from the GameEngine when it is visible.  `GameEngine.attachView(view)` returns the appropriate presenter for the view.  
 
 `BaseNameGameViewFragment` & `BaseNameGameViewController` handle attaching/detaching the presenter at the appropriate lifecycle methods.  Each Fragment/ViewController extends from these.
 
