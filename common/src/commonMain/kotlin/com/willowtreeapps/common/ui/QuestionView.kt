@@ -18,4 +18,6 @@ interface QuestionView : View<QuestionPresenter> {
     fun setTimerText(viewState: QuestionViewState)
 
     fun showTimesUp(viewState: QuestionViewState, isEndGame: Boolean)
+
+    fun openMic()
 }

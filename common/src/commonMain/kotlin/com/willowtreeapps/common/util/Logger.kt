@@ -17,15 +17,22 @@ object Logger {
             platformLogger.enabled = value
         }
 
-    fun d(message: String){
-        platformLogger.logDebug(message)
+    fun d(message: String, category: Category = Logger.Category.NONE) {
+        if (enabled && category.isEnabled)
+            platformLogger.logDebug(message)
     }
 
-    fun e(message: String, exception: Throwable? = null){
+    fun e(message: String, exception: Throwable? = null) {
         exception?.let {
             platformLogger.logError(message)
         } ?: run {
             platformLogger.logError(message)
         }
     }
+
+    enum class Category(val isEnabled: Boolean) {
+        LIFECYCLE(false),
+        NONE(true)
+    }
 }
+

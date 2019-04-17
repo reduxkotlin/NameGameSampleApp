@@ -26,6 +26,62 @@ import java.util.*
 
 
 class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), QuestionView, MainActivity.IOnBackPressed {
+    private val speechRecognizer by lazy { SpeechRecognizer.createSpeechRecognizer(activity!!) }
+    private val speechRecognizerIntent by lazy {
+        val speechRecIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        speechRecIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        speechRecIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
+                Locale.getDefault())
+        speechRecIntent
+    }
+
+    override fun openMic() {
+
+        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {
+            }
+
+            override fun onRmsChanged(rmsdB: Float) {
+            }
+
+            override fun onBufferReceived(buffer: ByteArray?) {
+            }
+
+            override fun onPartialResults(partialResults: Bundle) {
+                val matches = partialResults
+                        .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+
+                //displaying the first match
+                if (matches != null)
+                    presenter.namePicked(matches[0])
+            }
+
+            override fun onEvent(eventType: Int, params: Bundle?) {
+            }
+
+            override fun onBeginningOfSpeech() {
+            }
+
+            override fun onEndOfSpeech() {
+            }
+
+            override fun onError(error: Int) {
+            }
+
+            override fun onResults(results: Bundle) {
+                val matches = results
+                        .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+
+                //displaying the first match
+                if (matches != null)
+                    presenter.namePicked(matches[0])
+            }
+
+        })
+        speechRecognizer.startListening(speechRecognizerIntent)
+
+    }
 
     private var restoreX: Float? = null
     private var restoreY: Float? = null

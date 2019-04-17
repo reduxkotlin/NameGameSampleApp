@@ -54,6 +54,9 @@ class QuestionPresenter(
     fun profileImageIsVisible() {
         if (!store.state.isCurrentQuestionAnswered()) {
             store.dispatch(timerThunks.startCountDownTimer(5))
+            if (store.state.settings.microphoneMode) {
+                view?.openMic()
+            }
         }
     }
 

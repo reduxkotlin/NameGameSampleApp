@@ -23,7 +23,7 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     private val settingsPresenter by lazy { SettingsPresenter(gameEngine.appStore) }
 
     fun <T : View<Presenter<*>>> attachView(view: T) {
-        Logger.d("AttachView: $view")
+        Logger.d("AttachView: $view", Logger.Category.LIFECYCLE)
         if (subscription == null) {
             subscription = gameEngine.appStore.subscribe(this)
         }
@@ -52,7 +52,7 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     }
 
     fun detachView(view: View<*>) {
-        Logger.d("DetachView: $view")
+        Logger.d("DetachView: $view", Logger.Category.LIFECYCLE)
         if (view is StartView)
             startPresenter.detachView(view)
         if (view is QuestionView)
@@ -98,7 +98,7 @@ abstract class Presenter<T : View<*>?> {
     fun isAttached() = view != null
 
     open fun attachView(view: T) {
-        Logger.d("Presenter attachView: $view")
+        Logger.d("Presenter attachView: $view", Logger.Category.LIFECYCLE)
         if (subscriber == null) {
             subscriber = makeSubscriber()
         }
@@ -106,7 +106,7 @@ abstract class Presenter<T : View<*>?> {
     }
 
     fun detachView(view: T) {
-        Logger.d("Presenter DetachView: $view")
+        Logger.d("Presenter DetachView: $view", Logger.Category.LIFECYCLE)
         if (this.view == view) {
             this.view = null
         }

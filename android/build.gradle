@@ -1,3 +1,4 @@
+
 apply plugin: 'com.android.application'
 
 apply plugin: 'kotlin-android'
@@ -33,6 +34,7 @@ android {
     }
     tasks.lint.enabled = false
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
