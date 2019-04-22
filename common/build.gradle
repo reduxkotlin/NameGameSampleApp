@@ -33,6 +33,7 @@ kotlin {
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serializationVersion"
                 implementation "io.ktor:ktor-client-logging:$ktorVersion"
                 implementation "com.russhwolf:multiplatform-settings:$multiplatformSettingsVersion"
+                implementation "com.willowtreeapps:fuzzywuzzy-kotlin:0.1.1"
 
 
                 implementation "io.ktor:ktor-client-core:$ktorVersion"
