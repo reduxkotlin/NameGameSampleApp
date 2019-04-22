@@ -7,16 +7,16 @@ import com.willowtreeapps.common.util.VibrateUtil
 
 
 class QuestionPresenter(
-        val store: Store<AppState>,
+        private val engine: GameEngine,
         private val vibrateUtil: VibrateUtil,
         private val timerThunks: TimerThunks) : Presenter<QuestionView>() {
 
     override fun recreateView() {
-        view?.showProfileNotAnimated(store.state.toQuestionViewState())
+        view?.showProfileNotAnimated(engine.state.toQuestionViewState())
     }
 
     //TODO consider SelectorSubscriberFn take coroutineContext as param so activity.runOnUiThread is not needed
-    override fun makeSubscriber() = SelectorSubscriberFn(store) {
+    override fun makeSubscriber() = SelectorSubscriberFn(engine.appStore) {
         withSingleField({ it.questionClock }, { view?.setTimerText(state.toQuestionViewState()) })
         withSingleField({
             it.currentQuestion?.itemId?.id ?: Any()
@@ -24,6 +24,12 @@ class QuestionPresenter(
 
         withSingleField({ it.waitingForNextQuestion }) {
             if (state.waitingForNextQuestion) {
+                if (state.settings.microphoneMode) {
+                    view?.closeMic()
+                    if (!state.isGameComplete()) {
+                        store.dispatch(timerThunks.dispatchDelayed(4000, Actions.NextQuestionAction()))
+                    }
+                }
                 when (state.currentQuestion?.status) {
                     Question.Status.CORRECT -> {
                         view?.showCorrectAnswer(state.toQuestionViewState(), state.isGameComplete())
@@ -43,30 +49,32 @@ class QuestionPresenter(
     }
 
     fun namePicked(name: String) {
-        store.dispatch(Actions.NamePickedAction(name))
-        store.dispatch(timerThunks.stopTimer())
+        engine.dispatch(Actions.NamePickedAction(name))
+        engine.dispatch(timerThunks.stopTimer())
+
     }
 
     fun nextTapped() {
-        store.dispatch(Actions.NextQuestionAction())
+        engine.dispatch(timerThunks.cancelDelayed())
+        engine.dispatch(Actions.NextQuestionAction())
     }
 
     fun profileImageIsVisible() {
-        if (!store.state.isCurrentQuestionAnswered()) {
-            store.dispatch(timerThunks.startCountDownTimer(5))
-            if (store.state.settings.microphoneMode) {
+        if (!engine.state.isCurrentQuestionAnswered()) {
+            engine.dispatch(timerThunks.startCountDownTimer(5))
+            if (engine.state.settings.microphoneMode) {
                 view?.openMic()
             }
         }
     }
 
     fun endGameTapped() {
-        store.dispatch(Actions.GameCompleteAction())
+        engine.dispatch(Actions.GameCompleteAction())
     }
 
     fun onBackPressed() {
-        store.dispatch(Actions.StartOverAction())
-        store.dispatch(timerThunks.stopTimer())
+        engine.dispatch(Actions.StartOverAction())
+        engine.dispatch(timerThunks.stopTimer())
     }
 
 }

@@ -8,12 +8,12 @@ import com.willowtreeapps.common.*
 fun AppState.toQuestionViewState(): QuestionViewState {
     val item = currentQuestionItem()
     val imageUrl = item.imageUrl
-    val choice1 = getItem(currentQuestion?.choices?.get(0))!!.displayName()
-    val choice2 = getItem(currentQuestion?.choices?.get(1))!!.displayName()
-    val choice3 = getItem(currentQuestion?.choices?.get(2))!!.displayName()
-    val choice4 = getItem(currentQuestion?.choices?.get(3))!!.displayName()
-    val correctBtnNum = currentQuestion?.choices?.indexOfFirst { it == item.id }!! + 1
-    var selectedBtnNum = currentQuestion?.choices?.indexOfFirst { getItem(it)?.matches(currentQuestion?.answerName ?: "") ?: false}
+    val choice1 = currentQuestion?.choices?.get(0)!!.displayName()
+    val choice2 = currentQuestion?.choices?.get(1)!!.displayName()
+    val choice3 = currentQuestion?.choices?.get(2)!!.displayName()
+    val choice4 = currentQuestion?.choices?.get(3)!!.displayName()
+    val correctBtnNum = currentQuestion?.choices?.indexOfFirst { it.id == item.id }!! + 1
+    var selectedBtnNum = currentQuestion?.choices?.indexOfFirst { it.equalsDisplayName(currentQuestion?.answerName ?: "") }
     if (selectedBtnNum != null) {
         selectedBtnNum += 1
     }
@@ -46,7 +46,7 @@ fun AppState.toGameResultsViewState(): GameResultsViewState {
             messageText = messageText)
 }
 
-fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(this.numQuestions, this.categoryId)
+fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(this.numQuestions, this.categoryId, this.microphoneMode)
 
 //TODO should this be here?
 private fun AppState.roundTotals() = "${currentQuestionIndex + 1} out of ${questions.size}"

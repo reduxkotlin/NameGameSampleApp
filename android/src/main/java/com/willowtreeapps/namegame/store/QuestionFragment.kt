@@ -26,7 +26,7 @@ import java.util.*
 
 
 class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), QuestionView, MainActivity.IOnBackPressed {
-    private val speechRecognizer by lazy { SpeechRecognizer.createSpeechRecognizer(activity!!) }
+    private lateinit var speechRecognizer: SpeechRecognizer
     private val speechRecognizerIntent by lazy {
         val speechRecIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
         speechRecIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
@@ -37,7 +37,6 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     }
 
     override fun openMic() {
-
         speechRecognizer.setRecognitionListener(object : RecognitionListener {
             override fun onReadyForSpeech(params: Bundle?) {
             }
@@ -83,12 +82,17 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
 
     }
 
+    override fun closeMic() {
+        speechRecognizer.stopListening()
+    }
+
     private var restoreX: Float? = null
     private var restoreY: Float? = null
     private var lastCorrectBtn: Button? = null
     private var lastSelectedBtn: Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity!!)
         return inflater.inflate(R.layout.fragment_question, container, false)
     }
 
@@ -173,12 +177,10 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     }
 
     override fun showProfile(viewState: QuestionViewState) {
-        activity?.runOnUiThread {
-            if (btn_next.visibility == View.VISIBLE) {
-                fadeNextButton { setProfileAndFadeIn(viewState) }
-            } else {
-                setProfileAndFadeIn(viewState)
-            }
+        if (btn_next.visibility == View.VISIBLE) {
+            fadeNextButton { setProfileAndFadeIn(viewState) }
+        } else {
+            setProfileAndFadeIn(viewState)
         }
     }
 
@@ -188,9 +190,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     }
 
     override fun showWrongAnswer(viewState: QuestionViewState, isEndGame: Boolean) {
-        activity?.runOnUiThread {
-            wrongShakeAnimation(viewState) { hideButtonsShowNext(viewState, isEndGame) }
-        }
+        wrongShakeAnimation(viewState) { hideButtonsShowNext(viewState, isEndGame) }
     }
 
     private val showButtonsAnimatorSet by lazy {
@@ -337,7 +337,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     }
 
     override fun setTimerText(viewState: QuestionViewState) {
-        activity?.runOnUiThread {
+        if (view != null) {
             txt_timer.scaleX = 0f
             txt_timer.scaleY = 0f
             txt_timer.alpha = 1f
@@ -359,27 +359,24 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     }
 
     override fun showTimesUp(viewState: QuestionViewState, isEndGame: Boolean) {
-        activity?.runOnUiThread {
-            txt_timer.scaleX = 0f
-            txt_timer.scaleY = 0f
-            txt_timer.text = viewState.timerText
-            val restoreColor = txt_timer.currentTextColor
-            txt_timer.setTextColor(ResourcesCompat.getColor(context?.resources!!, R.color.red, activity?.theme))
-            txt_timer.animate()
-                    .scaleX(1f)
-                    .scaleY(1f)
-                    .setInterpolator(FastOutSlowInInterpolator())
-                    .setDuration(500)
-                    .withEndAction {
-                        showWrongAnswer(viewState, isEndGame)
-                        txt_timer?.animate()?.alpha(0f)
-                                ?.withEndAction {
-                                    txt_timer?.visibility = View.VISIBLE
-                                    txt_timer?.setTextColor(restoreColor)
-                                }
-                    }
-
-        }
+        txt_timer.scaleX = 0f
+        txt_timer.scaleY = 0f
+        txt_timer.text = viewState.timerText
+        val restoreColor = txt_timer.currentTextColor
+        txt_timer.setTextColor(ResourcesCompat.getColor(context?.resources!!, R.color.red, activity?.theme))
+        txt_timer.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .setInterpolator(FastOutSlowInInterpolator())
+                .setDuration(500)
+                .withEndAction {
+                    showWrongAnswer(viewState, isEndGame)
+                    txt_timer?.animate()?.alpha(0f)
+                            ?.withEndAction {
+                                txt_timer?.visibility = View.VISIBLE
+                                txt_timer?.setTextColor(restoreColor)
+                            }
+                }
     }
 
     private fun celebrate() {
@@ -401,54 +398,5 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
         3 -> button3
         4 -> button4
         else -> null//throw IllegalStateException("Invalid button index")
-    }
-
-
-    private fun startSpeechToText() {
-
-        val speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity!!)
-        val speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
-        speechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
-
-        speechRecognizer.setRecognitionListener(object : RecognitionListener {
-            override fun onReadyForSpeech(bundle: Bundle) {}
-
-            override fun onBeginningOfSpeech() {}
-
-            override fun onRmsChanged(v: Float) {}
-
-            override fun onBufferReceived(bytes: ByteArray) {}
-
-            override fun onEndOfSpeech() {}
-
-            override fun onError(i: Int) {}
-
-            override fun onResults(bundle: Bundle) {
-                val matches = bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)//getting all the matches
-                //displaying the first match
-//                if (matches != null)
-            }
-
-            override fun onPartialResults(bundle: Bundle) {}
-
-            override fun onEvent(i: Int, bundle: Bundle) {}
-        })
-
-        btn_end_game.setOnTouchListener { view, motionEvent ->
-            when (motionEvent.action) {
-                MotionEvent.ACTION_UP -> {
-                    speechRecognizer.stopListening()
-//                    editText.hint = getString(R.string.text_hint)
-                }
-
-                MotionEvent.ACTION_DOWN -> {
-                    speechRecognizer.startListening(speechRecognizerIntent)
-//                    editText.setText("")
-//                    editText.hint = "Listening..."
-                }
-            }
-            false
-        }
     }
 }

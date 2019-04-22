@@ -29,7 +29,7 @@ data class AppState(val isLoadingItems: Boolean = false,
 
     fun getItem(id: ItemId?) = items.find { it.id == id }
 
-    fun currentQuestionItem() = getItem(currentQuestion?.itemId)!!
+    fun currentQuestionItem() = currentQuestion!!.choices.find { it.id == currentQuestion!!.itemId }!!
 
     fun isGameComplete(): Boolean = currentQuestionIndex >= questions.size || (currentQuestionIndex == questions.size - 1 && questions[currentQuestionIndex].status != Question.Status.UNANSWERED)
 
@@ -42,8 +42,9 @@ data class AppState(val isLoadingItems: Boolean = false,
 inline class ItemId(val id: String)
 
 data class Question(val itemId: ItemId,
-                    val choices: List<ItemId>,
+                    val choices: List<Item>,
                     val status: Status = Status.UNANSWERED,
+                    val answerNameInterpretedAs: String? = null,
                     val answerName: String? = null) {
     enum class Status {
         UNANSWERED,
@@ -60,7 +61,7 @@ data class Item(val id: ItemId,
 
     fun displayName() = "$firstName $lastName"
 
-    fun matches(name: String): Boolean {
+    fun equalsDisplayName(name: String): Boolean {
         return displayName() == name
     }
 }
@@ -81,8 +82,10 @@ enum class QuestionCategoryId(val displayName: String) {
 
 data class UserSettings(val numQuestions: Int,
                         val categoryId: QuestionCategoryId,
-                        val microphoneMode: Boolean = false) {
+                        val microphoneMode: Boolean) {
     companion object {
-        fun defaults() = UserSettings(3, categoryId = QuestionCategoryId.CATS)
+        fun defaults() = UserSettings(3,
+                categoryId = QuestionCategoryId.CATS,
+                microphoneMode = false)
     }
 }

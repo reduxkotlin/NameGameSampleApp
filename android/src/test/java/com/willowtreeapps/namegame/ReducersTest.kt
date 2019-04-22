@@ -34,8 +34,8 @@ class ReducersTest {
     @Test
     fun `generate N distinct random rounds`() {
 
-        val itemHolder = runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response
-        val rounds = generateRounds(itemHolder?.items!!, 10)
+        val itemHolder = runBlocking { ProfileItemRepository(MockRepositoryFactory().success()).fetchItems() }.response
+        val rounds = generateQuestions(itemHolder?.items!!, 10)
 
         assertEquals(10, rounds.size)
         assertEquals(10, rounds.distinctBy { it.itemId }.size)
@@ -51,7 +51,7 @@ class ReducersTest {
     @Test
     fun `isLoadingProfiles set false on success`() {
         val initial = generateInitialTestState().copy(isLoadingItems = true)
-        val final = reducer(initial, Actions.FetchingItemsSuccessAction(runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response!!))
+        val final = reducer(initial, Actions.FetchingItemsSuccessAction(runBlocking { ProfileItemRepository(MockRepositoryFactory().success()).fetchItems() }.response!!))
 
         assertFalse(final.isLoadingItems)
     }
@@ -65,7 +65,7 @@ class ReducersTest {
     }
 
     @Test
-    fun `NextQuestionAction increments currentRoundIndex`() {
+    fun `NextQuestionAction - increments currentRoundIndex`() {
         val initial = generateInitialTestState()
         val final = reducer(initial, Actions.NextQuestionAction())
 
@@ -73,7 +73,7 @@ class ReducersTest {
     }
 
     @Test
-    fun `NextQuestionAction sets waitingForNextQuestion = false`() {
+    fun `NextQuestionAction - sets waitingForNextQuestion = false`() {
         val initial = generateInitialTestState()
         val final = reducer(initial, Actions.NextQuestionAction())
 
@@ -81,7 +81,7 @@ class ReducersTest {
     }
 
     @Test
-    fun `mark current round as CORRECT when name matches`() {
+    fun `NamePickedAction - mark current round as CORRECT when name matches`() {
         val initial = generateInitialTestState()
         val answer = initial.currentQuestionItem().displayName()
 
@@ -91,13 +91,59 @@ class ReducersTest {
     }
 
     @Test
-    fun `mark current round as INCORRECT when name doesn't matches`() {
+    fun `NamePickedAction - mark current round as INCORRECT when name doesn't matches`() {
         val initial = generateInitialTestState()
         val answer = "wrong answer"
 
         val final = reducer(initial, Actions.NamePickedAction(answer))
 
         assertEquals(Question.Status.INCORRECT, final.currentQuestion?.status)
+    }
+
+    @Test
+    fun `NamePickedAction - mark INCORRECT when name matches incorrect choice`() {
+        val initial = staticTestState(stanLee)
+        val answer = justinTimberlake.displayName()
+
+        val final = reducer(initial, Actions.NamePickedAction(answer))
+
+        assertEquals(Question.Status.INCORRECT, final.currentQuestion?.status)
+    }
+
+    @Test
+    fun `NamePickedAction - set answerName to null if no matches`() {
+        repeat(200) {
+            val initial = generateInitialTestState()
+            val answer = "wrong answer"
+
+            val final = reducer(initial, Actions.NamePickedAction(answer))
+
+            assertEquals(null, final.currentQuestion?.answerName)
+        }
+    }
+
+    @Test
+    fun `NamePickedAction - set answerName to display name on fuzzy match`() {
+        repeat(200) {
+            val initial = staticTestState(stanLee)
+            val answer = "stan bee"
+
+            val final = reducer(initial, Actions.NamePickedAction(answer))
+
+            assertEquals("Stan Lee", final.currentQuestion?.answerName)
+        }
+    }
+
+    @Test
+    fun `NamePickedAction - status set to CORRECT for fuzzy match`() {
+        repeat(200) {
+            val initial = staticTestState(stanLee)
+            val answer = "stan bee"
+
+            val final = reducer(initial, Actions.NamePickedAction(answer))
+
+            assertEquals(Question.Status.CORRECT, final.currentQuestion?.status)
+        }
     }
 
     @Test
@@ -146,7 +192,33 @@ class ReducersTest {
     }
 
     private fun generateInitialTestState(): AppState {
-        val initialState = reducer(AppState(), Actions.FetchingItemsSuccessAction(runBlocking {  ProfileItemRepository(MockRepositoryFactory().success()).fetchItems()}.response!!))
+        val initialState = reducer(AppState(), Actions.FetchingItemsSuccessAction(runBlocking { ProfileItemRepository(MockRepositoryFactory().success()).fetchItems() }.response!!))
         return initialState
     }
+
+    val justinTimberlake = Item(ItemId("0"), "", "Justin", "Timberlake")
+    val bobEvans = Item(ItemId("1"), "", "Bob", "Evans")
+    val stanLee = Item(ItemId("2"), "", "Stan", "Lee")
+    val lukeSkywalker = Item(ItemId("3"), "", "Luke", "Skywalker")
+
+    fun staticTestState(correctAnswer: Item): AppState {
+
+        val items = listOf(
+                justinTimberlake,
+                bobEvans,
+                stanLee,
+                lukeSkywalker
+        )
+        val questions = listOf(
+                Question(itemId = correctAnswer.id,
+                        choices = items,
+                        status = Question.Status.UNANSWERED
+                )
+        )
+        return AppState(isLoadingItems = false,
+                items = items,
+                questions = questions
+        )
+    }
+
 }

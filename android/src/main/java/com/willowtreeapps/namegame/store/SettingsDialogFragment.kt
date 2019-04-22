@@ -65,6 +65,7 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
     override fun showSettings(viewState: SettingsViewState) {
         numberPicker.value = viewState.numQuestions
         categoryPicker.value = QuestionCategoryId.values().indexOf(viewState.categoryId)
+        switch_mic.isChecked = viewState.isMicModeEnabled
     }
 
     override fun askForMicPermissions() {
@@ -77,14 +78,12 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
 
         if (permission != PackageManager.PERMISSION_GRANTED) {
             Logger.d("Permission to record denied")
-            makeRequest()
+            requestPermissions(
+                    arrayOf(Manifest.permission.RECORD_AUDIO),
+                    MainActivity.RECORD_REQUEST_CODE)
+        } else {
+            presenter.microphonePermissionGranted()
         }
-    }
-
-    private fun makeRequest() {
-        requestPermissions(
-                arrayOf(Manifest.permission.RECORD_AUDIO),
-                MainActivity.RECORD_REQUEST_CODE)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int,

@@ -1,2 +1,2 @@
-include ':android', ':common', ':fuzzywuzzytests'
+include ':android', ':common'
 enableFeaturePreview("GRADLE_METADATA")

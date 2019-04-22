@@ -17,6 +17,10 @@ object Logger {
             platformLogger.enabled = value
         }
 
+    fun d(message: String) {
+        d(message, Logger.Category.NONE)
+    }
+
     fun d(message: String, category: Category = Logger.Category.NONE) {
         if (enabled && category.isEnabled)
             platformLogger.logDebug(message)

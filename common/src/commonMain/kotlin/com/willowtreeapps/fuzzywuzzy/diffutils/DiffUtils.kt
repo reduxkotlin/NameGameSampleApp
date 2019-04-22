@@ -5,41 +5,34 @@ import com.willowtreeapps.fuzzywuzzy.diffutils.structs.EditType
 import com.willowtreeapps.fuzzywuzzy.diffutils.structs.EditType.*
 import com.willowtreeapps.fuzzywuzzy.diffutils.structs.MatchingBlock
 import com.willowtreeapps.fuzzywuzzy.diffutils.structs.OpCode
-import io.ktor.util.InternalAPI
-import io.ktor.util.toCharArray
 
 /**
  * This is a port of all the functions needed from python-levenshtein C implementation.
  * The code was ported line by line but unfortunately it was mostly undocumented,
  * so it is mostly non readable (eg. var names)
  */
-//@InternalAPI
-@UseExperimental(InternalAPI::class)
 object DiffUtils {
 
-    fun getEditOps(s1: String, s2: String): Array<EditOp> {
+    private fun getEditOps(s1: String, s2: String): Array<EditOp> {
         return getEditOps(s1.length, s1, s2.length, s2)
     }
 
 
-    @InternalAPI
     private fun getEditOps(len1: Int, s1: String, len2: Int, s2: String): Array<EditOp> {
         var len1 = len1
         var len2 = len2
 
-        var len1o: Int
+        var len1o = 0
         val len2o: Int
-        var i: Int
+        var i = 0
 
         val matrix: IntArray
 
-        val c1 = s1.toCharArray()
-        val c2 = s2.toCharArray()
+        val c1 = s1
+        val c2 = s2
 
         var p1 = 0
         var p2 = 0
-
-        len1o = 0
 
         while (len1 > 0 && len2 > 0 && c1[p1] == c2[p2]) {
             len1--
@@ -64,7 +57,6 @@ object DiffUtils {
 
         matrix = IntArray(len2 * len1)
 
-        i = 0
         while (i < len2) {
             matrix[i] = i
             i++
@@ -116,28 +108,21 @@ object DiffUtils {
     }
 
 
-    private fun editOpsFromCostMatrix(len1: Int, c1: CharArray, p1: Int, o1: Int,
-                                      len2: Int, c2: CharArray, p2: Int, o2: Int,
+    private fun editOpsFromCostMatrix(len1: Int, c1: String, p1: Int, o1: Int,
+                                      len2: Int, c2: String, p2: Int, o2: Int,
                                       matrix: IntArray): Array<EditOp> {
 
-        var i: Int
-        var j: Int
-        var pos: Int
+        var i: Int = len1 - 1
+        var j: Int = len2 - 1
+        var pos: Int = matrix[len1 * len2 - 1]
 
-        var ptr: Int
+        var ptr: Int = len1 * len2 - 1
 
         val ops: Array<EditOp?>
 
         var dir = 0
 
-        pos = matrix[len1 * len2 - 1]
-
         ops = arrayOfNulls(pos)
-
-        i = len1 - 1
-        j = len2 - 1
-
-        ptr = len1 * len2 - 1
 
         while (i > 0 || j > 0) {
 
@@ -324,12 +309,10 @@ object DiffUtils {
 
         val n = ops.size
 
-        var numberOfMatchingBlocks: Int
+        var numberOfMatchingBlocks: Int = 0
         var i: Int
         var spos: Int
         var dpos: Int
-
-        numberOfMatchingBlocks = 0
 
         var o = 0
 
@@ -357,7 +340,7 @@ object DiffUtils {
 
             }
 
-            type = ops[o]!!.type!!
+            type = ops[o].type!!
 
             when (type) {
                 REPLACE -> do {
@@ -421,7 +404,7 @@ object DiffUtils {
 
             }
 
-            type = ops[o]!!.type!!
+            type = ops[o].type!!
 
             when (type) {
                 REPLACE -> do {
@@ -636,14 +619,13 @@ object DiffUtils {
 
     }
 
-    @InternalAPI
     fun levEditDistance(s1: String, s2: String, xcost: Int): Int {
 
         var i: Int
         val half: Int
 
-        var c1 = s1.toCharArray()
-        var c2 = s2.toCharArray()
+        var c1 = s1
+        var c2 = s2
 
         var str1 = 0
         var str2 = 0
@@ -826,7 +808,7 @@ object DiffUtils {
 
     }
 
-    private fun memchr(haystack: CharArray, offset: Int, needle: Char, num: Int): Int {
+    private fun memchr(haystack: String, offset: Int, needle: Char, num: Int): Int {
         var num = num
 
         if (num != 0) {

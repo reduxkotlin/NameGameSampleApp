@@ -12,10 +12,10 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
 /**
- * Save and Loads user settings from local storage
+ * Save and Loads user settingsRepo from local storage
  */
-internal class SettingsMiddleware(private val settings: LocalStorageSettingsRepository,
-                         private val backgroundContext: CoroutineContext): CoroutineScope {
+internal class SettingsMiddleware(private val settingsRepo: LocalStorageSettingsRepository,
+                                  private val backgroundContext: CoroutineContext): CoroutineScope {
     override val coroutineContext: CoroutineContext
         get() = backgroundContext + Job()
 
@@ -23,16 +23,18 @@ internal class SettingsMiddleware(private val settings: LocalStorageSettingsRepo
     fun dispatch(store: Store<AppState>, nextDispatcher: (Any) -> Any, action: Any): Any {
         launch {
             when (action) {
-                is ChangeNumQuestionsSettingsAction -> settings.numRounds = action.num
+                is ChangeNumQuestionsSettingsAction -> settingsRepo.numRounds = action.num
 
-                is Actions.ChangeCategorySettingsAction -> settings.categoryId = action.categoryId
+                is Actions.ChangeCategorySettingsAction -> settingsRepo.categoryId = action.categoryId
 
                 is Actions.LoadAllSettingsAction -> {
-                    val settings = UserSettings(numQuestions = settings.numRounds, categoryId = settings.categoryId)
+                    val settings = UserSettings(numQuestions = settingsRepo.numRounds,
+                            categoryId = settingsRepo.categoryId,
+                            microphoneMode = settingsRepo.microphoneMode)
                     store.dispatch(Actions.SettingsLoadedAction(settings))
                 }
 
-                is Actions.ChangeMicrophoneModeSettingsAction ->  settings.microphoneMode = action.enabled
+                is Actions.ChangeMicrophoneModeSettingsAction ->  settingsRepo.microphoneMode = action.enabled
             }
         }
         return nextDispatcher(action)

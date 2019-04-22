@@ -3,7 +3,8 @@ package com.willowtreeapps.common
 sealed class ViewStates
 
 data class SettingsViewState(val numQuestions: Int,
-                             val categoryId: QuestionCategoryId)
+                             val categoryId: QuestionCategoryId,
+                             val isMicModeEnabled: Boolean)
 
 data class QuestionViewState(
         val title: String,

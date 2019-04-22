@@ -30,8 +30,10 @@ class GameResultsFragment : BaseNameGameViewFragment<GameResultsPresenter>(), Ga
     }
 
     override fun showResults(viewState: GameResultsViewState) {
-        txt_questionTitle.text = viewState.resultsText
-        txt_message.text = viewState.messageText
+        activity?.runOnUiThread {
+            txt_questionTitle.text = viewState.resultsText
+            txt_message.text = viewState.messageText
+        }
     }
 
     override fun onBackPressed(): Boolean {
