@@ -61,15 +61,12 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
         do {
             try audioEngine.start()
         } catch {
-//            self.sendAlert(message: "There has been an audio engine error.")
             return print(error)
         }
         guard let myRecognizer = SFSpeechRecognizer() else {
-//            self.sendAlert(message: "Speech recognition is not supported for your current locale.")
             return
         }
         if !myRecognizer.isAvailable {
-//            self.sendAlert(message: "Speech recognition is not currently available. Check back at a later time.")
             // Recognizer is not available right now
             return
         }
@@ -80,11 +77,12 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
                 
                 var lastString: String = ""
                 Logger.init().d(message: "speech: " + bestString)
+                self.getPresenter()?.namePicked(name: bestString)
+
                 if (result.isFinal) {
                     self.getPresenter()?.namePicked(name: bestString)
                 }
             } else if let error = error {
-//                self.sendAlert(message: "There has been a speech recognition error.")
                 print(error)
             }
         })

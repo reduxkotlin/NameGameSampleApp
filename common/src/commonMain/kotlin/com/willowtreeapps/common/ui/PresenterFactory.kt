@@ -1,7 +1,7 @@
-package com.willowtreeapps.common
+package com.willowtreeapps.common.ui
 
 import com.beyondeye.reduks.*
-import com.willowtreeapps.common.ui.*
+import com.willowtreeapps.common.*
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -17,10 +17,10 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     //    private val presenters = mutableSetOf<Presenter>()
     private var subscription: StoreSubscription? = null
 
-    private val startPresenter by lazy { StartPresenter(gameEngine.appStore, networkThunks) }
+    private val startPresenter by lazy { StartPresenter(gameEngine, networkThunks) }
     private val questionPresenter by lazy { QuestionPresenter(gameEngine, gameEngine.vibrateUtil, timerThunks) }
-    private val gameResultsPresenter by lazy { GameResultsPresenter(gameEngine.appStore) }
-    private val settingsPresenter by lazy { SettingsPresenter(gameEngine.appStore) }
+    private val gameResultsPresenter by lazy { GameResultsPresenter(gameEngine) }
+    private val settingsPresenter by lazy { SettingsPresenter(gameEngine) }
 
     fun <T : View<Presenter<*>>> attachView(view: T) {
         Logger.d("AttachView: $view", Logger.Category.LIFECYCLE)

@@ -26,14 +26,10 @@ class StartFragment : Fragment(), CoroutineScope, StartView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         btn_start.setOnClickListener {
-            activity?.runOnUiThread {
-                presenter?.startGame()
-            }
+            presenter?.startGame()
         }
         btn_settings.setOnClickListener {
-            activity?.runOnUiThread {
-                presenter?.settingsTapped()
-            }
+            presenter?.settingsTapped()
         }
     }
 
@@ -48,20 +44,14 @@ class StartFragment : Fragment(), CoroutineScope, StartView {
     }
 
     override fun hideLoading() {
-        activity?.runOnUiThread {
-            loading_spinner.visibility = View.GONE
-        }
+        loading_spinner.visibility = View.GONE
     }
 
     override fun showLoading() {
-        activity?.runOnUiThread {
-            loading_spinner.visibility = View.VISIBLE
-        }
+        loading_spinner.visibility = View.VISIBLE
     }
 
     override fun showError(msg: String) {
-        activity?.runOnUiThread {
-            txt_error.text = msg
-        }
+        txt_error.text = msg
     }
 }

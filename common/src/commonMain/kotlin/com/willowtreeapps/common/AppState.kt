@@ -1,5 +1,7 @@
 package com.willowtreeapps.common
 
+import com.willowtreeapps.common.repo.GameResultResponses
+
 data class AppState(val isLoadingItems: Boolean = false,
                     val items: List<Item> = listOf(),
                     val errorLoadingItems: Boolean = false,
@@ -8,6 +10,7 @@ data class AppState(val isLoadingItems: Boolean = false,
                     val waitingForNextQuestion: Boolean = false,
                     val questionClock: Int = -1,
                     val questionTitle: String = "",
+                    val gameResultResponses: GameResultResponses = GameResultResponses(),
                     val questions: List<Question> = listOf(),
                     val settings: UserSettings = UserSettings.defaults()) {
     companion object {

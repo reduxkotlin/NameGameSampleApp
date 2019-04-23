@@ -3,9 +3,8 @@ package com.willowtreeapps.namegame.store
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.willowtreeapps.common.Logger
-import com.willowtreeapps.common.Presenter
-import com.willowtreeapps.common.View
-import com.willowtreeapps.common.ui.GameResultsPresenter
+import com.willowtreeapps.common.ui.Presenter
+import com.willowtreeapps.common.ui.View
 import com.willowtreeapps.namegame.NameGameApp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

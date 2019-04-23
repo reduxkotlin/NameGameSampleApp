@@ -4,6 +4,8 @@ import com.beyondeye.reduks.*
 import com.willowtreeapps.common.*
 import com.willowtreeapps.common.boundary.toQuestionViewState
 import com.willowtreeapps.common.util.VibrateUtil
+import com.willowtreeapps.common.util.debounce
+import com.willowtreeapps.common.util.isAndroid
 
 
 class QuestionPresenter(
@@ -48,10 +50,23 @@ class QuestionPresenter(
         }
     }
 
-    fun namePicked(name: String) {
-        engine.dispatch(Actions.NamePickedAction(name))
-        engine.dispatch(timerThunks.stopTimer())
+    private val debouncedNamePicked: ((String) -> Unit) =
+            debounce(400, engine.uiContext) { name ->
+                Logger.d("choose name: $name")
+                engine.dispatch(Actions.NamePickedAction(name))
+                engine.dispatch(timerThunks.stopTimer())
+                view?.closeMic()
+            }
 
+    fun namePicked(name: String) {
+        //check for android here, because performance is a bit different and better UX without debounce
+        if (isAndroid()) {
+            engine.dispatch(Actions.NamePickedAction(name))
+            engine.dispatch(timerThunks.stopTimer())
+            view?.closeMic()
+        } else {
+            debouncedNamePicked(name)
+        }
     }
 
     fun nextTapped() {

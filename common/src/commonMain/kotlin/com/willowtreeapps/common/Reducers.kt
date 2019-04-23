@@ -49,7 +49,9 @@ fun reducer(state: AppState, action: Any): AppState =
                 }
 
                 val newQuestions = state.questions.toMutableList()
-                newQuestions[state.currentQuestionIndex] = newQuestions[state.currentQuestionIndex].copy(answerName = answerName, status = status, answerNameInterpretedAs = action.name)
+                newQuestions[state.currentQuestionIndex] = newQuestions[state.currentQuestionIndex].copy(answerName = answerName,
+                        status = status,
+                        answerNameInterpretedAs = action.name)
                 state.copy(questions = newQuestions, waitingForNextQuestion = true)
             }
             is NextQuestionAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
