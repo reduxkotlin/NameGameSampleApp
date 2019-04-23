@@ -2,12 +2,13 @@ package com.willowtreeapps.namegame.store
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.ViewTreeObserver
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
+import android.view.*
 import android.view.animation.BounceInterpolator
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.willowtreeapps.common.QuestionViewState
@@ -21,9 +22,69 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.willowtreeapps.common.Logger
 import com.willowtreeapps.common.ui.QuestionPresenter
 import com.willowtreeapps.namegame.*
+import java.util.*
 
 
 class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), QuestionView, MainActivity.IOnBackPressed {
+    private lateinit var speechRecognizer: SpeechRecognizer
+    private val speechRecognizerIntent by lazy {
+        val speechRecIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+        speechRecIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+        speechRecIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
+                Locale.getDefault())
+        speechRecIntent
+    }
+
+    override fun openMic() {
+        speechRecognizer.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle?) {
+            }
+
+            override fun onRmsChanged(rmsdB: Float) {
+            }
+
+            override fun onBufferReceived(buffer: ByteArray?) {
+            }
+
+            override fun onPartialResults(partialResults: Bundle) {
+                val matches = partialResults
+                        .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+
+                //displaying the first match
+                if (matches != null)
+                    presenter.namePicked(matches[0])
+            }
+
+            override fun onEvent(eventType: Int, params: Bundle?) {
+            }
+
+            override fun onBeginningOfSpeech() {
+            }
+
+            override fun onEndOfSpeech() {
+            }
+
+            override fun onError(error: Int) {
+            }
+
+            override fun onResults(results: Bundle) {
+                val matches = results
+                        .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+
+                //displaying the first match
+                if (matches != null)
+                    presenter.namePicked(matches[0])
+            }
+
+        })
+        speechRecognizer.startListening(speechRecognizerIntent)
+
+    }
+
+    override fun closeMic() {
+        speechRecognizer.stopListening()
+    }
 
     private var restoreX: Float? = null
     private var restoreY: Float? = null
@@ -31,6 +92,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     private var lastSelectedBtn: Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity!!)
         return inflater.inflate(R.layout.fragment_question, container, false)
     }
 
@@ -115,12 +177,10 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     }
 
     override fun showProfile(viewState: QuestionViewState) {
-        activity?.runOnUiThread {
-            if (btn_next.visibility == View.VISIBLE) {
-                fadeNextButton { setProfileAndFadeIn(viewState) }
-            } else {
-                setProfileAndFadeIn(viewState)
-            }
+        if (btn_next.visibility == View.VISIBLE) {
+            fadeNextButton { setProfileAndFadeIn(viewState) }
+        } else {
+            setProfileAndFadeIn(viewState)
         }
     }
 
@@ -130,9 +190,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     }
 
     override fun showWrongAnswer(viewState: QuestionViewState, isEndGame: Boolean) {
-        activity?.runOnUiThread {
-            wrongShakeAnimation(viewState) { hideButtonsShowNext(viewState, isEndGame) }
-        }
+        wrongShakeAnimation(viewState) { hideButtonsShowNext(viewState, isEndGame) }
     }
 
     private val showButtonsAnimatorSet by lazy {
@@ -279,7 +337,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     }
 
     override fun setTimerText(viewState: QuestionViewState) {
-        activity?.runOnUiThread {
+        if (view != null) {
             txt_timer.scaleX = 0f
             txt_timer.scaleY = 0f
             txt_timer.alpha = 1f
@@ -301,27 +359,24 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     }
 
     override fun showTimesUp(viewState: QuestionViewState, isEndGame: Boolean) {
-        activity?.runOnUiThread {
-            txt_timer.scaleX = 0f
-            txt_timer.scaleY = 0f
-            txt_timer.text = viewState.timerText
-            val restoreColor = txt_timer.currentTextColor
-            txt_timer.setTextColor(ResourcesCompat.getColor(context?.resources!!, R.color.red, activity?.theme))
-            txt_timer.animate()
-                    .scaleX(1f)
-                    .scaleY(1f)
-                    .setInterpolator(FastOutSlowInInterpolator())
-                    .setDuration(500)
-                    .withEndAction {
-                        showWrongAnswer(viewState, isEndGame)
-                        txt_timer?.animate()?.alpha(0f)
-                                ?.withEndAction {
-                                    txt_timer?.visibility = View.VISIBLE
-                                    txt_timer?.setTextColor(restoreColor)
-                                }
-                    }
-
-        }
+        txt_timer.scaleX = 0f
+        txt_timer.scaleY = 0f
+        txt_timer.text = viewState.timerText
+        val restoreColor = txt_timer.currentTextColor
+        txt_timer.setTextColor(ResourcesCompat.getColor(context?.resources!!, R.color.red, activity?.theme))
+        txt_timer.animate()
+                .scaleX(1f)
+                .scaleY(1f)
+                .setInterpolator(FastOutSlowInInterpolator())
+                .setDuration(500)
+                .withEndAction {
+                    showWrongAnswer(viewState, isEndGame)
+                    txt_timer?.animate()?.alpha(0f)
+                            ?.withEndAction {
+                                txt_timer?.visibility = View.VISIBLE
+                                txt_timer?.setTextColor(restoreColor)
+                            }
+                }
     }
 
     private fun celebrate() {

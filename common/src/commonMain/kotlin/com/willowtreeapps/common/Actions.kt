@@ -7,10 +7,10 @@ import com.willowtreeapps.common.repo.Profile
 sealed class Actions : Action {
 
     class FetchingItemsStartedAction
-    class FetchingItemsSuccessAction(val itemsHolder: ItemsHolder)
-    class FetchingItemsFailedAction(val message: String)
+    data class FetchingItemsSuccessAction(val itemsHolder: ItemsHolder)
+    data class FetchingItemsFailedAction(val message: String)
 
-    class NamePickedAction(val name: String)
+    data class NamePickedAction(val name: String)
 
     class NextQuestionAction
 
@@ -19,16 +19,17 @@ sealed class Actions : Action {
     class StartOverAction
     class ResetGameStateAction
 
-    class StartQuestionTimerAction(val initialValue: Int)
+    data class StartQuestionTimerAction(val initialValue: Int)
     class DecrementCountDownAction
     class TimesUpAction
 
 
     class SettingsTappedAction
     class LoadAllSettingsAction
-    class SettingsLoadedAction(val settings: UserSettings)
-    class ChangeNumQuestionsSettingsAction(val num: Int)
-    class ChangeCategorySettingsAction(val categoryId: QuestionCategoryId)
+    data class SettingsLoadedAction(val settings: UserSettings)
+    data class ChangeNumQuestionsSettingsAction(val num: Int)
+    data class ChangeCategorySettingsAction(val categoryId: QuestionCategoryId)
+    data class ChangeMicrophoneModeSettingsAction(val enabled: Boolean)
 
 }
 

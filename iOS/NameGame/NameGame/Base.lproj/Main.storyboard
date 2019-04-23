@@ -313,7 +313,7 @@
                                 </constraints>
                             </pickerView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2fu-Sa-y1Y">
-                                <rect key="frame" x="192" y="439" width="30" height="30"/>
+                                <rect key="frame" x="192" y="639" width="30" height="30"/>
                                 <state key="normal" title="Ok"/>
                                 <connections>
                                     <action selector="okButtonTap:" destination="zDO-k1-Up7" eventType="touchUpInside" id="cTa-x2-rRN"/>
@@ -340,26 +340,44 @@
                                     <constraint firstAttribute="width" constant="125" id="X4Q-b7-MaQ"/>
                                 </constraints>
                             </pickerView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Voice Mode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v08-d2-Jvy">
+                                <rect key="frame" x="40" y="494" width="160" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nN0-Gd-Bxy">
+                                <rect key="frame" x="285" y="489" width="51" height="31"/>
+                                <connections>
+                                    <action selector="voiceModeSwitched:" destination="zDO-k1-Up7" eventType="valueChanged" id="lvA-JR-xqh"/>
+                                </connections>
+                            </switch>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="xin-LQ-YXF" firstAttribute="centerX" secondItem="Lu3-CE-vvh" secondAttribute="centerX" constant="101.5" id="0yT-EQ-CNK"/>
                             <constraint firstItem="xin-LQ-YXF" firstAttribute="centerX" secondItem="Lu3-CE-vvh" secondAttribute="centerX" constant="101.5" id="1EY-Zy-rlp"/>
+                            <constraint firstItem="nN0-Gd-Bxy" firstAttribute="top" secondItem="eSc-Sj-18O" secondAttribute="bottom" constant="78" id="1PS-V1-f6O"/>
                             <constraint firstItem="xin-LQ-YXF" firstAttribute="centerX" secondItem="Lu3-CE-vvh" secondAttribute="centerX" constant="101.5" id="8py-Qx-QR9"/>
                             <constraint firstItem="1YP-9B-QsU" firstAttribute="top" secondItem="fFq-x9-dFj" secondAttribute="bottom" constant="8" symbolic="YES" id="CTj-mx-5hA"/>
+                            <constraint firstItem="v08-d2-Jvy" firstAttribute="leading" secondItem="8bI-my-tH5" secondAttribute="leading" constant="40" id="FZB-uj-GAC"/>
                             <constraint firstItem="xin-LQ-YXF" firstAttribute="centerX" secondItem="Lu3-CE-vvh" secondAttribute="centerX" constant="101.5" id="G8b-CI-YAP"/>
                             <constraint firstItem="1YP-9B-QsU" firstAttribute="leading" secondItem="Lu3-CE-vvh" secondAttribute="leadingMargin" id="GP4-aB-Frb"/>
+                            <constraint firstItem="nN0-Gd-Bxy" firstAttribute="leading" secondItem="v08-d2-Jvy" secondAttribute="trailing" constant="85" id="I0o-Ek-vYk"/>
                             <constraint firstItem="xin-LQ-YXF" firstAttribute="leading" secondItem="fFq-x9-dFj" secondAttribute="trailing" constant="81" id="NIO-9W-lzk"/>
                             <constraint firstItem="fFq-x9-dFj" firstAttribute="centerX" secondItem="Lu3-CE-vvh" secondAttribute="centerX" constant="-104.5" id="NWO-3p-QBT"/>
                             <constraint firstItem="xin-LQ-YXF" firstAttribute="width" secondItem="fFq-x9-dFj" secondAttribute="width" id="RD1-Je-oAF"/>
                             <constraint firstItem="fFq-x9-dFj" firstAttribute="centerX" secondItem="Lu3-CE-vvh" secondAttribute="centerX" constant="-104.5" id="ZgK-8U-sWv"/>
                             <constraint firstItem="fFq-x9-dFj" firstAttribute="centerX" secondItem="Lu3-CE-vvh" secondAttribute="centerX" constant="-104.5" id="eti-Sr-wDZ"/>
                             <constraint firstItem="eSc-Sj-18O" firstAttribute="leading" secondItem="1YP-9B-QsU" secondAttribute="trailing" constant="42" id="fEg-f1-a1t"/>
+                            <constraint firstItem="v08-d2-Jvy" firstAttribute="top" secondItem="1YP-9B-QsU" secondAttribute="bottom" constant="83" id="guc-Tx-zc7"/>
                             <constraint firstItem="1YP-9B-QsU" firstAttribute="baseline" secondItem="eSc-Sj-18O" secondAttribute="baseline" id="hyM-SP-vjM"/>
                             <constraint firstItem="fFq-x9-dFj" firstAttribute="centerX" secondItem="Lu3-CE-vvh" secondAttribute="centerX" constant="-104.5" id="ikK-5P-fDA"/>
-                            <constraint firstItem="2fu-Sa-y1Y" firstAttribute="top" secondItem="fFq-x9-dFj" secondAttribute="bottom" constant="57" id="k9K-hZ-PMA"/>
+                            <constraint firstItem="2fu-Sa-y1Y" firstAttribute="top" secondItem="fFq-x9-dFj" secondAttribute="bottom" constant="257" id="k9K-hZ-PMA"/>
                             <constraint firstItem="fFq-x9-dFj" firstAttribute="top" secondItem="8bI-my-tH5" secondAttribute="top" constant="122" id="qce-wZ-N3z"/>
+                            <constraint firstItem="8bI-my-tH5" firstAttribute="trailing" secondItem="nN0-Gd-Bxy" secondAttribute="trailing" constant="80" id="usM-uH-TNB"/>
                             <constraint firstItem="2fu-Sa-y1Y" firstAttribute="centerX" secondItem="Lu3-CE-vvh" secondAttribute="centerX" id="vdq-1c-tK5"/>
+                            <constraint firstItem="8bI-my-tH5" firstAttribute="trailing" secondItem="eSc-Sj-18O" secondAttribute="trailing" constant="24.5" id="z09-wh-SLM"/>
                             <constraint firstItem="fFq-x9-dFj" firstAttribute="top" secondItem="xin-LQ-YXF" secondAttribute="top" id="zN6-AS-M3U"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="8bI-my-tH5"/>
@@ -378,7 +396,6 @@
         <image name="willowtree_banner.png" width="1400" height="600"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="fdP-Ys-gQc"/>
         <segue reference="LZ0-bS-HDb"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -1,7 +1,7 @@
-package com.willowtreeapps.common
+package com.willowtreeapps.common.ui
 
 import com.beyondeye.reduks.*
-import com.willowtreeapps.common.ui.*
+import com.willowtreeapps.common.*
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -12,18 +12,18 @@ import kotlin.coroutines.CoroutineContext
  */
 internal class PresenterFactory(private val gameEngine: GameEngine, networkContext: CoroutineContext) : StoreSubscriber<AppState> {
 
-    private val timerThunks = TimerThunks(networkContext, gameEngine.appStore)
+    private val timerThunks = TimerThunks(networkContext, gameEngine)
     private val networkThunks = NetworkThunks(networkContext, gameEngine.appStore)
     //    private val presenters = mutableSetOf<Presenter>()
     private var subscription: StoreSubscription? = null
 
-    private val startPresenter by lazy { StartPresenter(gameEngine.appStore, networkThunks) }
-    private val questionPresenter by lazy { QuestionPresenter(gameEngine.appStore, gameEngine.vibrateUtil, timerThunks) }
-    private val gameResultsPresenter by lazy { GameResultsPresenter(gameEngine.appStore) }
-    private val settingsPresenter by lazy { SettingsPresenter(gameEngine.appStore) }
+    private val startPresenter by lazy { StartPresenter(gameEngine, networkThunks) }
+    private val questionPresenter by lazy { QuestionPresenter(gameEngine, gameEngine.vibrateUtil, timerThunks) }
+    private val gameResultsPresenter by lazy { GameResultsPresenter(gameEngine) }
+    private val settingsPresenter by lazy { SettingsPresenter(gameEngine) }
 
     fun <T : View<Presenter<*>>> attachView(view: T) {
-        Logger.d("AttachView: $view")
+        Logger.d("AttachView: $view", Logger.Category.LIFECYCLE)
         if (subscription == null) {
             subscription = gameEngine.appStore.subscribe(this)
         }
@@ -52,7 +52,7 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     }
 
     fun detachView(view: View<*>) {
-        Logger.d("DetachView: $view")
+        Logger.d("DetachView: $view", Logger.Category.LIFECYCLE)
         if (view is StartView)
             startPresenter.detachView(view)
         if (view is QuestionView)
@@ -98,7 +98,7 @@ abstract class Presenter<T : View<*>?> {
     fun isAttached() = view != null
 
     open fun attachView(view: T) {
-        Logger.d("Presenter attachView: $view")
+        Logger.d("Presenter attachView: $view", Logger.Category.LIFECYCLE)
         if (subscriber == null) {
             subscriber = makeSubscriber()
         }
@@ -106,7 +106,7 @@ abstract class Presenter<T : View<*>?> {
     }
 
     fun detachView(view: T) {
-        Logger.d("Presenter DetachView: $view")
+        Logger.d("Presenter DetachView: $view", Logger.Category.LIFECYCLE)
         if (this.view == view) {
             this.view = null
         }

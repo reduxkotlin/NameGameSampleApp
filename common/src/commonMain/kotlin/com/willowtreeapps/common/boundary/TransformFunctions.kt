@@ -8,12 +8,14 @@ import com.willowtreeapps.common.*
 fun AppState.toQuestionViewState(): QuestionViewState {
     val item = currentQuestionItem()
     val imageUrl = item.imageUrl
-    val choice1 = getItem(currentQuestion?.choices?.get(0))!!.displayName()
-    val choice2 = getItem(currentQuestion?.choices?.get(1))!!.displayName()
-    val choice3 = getItem(currentQuestion?.choices?.get(2))!!.displayName()
-    val choice4 = getItem(currentQuestion?.choices?.get(3))!!.displayName()
-    val correctBtnNum = currentQuestion?.choices?.indexOfFirst { it == item.id }!! + 1
-    var selectedBtnNum = currentQuestion?.choices?.indexOfFirst { getItem(it)?.matches(currentQuestion?.answerName ?: "") ?: false}
+    val choice1 = currentQuestion?.choices?.get(0)!!.displayName()
+    val choice2 = currentQuestion?.choices?.get(1)!!.displayName()
+    val choice3 = currentQuestion?.choices?.get(2)!!.displayName()
+    val choice4 = currentQuestion?.choices?.get(3)!!.displayName()
+    val correctBtnNum = currentQuestion?.choices?.indexOfFirst { it.id == item.id }!! + 1
+    var selectedBtnNum = currentQuestion?.choices?.indexOfFirst {
+        it.equalsDisplayName(currentQuestion?.answerName ?: "")
+    }
     if (selectedBtnNum != null) {
         selectedBtnNum += 1
     }
@@ -29,24 +31,26 @@ fun AppState.toQuestionViewState(): QuestionViewState {
             nextButtonVisible = this.waitingForNextQuestion && !isGameComplete(),
             endButtonVisible = isGameComplete(),
             timerText = timerText,
-            selectedBtnNum =  selectedBtnNum ?: -1)
+            selectedBtnNum = selectedBtnNum ?: -1)
 }
 
 fun AppState.toGameResultsViewState(): GameResultsViewState {
     val percentage = ((numCorrect.toFloat() / questions.size) * 100).toInt()
-    val messageText = when (percentage) {
-        100 -> perfectScoreResponses.takeRandom()
-        in 80..99 -> goodScoreResponses.takeRandom()
-        in 50..79 -> okScoreResponses.takeRandom()
-        in 10..49 -> badScoreResponses.takeRandom()
-        0 -> zeroScoreResponses.takeRandom()
-        else -> throw IllegalStateException("Error in toGameResultsViewState when statement or invalid game state")
+    val messageText = with(gameResultResponses) {
+        when (percentage) {
+            100 -> perfect
+            in 80..99 -> good
+            in 50..79 -> ok
+            in 10..49 -> bad
+            0 -> zero
+            else -> throw IllegalStateException("Error in toGameResultsViewState when statement or invalid game state")
+        }
     }
     return GameResultsViewState(resultsText = gameTotals(),
             messageText = messageText)
 }
 
-fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(this.numQuestions, this.categoryId)
+fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(this.numQuestions, this.categoryId, this.microphoneMode)
 
 //TODO should this be here?
 private fun AppState.roundTotals() = "${currentQuestionIndex + 1} out of ${questions.size}"

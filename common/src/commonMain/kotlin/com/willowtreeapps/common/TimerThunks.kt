@@ -1,14 +1,14 @@
 package com.willowtreeapps.common
 
-import com.beyondeye.reduks.Store
 import com.beyondeye.reduks.ThunkFn
 import com.beyondeye.reduks.ThunkImpl
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-class TimerThunks(private val backgroundContext: CoroutineContext, val store: Store<AppState>) : CoroutineScope {
+class TimerThunks(private val backgroundContext: CoroutineContext, private val engine: GameEngine) : CoroutineScope {
     override val coroutineContext = backgroundContext + Job()
-    private var timerJob: Job? = null
+    private var countDownTimerJob: Job? = null
+    private var delayedJob: Job? = null
 
     /**
      * Starts a countdown timer that executes every X ms as specified by the action.
@@ -16,28 +16,42 @@ class TimerThunks(private val backgroundContext: CoroutineContext, val store: St
      * the timer and start the new one.
      */
     fun startCountDownTimer(initialValue: Int): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
-        if (timerJob == null || timerJob?.isCompleted == true) {
+        if (countDownTimerJob == null || countDownTimerJob?.isCompleted == true) {
             Logger.d("Launching new Timer")
-            store.dispatch(Actions.StartQuestionTimerAction(initialValue))
-            timerJob = launchTimer(1000, CoroutineScope(coroutineContext)) {
-                if (store.state.questionClock > 0) {
-                    store.dispatch(Actions.DecrementCountDownAction())
+            engine.dispatch(Actions.StartQuestionTimerAction(initialValue))
+            countDownTimerJob = launchTimer(1000, CoroutineScope(coroutineContext)) {
+                if (engine.state.questionClock > 0) {
+                    engine.dispatch(Actions.DecrementCountDownAction())
                 } else {
-                    store.dispatch(Actions.TimesUpAction())
-                    timerJob?.cancel()
+                    engine.dispatch(Actions.TimesUpAction())
+                    countDownTimerJob?.cancel()
 
                 }
             }
-            timerJob?.invokeOnCompletion {
+            countDownTimerJob?.invokeOnCompletion {
                 Logger.d("TIMERJOB is complete: ${it?.message}")
             }
         }
     }
 
-    fun stopTimer() {
-        timerJob?.cancel()
+    fun stopTimer(): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+        countDownTimerJob?.cancel()
+        Unit
     }
 
+    fun dispatchDelayed(delayMs: Long, action: Any): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+        delayedJob?.cancel()
+        delayedJob = CoroutineScope(coroutineContext).launch {
+            delay(delayMs)
+            engine.dispatch(action)
+        }
+        Unit
+    }
+
+    fun cancelDelayed(): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+        delayedJob?.cancel()
+        Unit
+    }
 
     private fun launchTimer(xMs: Long, coroutineScope: CoroutineScope, f: () -> Unit): Job {
         return coroutineScope.launch {

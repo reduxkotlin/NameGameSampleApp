@@ -9,11 +9,12 @@
 import Foundation
 import UIKit
 import common
+import Speech
 
 class SettingsViewController: BaseNameViewController<SettingsPresenter>,
         UIPickerViewDelegate,
         UIPickerViewDataSource,
-        SettingsView {
+SettingsView {
 
     @IBAction func okButtonTap(_ sender: Any?) {
         let selectedValue = pickerData[numPicker.selectedRow(inComponent: 0)]
@@ -27,7 +28,10 @@ class SettingsViewController: BaseNameViewController<SettingsPresenter>,
     @IBOutlet weak var numPicker: UIPickerView!
     @IBOutlet weak var categoryPicker: UIPickerView!
 
-
+    @IBAction func voiceModeSwitched(_ sender: UISwitch) {
+        getPresenter()?.microphoneModeChanged(enabled: sender.isOn)
+    }
+    
     let pickerData: [Int] = Array(1...20)
     let categoryData: [String] = QuestionCategoryId.Companion.init().displayNameList
 
@@ -43,7 +47,11 @@ class SettingsViewController: BaseNameViewController<SettingsPresenter>,
         numPicker.selectRow((Int(viewState.numQuestions - 1)), inComponent: 0, animated: true)
         categoryPicker.selectRow(Int(QuestionCategoryId.Companion.init().displayNameList.firstIndex(of: viewState.categoryId.displayName)!), inComponent: 0, animated: true)
     }
-
+    
+    func askForMicPermissions() {
+        authorizeSR()
+    }
+    
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         if (pickerView == numPicker) {
             return String(pickerData[row])
@@ -63,6 +71,24 @@ class SettingsViewController: BaseNameViewController<SettingsPresenter>,
     // Number of columns of data
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
+    }
+    
+    private func authorizeSR() {
+        SFSpeechRecognizer.requestAuthorization { authStatus in
+            OperationQueue.main.addOperation {
+                switch authStatus {
+                case .authorized:
+                    self.getPresenter()?.microphonePermissionGranted()
+                case .denied:
+                    self.getPresenter()?.microphonePermissionDenied()
+                case .restricted:
+                    self.getPresenter()?.microphonePermissionDenied()
+                case .notDetermined:
+                    self.getPresenter()?.microphonePermissionDenied()
+
+                }
+            }
+        }
     }
 }
 

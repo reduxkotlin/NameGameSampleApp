@@ -1,20 +1,16 @@
 package com.willowtreeapps.common.ui
 
 import com.beyondeye.reduks.SelectorSubscriberFn
-import com.beyondeye.reduks.Store
-import com.willowtreeapps.common.Actions
-import com.willowtreeapps.common.AppState
-import com.willowtreeapps.common.NetworkThunks
-import com.willowtreeapps.common.Presenter
+import com.willowtreeapps.common.*
 
 
-class StartPresenter(val store: Store<AppState>,
+class StartPresenter(private val engine: GameEngine,
                      private val networkThunks: NetworkThunks) : Presenter<StartView>() {
     override fun recreateView() {
         //no-op
     }
 
-    override fun makeSubscriber() = SelectorSubscriberFn(store) {
+    override fun makeSubscriber() = SelectorSubscriberFn(engine.appStore) {
         withSingleField({ it.isLoadingItems }) {
             if (state.isLoadingItems) {
                 view?.showLoading()
@@ -29,11 +25,11 @@ class StartPresenter(val store: Store<AppState>,
     }
 
     fun startGame() {
-        store.dispatch(Actions.ResetGameStateAction())
-        store.dispatch(networkThunks.fetchItems(store.state.settings.categoryId))
+        engine.dispatch(Actions.ResetGameStateAction())
+        engine.dispatch(networkThunks.fetchItems(engine.state.settings.categoryId))
     }
 
     fun settingsTapped() {
-        store.dispatch(Actions.SettingsTappedAction())
+        engine.dispatch(Actions.SettingsTappedAction())
     }
 }

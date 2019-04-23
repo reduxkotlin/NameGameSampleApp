@@ -1,9 +1,11 @@
 import Foundation
 import UIKit
 import common
+import Speech
 
 
 class QuestionViewController: BaseNameViewController<QuestionPresenter>, QuestionView {
+
     
     
     @IBOutlet weak var labelQuestion: UILabel!
@@ -34,7 +36,57 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
     var lastCorrectBtn: UIButton?
     var lastSelectedBtn: UIButton?
     var lastSelectedColor: UIColor?
+    
+    let audioEngine = AVAudioEngine()
+    let speechRecognizer: SFSpeechRecognizer? = SFSpeechRecognizer()
+    let request = SFSpeechAudioBufferRecognitionRequest()
+    var recognitionTask: SFSpeechRecognitionTask?
+    
+    func openMic() {
+       recordAndRecognizeSpeech()
+    }
+    
+    func closeMic() {
+        request.endAudio()
+        audioEngine.inputNode.removeTap(onBus: 0)
+    }
+    
+    func recordAndRecognizeSpeech() {
+        guard let node: AVAudioNode = audioEngine.inputNode else { return }
+        let recordingFormat = node.outputFormat(forBus: 0)
+        node.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, _ in
+            self.request.append(buffer)
+        }
+        audioEngine.prepare()
+        do {
+            try audioEngine.start()
+        } catch {
+            return print(error)
+        }
+        guard let myRecognizer = SFSpeechRecognizer() else {
+            return
+        }
+        if !myRecognizer.isAvailable {
+            // Recognizer is not available right now
+            return
+        }
+        recognitionTask = speechRecognizer?.recognitionTask(with: request, resultHandler: { result, error in
+            if let result = result {
+                
+                let bestString = result.bestTranscription.formattedString
+                
+                var lastString: String = ""
+                Logger.init().d(message: "speech: " + bestString)
+                self.getPresenter()?.namePicked(name: bestString)
 
+                if (result.isFinal) {
+                    self.getPresenter()?.namePicked(name: bestString)
+                }
+            } else if let error = error {
+                print(error)
+            }
+        })
+    }
 
     override func viewWillAppear(_ animated: Bool) {
         confettiView = SAConfettiView(frame: self.view.bounds)

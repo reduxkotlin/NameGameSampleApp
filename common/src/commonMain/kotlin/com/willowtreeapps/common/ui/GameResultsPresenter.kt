@@ -1,24 +1,22 @@
 package com.willowtreeapps.common.ui
 
 import com.beyondeye.reduks.SelectorSubscriberFn
-import com.beyondeye.reduks.Store
 import com.willowtreeapps.common.Actions
-import com.willowtreeapps.common.AppState
-import com.willowtreeapps.common.Presenter
+import com.willowtreeapps.common.GameEngine
 import com.willowtreeapps.common.boundary.toGameResultsViewState
 
-class GameResultsPresenter(val store: Store<AppState>) : Presenter<GameResultsView>() {
+class GameResultsPresenter(private val engine: GameEngine) : Presenter<GameResultsView>() {
 
     override fun recreateView() {
-        view?.showResults(store.state.toGameResultsViewState())
+        view?.showResults(engine.state.toGameResultsViewState())
     }
 
-    override fun makeSubscriber() = SelectorSubscriberFn(store) {
+    override fun makeSubscriber() = SelectorSubscriberFn(engine.appStore) {
         withAnyChange { view?.showResults(state.toGameResultsViewState()) }
     }
 
     fun startOverTapped() {
-        store.dispatch(Actions.StartOverAction())
+        engine.dispatch(Actions.StartOverAction())
     }
 
     fun onBackPressed() {

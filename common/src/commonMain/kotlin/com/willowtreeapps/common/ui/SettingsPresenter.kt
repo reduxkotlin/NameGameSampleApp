@@ -1,28 +1,40 @@
 package com.willowtreeapps.common.ui
 
 import com.beyondeye.reduks.SelectorSubscriberFn
-import com.beyondeye.reduks.Store
-import com.willowtreeapps.common.Actions
-import com.willowtreeapps.common.AppState
-import com.willowtreeapps.common.Presenter
-import com.willowtreeapps.common.QuestionCategoryId
+import com.willowtreeapps.common.*
 import com.willowtreeapps.common.boundary.toViewState
 
-class SettingsPresenter(val store: Store<AppState>): Presenter<SettingsView>() {
+class SettingsPresenter(private val engine: GameEngine): Presenter<SettingsView>() {
 
     override fun recreateView() {
-        view?.showSettings(store.state.settings.toViewState())
+        view?.showSettings(engine.state.settings.toViewState())
     }
 
-    override fun makeSubscriber() = SelectorSubscriberFn(store){
+    override fun makeSubscriber() = SelectorSubscriberFn(engine.appStore){
         withSingleField({ it.settings}) { view?.showSettings(state.settings.toViewState())}
     }
 
     fun numQuestionsChanged(numQuestions: Int) {
-        store.dispatch(Actions.ChangeNumQuestionsSettingsAction(numQuestions))
+        engine.dispatch(Actions.ChangeNumQuestionsSettingsAction(numQuestions))
     }
 
     fun categoryChanged(categoryId: QuestionCategoryId) {
-        store.dispatch(Actions.ChangeCategorySettingsAction(categoryId))
+        engine.dispatch(Actions.ChangeCategorySettingsAction(categoryId))
+    }
+
+    fun microphoneModeChanged(enabled: Boolean) {
+        if (enabled) {
+            view?.askForMicPermissions()
+        } else {
+            engine.dispatch(Actions.ChangeMicrophoneModeSettingsAction(false))
+        }
+    }
+
+    fun microphonePermissionGranted() {
+        engine.dispatch(Actions.ChangeMicrophoneModeSettingsAction(true))
+    }
+
+    fun microphonePermissionDenied() {
+        engine.dispatch(Actions.ChangeMicrophoneModeSettingsAction(false))
     }
 }

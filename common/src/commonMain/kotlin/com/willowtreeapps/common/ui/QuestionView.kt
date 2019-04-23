@@ -1,7 +1,6 @@
 package com.willowtreeapps.common.ui
 
 import com.willowtreeapps.common.QuestionViewState
-import com.willowtreeapps.common.View
 
 interface QuestionView : View<QuestionPresenter> {
 
@@ -18,4 +17,8 @@ interface QuestionView : View<QuestionPresenter> {
     fun setTimerText(viewState: QuestionViewState)
 
     fun showTimesUp(viewState: QuestionViewState, isEndGame: Boolean)
+
+    fun openMic()
+
+    fun closeMic()
 }
