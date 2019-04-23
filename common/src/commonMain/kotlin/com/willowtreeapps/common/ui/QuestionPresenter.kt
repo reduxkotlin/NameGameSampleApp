@@ -90,6 +90,8 @@ class QuestionPresenter(
     fun onBackPressed() {
         engine.dispatch(Actions.StartOverAction())
         engine.dispatch(timerThunks.stopTimer())
+        engine.dispatch(timerThunks.cancelDelayed())
+        view?.closeMic()
     }
 
 }

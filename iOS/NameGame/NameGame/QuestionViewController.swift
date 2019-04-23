@@ -48,7 +48,11 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
     
     func closeMic() {
         request.endAudio()
-        audioEngine.inputNode.removeTap(onBus: 0)
+        do {
+            try audioEngine.inputNode.removeTap(onBus: 0)
+        } catch {
+        
+        }
     }
     
     func recordAndRecognizeSpeech() {
@@ -92,12 +96,12 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
         confettiView = SAConfettiView(frame: self.view.bounds)
         self.view.addSubview(confettiView!)
         confettiView?.isUserInteractionEnabled = false
+        self.labelTimer.alpha = 0
         super.viewWillAppear(animated)
-
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         if (isMovingFromParent) {
             getPresenter()?.onBackPressed()
         }

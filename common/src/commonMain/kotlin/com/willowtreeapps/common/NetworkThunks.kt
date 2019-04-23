@@ -10,7 +10,7 @@ import kotlin.coroutines.CoroutineContext
  * actions.  This allows dispatching a loading, success, and failure state.
  */
 class NetworkThunks(private val networkContext: CoroutineContext,
-                    val store: Store<AppState>) : CoroutineScope {
+                    val engine: GameEngine) : CoroutineScope {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = networkContext + job
@@ -26,14 +26,14 @@ class NetworkThunks(private val networkContext: CoroutineContext,
         val repo = repoForCategory(categoryId)
         Logger.d("Fetching StoreInfo and Feed")
         launch {
-            store.dispatch(Actions.FetchingItemsStartedAction())
-            val result = repo.fetchItems()
+            engine.dispatch(Actions.FetchingItemsStartedAction())
+            val result = repo.fetchItems(state.settings.numQuestions)
             if (result.isSuccessful) {
                 Logger.d("Success")
-                store.dispatch(Actions.FetchingItemsSuccessAction(result.response!!))
+                engine.dispatch(Actions.FetchingItemsSuccessAction(result.response!!))
             } else {
                 Logger.d("Failure")
-                store.dispatch(Actions.FetchingItemsFailedAction(result.message!!))
+                engine.dispatch(Actions.FetchingItemsFailedAction(result.message!!))
             }
         }
     }

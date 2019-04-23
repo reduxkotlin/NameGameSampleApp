@@ -29,8 +29,8 @@ class AndroidNavigator : Navigator, Application.ActivityLifecycleCallbacks {
             when (screen) {
                 Screen.QUESTION -> navController.navigate(R.id.action_startScreen_to_questionScreen)
                 Screen.GAME_COMPLETE -> navController.navigate(R.id.action_questionScreen_to_resultsFragment)
-//            Screen.START -> navController.navigate(R.id.startScreen)
-                Screen.START -> navController.navigate(R.id.action_resultsFragment_to_startScreen)
+            Screen.START -> navController.navigate(R.id.startScreen)
+//                Screen.START -> navController.navigate(R.id.action_resultsFragment_to_startScreen)
                 Screen.SETTINGS -> {
                     val dialog = SettingsDialogFragment.newInstance()
                     dialog.show(currentActivity!!.supportFragmentManager, "SettingsFragment")

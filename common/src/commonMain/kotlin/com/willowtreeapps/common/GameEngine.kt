@@ -37,7 +37,9 @@ class GameEngine(navigator: Navigator,
     }
 
     init {
-        appStore.dispatch(Actions.LoadAllSettingsAction())
+        CoroutineScope(uiContext).launch {
+            appStore.dispatch(Actions.LoadAllSettingsAction())
+        }
     }
 
     fun dispatch(action: Any) {

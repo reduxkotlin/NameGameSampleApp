@@ -13,7 +13,7 @@ import kotlin.coroutines.CoroutineContext
 internal class PresenterFactory(private val gameEngine: GameEngine, networkContext: CoroutineContext) : StoreSubscriber<AppState> {
 
     private val timerThunks = TimerThunks(networkContext, gameEngine)
-    private val networkThunks = NetworkThunks(networkContext, gameEngine.appStore)
+    private val networkThunks = NetworkThunks(networkContext, gameEngine)
     //    private val presenters = mutableSetOf<Presenter>()
     private var subscription: StoreSubscription? = null
 

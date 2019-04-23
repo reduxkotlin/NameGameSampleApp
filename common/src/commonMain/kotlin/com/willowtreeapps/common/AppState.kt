@@ -30,8 +30,6 @@ data class AppState(val isLoadingItems: Boolean = false,
         else
             null
 
-    fun getItem(id: ItemId?) = items.find { it.id == id }
-
     fun currentQuestionItem() = currentQuestion!!.choices.find { it.id == currentQuestion!!.itemId }!!
 
     fun isGameComplete(): Boolean = currentQuestionIndex >= questions.size || (currentQuestionIndex == questions.size - 1 && questions[currentQuestionIndex].status != Question.Status.UNANSWERED)

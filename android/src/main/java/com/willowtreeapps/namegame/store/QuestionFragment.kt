@@ -66,6 +66,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
             }
 
             override fun onError(error: Int) {
+                Logger.d("Error with speech recognizer: code =$error")
             }
 
             override fun onResults(results: Bundle) {
