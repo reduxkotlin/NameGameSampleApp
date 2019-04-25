@@ -81,7 +81,7 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
             gameResultsPresenter.onStateChange(gameEngine.appStore.state)
         }
         if (settingsPresenter.isAttached()) {
-            gameResultsPresenter.onStateChange(gameEngine.appStore.state)
+            settingsPresenter.onStateChange(gameEngine.appStore.state)
         }
 //        presenters.forEach { it.onStateChange(gameEngine.appStore.state) }
     }

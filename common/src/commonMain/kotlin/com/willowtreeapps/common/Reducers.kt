@@ -65,6 +65,9 @@ fun reducer(state: AppState, action: Any): AppState =
             is ChangeMicrophoneModeSettingsAction -> state.copy(settings = state.settings.copy(microphoneMode = action.enabled))
             is SettingsLoadedAction -> state.copy(settings = action.settings)
 
+            is WillowTreeSignInSuccessAction -> state.copy(settings = state.settings.copy(isWillowTree = true))
+            is WillowTreeSignOutSuccessAction -> state.copy(settings = state.settings.copy(isWillowTree = false))
+
             else -> throw AssertionError("Action ${action::class.simpleName} not handled")
         }
 

@@ -1,11 +1,3 @@
-//
-//  SettingsViewController.swift
-//  NameGame
-//
-//  Created by Patrick Jackson on 4/8/19.
-//  Copyright © 2019 Willowtree. All rights reserved.
-//
-
 import Foundation
 import UIKit
 import common
@@ -33,7 +25,7 @@ SettingsView {
     }
     
     let pickerData: [Int] = Array(1...20)
-    let categoryData: [String] = QuestionCategoryId.Companion.init().displayNameList
+    let categoryData: [String] = QuestionCategoryId.Companion.init().displayNameListWithWT
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +37,7 @@ SettingsView {
 
     func showSettings(viewState: SettingsViewState) {
         numPicker.selectRow((Int(viewState.numQuestions - 1)), inComponent: 0, animated: true)
-        categoryPicker.selectRow(Int(QuestionCategoryId.Companion.init().displayNameList.firstIndex(of: viewState.categoryId.displayName)!), inComponent: 0, animated: true)
+        categoryPicker.selectRow(Int(QuestionCategoryId.Companion.init().displayNameListWithWT.firstIndex(of: viewState.categoryId.displayName)!), inComponent: 0, animated: true)
     }
     
     func askForMicPermissions() {

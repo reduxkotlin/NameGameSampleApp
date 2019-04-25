@@ -4,7 +4,10 @@ sealed class ViewStates
 
 data class SettingsViewState(val numQuestions: Int,
                              val categoryId: QuestionCategoryId,
-                             val isMicModeEnabled: Boolean)
+                             val categoryDisplayValues: List<String>,
+                             val isMicModeEnabled: Boolean,
+                             val isWillowTree: Boolean = false,
+                             val signInBtnText: String)
 
 data class QuestionViewState(
         val title: String,

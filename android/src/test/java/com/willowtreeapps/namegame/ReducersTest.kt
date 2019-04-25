@@ -191,6 +191,25 @@ class ReducersTest {
         assertEquals(true, final.settings.microphoneMode)
     }
 
+    @Test
+    fun `WillowTreeSignInSuccess should update is state`() {
+        val initial = generateInitialTestState()
+
+        val final = reducer(initial, Actions.WillowTreeSignInSuccessAction())
+
+        assertEquals(true, final.settings.isWillowTree)
+    }
+
+    @Test
+    fun `WillowTreeSignOutSuccess should update settings`() {
+        var initial = generateInitialTestState()
+        initial = initial.copy(settings = initial.settings.copy(isWillowTree = true))
+
+        val final = reducer(initial, Actions.WillowTreeSignOutSuccessAction())
+
+        assertEquals(false, final.settings.isWillowTree)
+    }
+
     private fun generateInitialTestState(): AppState {
         val initialState = reducer(AppState(), Actions.FetchingItemsSuccessAction(runBlocking { ProfileItemRepository(MockRepositoryFactory().success()).fetchItems() }.response!!))
         return initialState
