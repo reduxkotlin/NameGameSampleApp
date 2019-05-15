@@ -1,7 +1,7 @@
 package com.willowtreeapps.common
 
+import com.beyondeye.reduks.Thunk
 import com.beyondeye.reduks.ThunkFn
-import com.beyondeye.reduks.ThunkImpl
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -15,7 +15,7 @@ class TimerThunks(private val backgroundContext: CoroutineContext, private val e
      * Only one timer is active at a time.  If called while a timer is active, it will cancel
      * the timer and start the new one.
      */
-    fun startCountDownTimer(initialValue: Int): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+    fun startCountDownTimer(initialValue: Int): Thunk<AppState> = ThunkFn { dispatcher, state ->
         if (countDownTimerJob == null || countDownTimerJob?.isCompleted == true) {
             Logger.d("Launching new Timer")
             engine.dispatch(Actions.StartQuestionTimerAction(initialValue))
@@ -34,12 +34,12 @@ class TimerThunks(private val backgroundContext: CoroutineContext, private val e
         }
     }
 
-    fun stopTimer(): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+    fun stopTimer(): Thunk<AppState> = ThunkFn { dispatcher, state ->
         countDownTimerJob?.cancel()
         Unit
     }
 
-    fun dispatchDelayed(delayMs: Long, action: Any): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+    fun dispatchDelayed(delayMs: Long, action: Any): Thunk<AppState> = ThunkFn { dispatcher, state ->
         delayedJob?.cancel()
         delayedJob = CoroutineScope(coroutineContext).launch {
             delay(delayMs)
@@ -48,7 +48,7 @@ class TimerThunks(private val backgroundContext: CoroutineContext, private val e
         Unit
     }
 
-    fun cancelDelayed(): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+    fun cancelDelayed(): Thunk<AppState> = ThunkFn { dispatcher, state ->
         delayedJob?.cancel()
         Unit
     }

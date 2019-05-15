@@ -16,7 +16,7 @@ interface Store<S> {
     /**
      * return a subscription
      */
-    fun subscribe(storeSubscriber: StoreSubscriber<S>): StoreSubscription
+    fun subscribe(storeSubscriber: StoreSubscriber): StoreSubscription
 
     /**
      * replace current reducer with new one
@@ -44,12 +44,12 @@ operator fun ((action:Any) -> Any)?.invoke(action:Any):Any? =
 /**
  * extension method for directly provide a lambda as argument for store subscribe
  */
-fun <S> Store<S>.subscribe(lambda: () -> Unit) = this.subscribe(StoreSubscriberFn<S> { lambda() })
+fun <S> Store<S>.subscribe(lambda: () -> Unit) = this.subscribe { lambda() }
 
 /**
  * extension method for directly subscribing using a store subscriber builder
  */
-fun <S> Store<S>.subscribe(sb: StoreSubscriberBuilder<S>?) =if(sb!=null) this.subscribe(sb.build(this)) else null
+fun <S> Store<S>.subscribe(sb: StoreSubscriberBuilder<S>?) =if(sb!=null) this.subscribe(sb(this)) else null
 
 /**
  * extension method for checking at compile time that we only dispatch objects derived from
@@ -64,7 +64,3 @@ fun <S> Store<S>.dispatch_a(action: Action) = dispatch(action)
 fun <S> Store<S>.dispatch_sa(action: StandardAction) = dispatch(action)
 
 
-/**
- * extension method for obtained encapsulated [DispatcherFn] reference to the store [dispatch] method
- */
-fun <S> Store<S>.getDispatcherFn() =DispatcherFn(this.dispatch)

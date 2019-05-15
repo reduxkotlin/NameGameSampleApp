@@ -22,7 +22,7 @@ class NetworkThunks(private val networkContext: CoroutineContext,
         QuestionCategoryId.DOGS -> DogItemRepository()
     }
 
-    fun fetchItems(categoryId: QuestionCategoryId): ThunkImpl<AppState> = ThunkFn { dispatcher, state ->
+    fun fetchItems(categoryId: QuestionCategoryId): Thunk<AppState> = ThunkFn { dispatcher, state ->
         val repo = repoForCategory(categoryId)
         Logger.d("Fetching StoreInfo and Feed")
         launch {

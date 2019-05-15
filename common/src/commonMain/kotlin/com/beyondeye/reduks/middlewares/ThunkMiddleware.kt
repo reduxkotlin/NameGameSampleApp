@@ -28,7 +28,6 @@ import com.beyondeye.reduks.*
 
 fun <S> thunkMiddleware(store: Store<S>, nextDispatcher: (Any) -> Any, action: Any): Any {
     if (action is Thunk<*>) {
-        @Suppress("UNCHECKED_CAST")
         val a = (action as Thunk<S>).execute({ it -> store.dispatch(it) }, store.state)
         return nextDispatcher(a)
     }

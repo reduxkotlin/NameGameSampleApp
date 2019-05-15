@@ -9,19 +9,9 @@ class SimpleStore<S>(initialState: S, private var reducer: Reducer<S>) : Store<S
         dispatch(INIT())
     }
 
-    class Creator<S>(val withStandardMiddlewares: Boolean = true) : StoreCreator<S> {
-        override fun create(reducer: Reducer<S>, initialState: S): Store<S> {
-            val res = SimpleStore<S>(initialState, reducer)
-            return if (!withStandardMiddlewares)
-                res
-            else
-                res.applyMiddleware(::thunkMiddleware)
-        }
-    }
-
     override var errorLogFn: ((String) -> Unit)? = null
     override var state: S = initialState
-    private val subscribers = mutableListOf<StoreSubscriber<S>>()
+    private val subscribers = mutableListOf<StoreSubscriber>()
     private fun mainDispatcher(store: Store<S>, nextDispatcher: (Any) -> Any, action: Any): Any {
         //Todo consider how accessing from multiple threads affects this.
         try {
@@ -32,7 +22,7 @@ class SimpleStore<S>(initialState: S, private var reducer: Reducer<S>) : Store<S
 
         subscribers.forEach {
             try {
-                it.onStateChange()
+                it()
             } catch (e: Throwable) {
                 ReduksInternalLogUtils.reportErrorInSubscriber(this@SimpleStore, e)
             }
@@ -55,17 +45,21 @@ class SimpleStore<S>(initialState: S, private var reducer: Reducer<S>) : Store<S
                 action)
     }
 
-    override fun subscribe(storeSubscriber: StoreSubscriber<S>): StoreSubscription {
+    override fun subscribe(storeSubscriber: StoreSubscriber): StoreSubscription {
         this.subscribers.add(storeSubscriber)
-        return object : StoreSubscription {
-            override fun unsubscribe() {
-                subscribers.remove(storeSubscriber)
-            }
-        }
+        return { subscribers.remove(storeSubscriber) }
     }
 
     companion object {
         val redukstag = "rdks"
+
+        fun <S> create(withStandardMiddlewares: Boolean = true): StoreCreator<S> = { reducer, initialState ->
+            val res = SimpleStore(initialState, reducer)
+            if (!withStandardMiddlewares)
+                res
+            else
+                res.applyMiddleware(::thunkMiddleware)
+        }
     }
 }
 

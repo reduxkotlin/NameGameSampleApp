@@ -10,7 +10,7 @@ import kotlin.coroutines.CoroutineContext
  * Attaching returns a presenter to the view.
  * PresenterFactory subscribes to changes in state, and passes state to presenters.
  */
-internal class PresenterFactory(private val gameEngine: GameEngine, networkContext: CoroutineContext) : StoreSubscriber<AppState> {
+internal class PresenterFactory(private val gameEngine: GameEngine, networkContext: CoroutineContext) {
 
     private val timerThunks = TimerThunks(networkContext, gameEngine)
     private val networkThunks = NetworkThunks(networkContext, gameEngine)
@@ -25,7 +25,7 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     fun <T : View<Presenter<*>>> attachView(view: T) {
         Logger.d("AttachView: $view", Logger.Category.LIFECYCLE)
         if (subscription == null) {
-            subscription = gameEngine.appStore.subscribe(this)
+            subscription = gameEngine.appStore.subscribe(this::onStateChange)
         }
         //TODO find generic way to handle
         val presenter = when (view) {
@@ -63,14 +63,14 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
             settingsPresenter.detachView(view)
 
         if (hasAttachedViews()) {
-            subscription?.unsubscribe()
+            subscription!!()
             subscription = null
         }
     }
 
     private fun hasAttachedViews() = !startPresenter.isAttached() && !questionPresenter.isAttached() && !gameResultsPresenter.isAttached()
 
-    override fun onStateChange() {
+    fun onStateChange() {
         if (startPresenter.isAttached()) {
             startPresenter.onStateChange(gameEngine.appStore.state)
         }
@@ -93,7 +93,7 @@ interface View<TPresenter> {
 
 abstract class Presenter<T : View<*>?> {
     var view: T? = null
-    var subscriber: StoreSubscriber<AppState>? = null
+    var subscriber: StoreSubscriber? = null
 
     fun isAttached() = view != null
 
@@ -112,10 +112,10 @@ abstract class Presenter<T : View<*>?> {
         }
     }
 
-    abstract fun makeSubscriber(): StoreSubscriber<AppState>
+    abstract fun makeSubscriber(): StoreSubscriber
 
     fun onStateChange(state: AppState) {
-        subscriber?.onStateChange()
+        subscriber!!()
     }
 
     //on Android, this is when the view has been destroyed and must be recreated. (onConfig change, etc)
