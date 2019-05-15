@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">NameGame</string>
+
+    <string name="firebase_web_host" translatable="false">namegamekotlin.firebaseapp.com</string>
 </resources>

@@ -31,5 +31,7 @@ sealed class Actions : Action {
     data class ChangeCategorySettingsAction(val categoryId: QuestionCategoryId)
     data class ChangeMicrophoneModeSettingsAction(val enabled: Boolean)
 
+    class WillowTreeSignInSuccessAction
+    class WillowTreeSignOutSuccessAction
 }
 

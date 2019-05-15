@@ -50,7 +50,17 @@ fun AppState.toGameResultsViewState(): GameResultsViewState {
             messageText = messageText)
 }
 
-fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(this.numQuestions, this.categoryId, this.microphoneMode)
+fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(
+        numQuestions = numQuestions,
+        categoryId = categoryId,
+        categoryDisplayValues = if (isWillowTree)
+            QuestionCategoryId.displayNameListWithWT
+        else
+            QuestionCategoryId.displayNameListWithoutWT,
+        isMicModeEnabled = microphoneMode,
+        isWillowTree = isWillowTree,
+        signInBtnText = if (isWillowTree) "Sign Out" else "Sign In"
+)
 
 //TODO should this be here?
 private fun AppState.roundTotals() = "${currentQuestionIndex + 1} out of ${questions.size}"

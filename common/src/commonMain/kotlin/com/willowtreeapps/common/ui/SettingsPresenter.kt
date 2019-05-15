@@ -4,14 +4,14 @@ import com.beyondeye.reduks.SelectorSubscriberFn
 import com.willowtreeapps.common.*
 import com.willowtreeapps.common.boundary.toViewState
 
-class SettingsPresenter(private val engine: GameEngine): Presenter<SettingsView>() {
+class SettingsPresenter(private val engine: GameEngine) : Presenter<SettingsView>() {
 
     override fun recreateView() {
         view?.showSettings(engine.state.settings.toViewState())
     }
 
-    override fun makeSubscriber() = SelectorSubscriberFn(engine.appStore){
-        withSingleField({ it.settings}) { view?.showSettings(state.settings.toViewState())}
+    override fun makeSubscriber() = SelectorSubscriberFn(engine.appStore) {
+        withSingleField({ it.settings }) { view?.showSettings(state.settings.toViewState()) }
     }
 
     fun numQuestionsChanged(numQuestions: Int) {
@@ -20,6 +20,14 @@ class SettingsPresenter(private val engine: GameEngine): Presenter<SettingsView>
 
     fun categoryChanged(categoryId: QuestionCategoryId) {
         engine.dispatch(Actions.ChangeCategorySettingsAction(categoryId))
+    }
+
+    fun signInSuccess() {
+        engine.dispatch(Actions.WillowTreeSignInSuccessAction())
+    }
+
+    fun signOutSuccess() {
+        engine.dispatch(Actions.WillowTreeSignOutSuccessAction())
     }
 
     fun microphoneModeChanged(enabled: Boolean) {

@@ -30,8 +30,6 @@ data class AppState(val isLoadingItems: Boolean = false,
         else
             null
 
-    fun getItem(id: ItemId?) = items.find { it.id == id }
-
     fun currentQuestionItem() = currentQuestion!!.choices.find { it.id == currentQuestion!!.itemId }!!
 
     fun isGameComplete(): Boolean = currentQuestionIndex >= questions.size || (currentQuestionIndex == questions.size - 1 && questions[currentQuestionIndex].status != Question.Status.UNANSWERED)
@@ -75,16 +73,22 @@ enum class QuestionCategoryId(val displayName: String) {
     CATS("Cats");
 
     companion object {
-        val displayNameList by lazy {
+        val displayNameListWithWT by lazy {
             values().map { it.displayName }
+        }
+        val displayNameListWithoutWT by lazy {
+            values().filter { it != WILLOW_TREE }.map { it.displayName }
         }
 
         fun fromOrdinal(ordinal: Int) = values()[ordinal]
+
+        fun fromDisplayName(displayName: String) = values().find { it.displayName == displayName }
     }
 }
 
 data class UserSettings(val numQuestions: Int,
                         val categoryId: QuestionCategoryId,
+                        val isWillowTree: Boolean = false,
                         val microphoneMode: Boolean) {
     companion object {
         fun defaults() = UserSettings(3,

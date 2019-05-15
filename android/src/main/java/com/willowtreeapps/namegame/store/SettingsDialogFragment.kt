@@ -1,6 +1,7 @@
 package com.willowtreeapps.namegame.store
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
+import com.firebase.ui.auth.AuthUI
+import com.google.firebase.auth.FirebaseAuth
+//import com.google.firebase.auth.FirebaseAuth
 import com.willowtreeapps.common.Logger
 import com.willowtreeapps.common.QuestionCategoryId
 import com.willowtreeapps.common.SettingsViewState
@@ -40,13 +44,11 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
             presenter.numQuestionsChanged(newVal)
         }
 
-        categoryPicker.displayedValues = QuestionCategoryId.displayNameList.toTypedArray()
-        categoryPicker.maxValue = 0
-        categoryPicker.maxValue = QuestionCategoryId.displayNameList.toTypedArray().size - 1
         categoryPicker.setOnValueChangedListener { _, _, newVal ->
-            presenter.categoryChanged(QuestionCategoryId.fromOrdinal(newVal))
+            presenter.categoryChanged(QuestionCategoryId.fromDisplayName(categoryPicker.displayedValues[categoryPicker.value])!!)
         }
         btn_ok.setOnClickListener { dismiss() }
+        btn_sign_in.setOnClickListener { launchSignIn() }
         switch_mic.setOnCheckedChangeListener { buttonView, isChecked ->
             presenter.microphoneModeChanged(isChecked)
         }
@@ -63,9 +65,22 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
     }
 
     override fun showSettings(viewState: SettingsViewState) {
+        categoryPicker.displayedValues = viewState.categoryDisplayValues.toTypedArray()
+        categoryPicker.maxValue = 0
+        categoryPicker.maxValue = viewState.categoryDisplayValues.toTypedArray().size - 1
         numberPicker.value = viewState.numQuestions
-        categoryPicker.value = QuestionCategoryId.values().indexOf(viewState.categoryId)
+        categoryPicker.value = viewState.categoryDisplayValues.indexOf(viewState.categoryId.displayName)
         switch_mic.isChecked = viewState.isMicModeEnabled
+        btn_sign_in.setOnClickListener {
+            if (viewState.isWillowTree) {
+                signOut()
+            } else {
+                launchSignIn()
+            }
+        }
+//        btn_sign_in.visibility = if (viewState.showSignIn) View.VISIBLE else View.GONE
+
+        btn_sign_in.text = viewState.signInBtnText
     }
 
     override fun askForMicPermissions() {
@@ -97,5 +112,31 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
                 }
             }
         }
+    }
+
+
+    private fun launchSignIn() {
+        startActivityForResult(
+                AuthUI.getInstance().createSignInIntentBuilder()
+                        .setAvailableProviders(listOf(AuthUI.IdpConfig.GoogleBuilder().build()))
+                        .build(), 0)
+    }
+
+    private fun signOut() {
+        AuthUI.getInstance()
+                .signOut(activity?.applicationContext!!)
+                .addOnCompleteListener {
+                    presenter.signOutSuccess()
+                }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0) {
+            val auth = FirebaseAuth.getInstance()
+            val email = auth.currentUser?.email!!
+            presenter.signInSuccess()
+        }
+
     }
 }

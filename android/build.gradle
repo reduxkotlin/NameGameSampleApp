@@ -29,6 +29,14 @@ android {
             matchingFallbacks = ['release']
         }
     }
+//    signingConfigs {
+//        debug {
+//            storeFile file("./debug.keystore")
+//            storePassword 'android'
+//            keyAlias 'android'
+//            keyPassword 'android'
+//        }
+//    }
     packagingOptions {
         exclude 'META-INF/*.kotlin_module'
     }
@@ -65,6 +73,18 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha3'
 
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha4'
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-auth:16.2.1'
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.2'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-core:0.9.27'
+    releaseImplementation 'com.willowtreeapps.hyperion:hyperion-core-no-op:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-measurement:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-shared-preferences:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-geiger-counter:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-build-config:0.9.27'
+    debugImplementation 'com.willowtreeapps.hyperion:hyperion-attr:0.9.27'
 }
+
+apply plugin: 'com.google.gms.google-services'

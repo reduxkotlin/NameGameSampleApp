@@ -5,9 +5,11 @@ import android.app.Application
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import com.willowtreeapps.common.Logger
 import com.willowtreeapps.common.middleware.Navigator
 import com.willowtreeapps.common.middleware.Screen
 import com.willowtreeapps.namegame.store.SettingsDialogFragment
+import java.lang.Exception
 
 /**
  * Android implementation of Navigator interface.  This will load the appropriate Activity or Fragment
@@ -29,8 +31,8 @@ class AndroidNavigator : Navigator, Application.ActivityLifecycleCallbacks {
             when (screen) {
                 Screen.QUESTION -> navController.navigate(R.id.action_startScreen_to_questionScreen)
                 Screen.GAME_COMPLETE -> navController.navigate(R.id.action_questionScreen_to_resultsFragment)
-//            Screen.START -> navController.navigate(R.id.startScreen)
-                Screen.START -> navController.navigate(R.id.action_resultsFragment_to_startScreen)
+                Screen.START -> navController.navigate(R.id.startScreen)
+//                Screen.START -> navController.navigate(R.id.action_resultsFragment_to_startScreen)
                 Screen.SETTINGS -> {
                     val dialog = SettingsDialogFragment.newInstance()
                     dialog.show(currentActivity!!.supportFragmentManager, "SettingsFragment")
@@ -44,15 +46,23 @@ class AndroidNavigator : Navigator, Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityResumed(activity: Activity?) {
-        if (cachedNavigationScreen!= null) {
+        if (cachedNavigationScreen != null) {
             goto(cachedNavigationScreen!!)
             cachedNavigationScreen = null
+        }
+        attachActivity(activity)
+    }
+
+    private fun attachActivity(activity: Activity?) {
+        try {
+            currentActivity = activity as AppCompatActivity?
+        } catch (e: Exception) {
+            Logger.d("Exception casting activity to AppCompatActivity.  $e")
         }
     }
 
     override fun onActivityStarted(activity: Activity?) {
-        currentActivity = activity as AppCompatActivity?
-
+        attachActivity(activity)
     }
 
     override fun onActivityDestroyed(activity: Activity?) {
@@ -62,7 +72,9 @@ class AndroidNavigator : Navigator, Application.ActivityLifecycleCallbacks {
     }
 
     override fun onActivityStopped(activity: Activity?) {
-        currentActivity = null
+        if (activity == currentActivity) {
+            currentActivity = null
+        }
     }
 
     override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
