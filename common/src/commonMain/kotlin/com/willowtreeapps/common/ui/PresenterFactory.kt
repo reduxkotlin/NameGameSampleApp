@@ -1,7 +1,11 @@
 package com.willowtreeapps.common.ui
 
-import com.beyondeye.reduks.*
 import com.willowtreeapps.common.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import org.reduxkotlin.StoreSubscriber
+import org.reduxkotlin.StoreSubscription
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -10,10 +14,12 @@ import kotlin.coroutines.CoroutineContext
  * Attaching returns a presenter to the view.
  * PresenterFactory subscribes to changes in state, and passes state to presenters.
  */
-internal class PresenterFactory(private val gameEngine: GameEngine, networkContext: CoroutineContext) {
+internal class PresenterFactory(private val gameEngine: GameEngine,
+                                networkContext: CoroutineContext,
+                                uiContext: CoroutineContext): CoroutineScope {
 
-    private val timerThunks = TimerThunks(networkContext, gameEngine)
-    private val networkThunks = NetworkThunks(networkContext, gameEngine)
+    private val timerThunks = TimerThunks(networkContext)
+    private val networkThunks = NetworkThunks(networkContext)
     //    private val presenters = mutableSetOf<Presenter>()
     private var subscription: StoreSubscription? = null
 
@@ -21,6 +27,7 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
     private val questionPresenter by lazy { QuestionPresenter(gameEngine, gameEngine.vibrateUtil, timerThunks) }
     private val gameResultsPresenter by lazy { GameResultsPresenter(gameEngine) }
     private val settingsPresenter by lazy { SettingsPresenter(gameEngine) }
+    override val coroutineContext: CoroutineContext = uiContext + Job()
 
     fun <T : View<Presenter<*>>> attachView(view: T) {
         Logger.d("AttachView: $view", Logger.Category.LIFECYCLE)
@@ -48,7 +55,7 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
             else -> throw IllegalStateException("Screen $view not handled")
         }
         view.presenter = presenter
-        presenter.onStateChange(gameEngine.appStore.state)
+        presenter.onStateChange()
     }
 
     fun detachView(view: View<*>) {
@@ -70,18 +77,20 @@ internal class PresenterFactory(private val gameEngine: GameEngine, networkConte
 
     private fun hasAttachedViews() = !startPresenter.isAttached() && !questionPresenter.isAttached() && !gameResultsPresenter.isAttached()
 
-    fun onStateChange() {
-        if (startPresenter.isAttached()) {
-            startPresenter.onStateChange(gameEngine.appStore.state)
-        }
-        if (questionPresenter.isAttached()) {
-            questionPresenter.onStateChange(gameEngine.appStore.state)
-        }
-        if (gameResultsPresenter.isAttached()) {
-            gameResultsPresenter.onStateChange(gameEngine.appStore.state)
-        }
-        if (settingsPresenter.isAttached()) {
-            settingsPresenter.onStateChange(gameEngine.appStore.state)
+    private fun onStateChange() {
+        launch {
+            if (startPresenter.isAttached()) {
+                startPresenter.onStateChange()
+            }
+            if (questionPresenter.isAttached()) {
+                questionPresenter.onStateChange()
+            }
+            if (gameResultsPresenter.isAttached()) {
+                gameResultsPresenter.onStateChange()
+            }
+            if (settingsPresenter.isAttached()) {
+                settingsPresenter.onStateChange()
+            }
         }
 //        presenters.forEach { it.onStateChange(gameEngine.appStore.state) }
     }
@@ -93,7 +102,7 @@ interface View<TPresenter> {
 
 abstract class Presenter<T : View<*>?> {
     var view: T? = null
-    var subscriber: StoreSubscriber? = null
+    private var subscriber: StoreSubscriber? = null
 
     fun isAttached() = view != null
 
@@ -114,7 +123,7 @@ abstract class Presenter<T : View<*>?> {
 
     abstract fun makeSubscriber(): StoreSubscriber
 
-    fun onStateChange(state: AppState) {
+    fun onStateChange() {
         subscriber!!()
     }
 

@@ -9,8 +9,7 @@ import kotlin.coroutines.CoroutineContext
  * Thunks are functions that are executed by the "ThunkMiddleware".  They are asynchronous and dispatch
  * actions.  This allows dispatching a loading, success, and failure state.
  */
-class NetworkThunks(private val networkContext: CoroutineContext,
-                    val engine: GameEngine) : CoroutineScope {
+class NetworkThunks(private val networkContext: CoroutineContext) : CoroutineScope {
     private val job = Job()
     override val coroutineContext: CoroutineContext
         get() = networkContext + job
@@ -22,18 +21,18 @@ class NetworkThunks(private val networkContext: CoroutineContext,
         QuestionCategoryId.DOGS -> DogItemRepository()
     }
 
-    fun fetchItems(categoryId: QuestionCategoryId): Thunk<AppState> = ThunkFn { dispatcher, state ->
+    fun fetchItems(categoryId: QuestionCategoryId, numQuestions: Int): Thunk = { dispatch ->
         val repo = repoForCategory(categoryId)
         Logger.d("Fetching StoreInfo and Feed")
         launch {
-            engine.dispatch(Actions.FetchingItemsStartedAction())
-            val result = repo.fetchItems(state.settings.numQuestions)
+            dispatch(Actions.FetchingItemsStartedAction())
+            val result = repo.fetchItems(numQuestions)
             if (result.isSuccessful) {
                 Logger.d("Success")
-                engine.dispatch(Actions.FetchingItemsSuccessAction(result.response!!))
+                dispatch(Actions.FetchingItemsSuccessAction(result.response!!))
             } else {
                 Logger.d("Failure")
-                engine.dispatch(Actions.FetchingItemsFailedAction(result.message!!))
+                dispatch(Actions.FetchingItemsFailedAction(result.message!!))
             }
         }
     }

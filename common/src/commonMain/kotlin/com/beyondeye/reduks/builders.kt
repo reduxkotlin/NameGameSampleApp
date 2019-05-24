@@ -1,21 +1,11 @@
 package com.beyondeye.reduks
 
-/**
- * builder methods for making the code more clear when defining reduks objects
- */
-
-/**
- * see also https://github.com/reactjs/redux/blob/master/docs/Glossary.md#middleware
- */
-
-
-class ThunkImpl<S>(val thunkFn: (dispatcher: (Any) -> Any, state: S) -> Any) : Thunk<S> {
-    override fun execute(dispatcher: (Any) -> Any, state: S): Any = thunkFn(dispatcher, state)
-}
+import org.reduxkotlin.Store
+import org.reduxkotlin.StoreSubscriber
 
 class SelectorSubscriberBuilder<S : Any>(val store: Store<S>) {
     val state: S
-        get() = store.state
+        get() = store.getState()
 
     var withAnyChangeFun: (() -> Unit)? = null
 
@@ -50,11 +40,8 @@ fun <S : Any> SelectorSubscriberFn(store: Store<S>, selectorSubscriberBuilderIni
     subBuilder.selectorSubscriberBuilderInit()
     return {
         subBuilder.selectorList.forEach { entry ->
-            entry.key.onChangeIn(store.state) { entry.value(store.state) }
+            entry.key.onChangeIn(store.getState()) { entry.value(store.getState()) }
         }
         subBuilder.withAnyChangeFun?.invoke()
     }
 }
-
-
-fun <S> ThunkFn(thunkFn: (dispatcher: (Any) -> Any, state: S) -> Any) = ThunkImpl(thunkFn)

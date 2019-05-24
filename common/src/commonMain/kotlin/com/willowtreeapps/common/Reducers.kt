@@ -1,5 +1,6 @@
 package com.willowtreeapps.common
 
+import org.reduxkotlin.ActionTypes
 import com.willowtreeapps.common.Actions.*
 import com.willowtreeapps.common.util.NO_MATCH
 import com.willowtreeapps.common.util.match
@@ -10,6 +11,7 @@ import com.willowtreeapps.common.util.match
  */
 fun reducer(state: AppState, action: Any): AppState =
         when (action) {
+            is ActionTypes.INIT -> { AppState.INITIAL_STATE}
             is FetchingItemsStartedAction -> state.copy(isLoadingItems = true)
             is FetchingItemsSuccessAction -> {
                 state.copy(isLoadingItems = false,
@@ -67,7 +69,11 @@ fun reducer(state: AppState, action: Any): AppState =
 
             is WillowTreeSignInSuccessAction -> state.copy(settings = state.settings.copy(isWillowTree = true))
             is WillowTreeSignOutSuccessAction -> state.copy(settings = state.settings.copy(isWillowTree = false))
+            is LoadAllSettingsAction -> {state}
 
-            else -> throw AssertionError("Action ${action::class.simpleName} not handled")
+            else -> {
+                Logger.d("Action ${action::class.simpleName} not handled")
+                state
+            }
         }
 

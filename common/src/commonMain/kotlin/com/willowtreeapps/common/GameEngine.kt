@@ -1,8 +1,8 @@
 package com.willowtreeapps.common
 
-import com.beyondeye.reduks.SimpleStore
-import com.beyondeye.reduks.middlewares.applyMiddleware
-import com.beyondeye.reduks.middlewares.thunkMiddleware
+import org.reduxkotlin.createStore
+import com.beyondeye.reduks.createThunkMiddleware
+import org.reduxkotlin.applyMiddleware
 import com.willowtreeapps.common.middleware.*
 import com.willowtreeapps.common.middleware.NavigationMiddleware
 import com.willowtreeapps.common.middleware.SettingsMiddleware
@@ -22,18 +22,18 @@ class GameEngine(navigator: Navigator,
                  networkContext: CoroutineContext,
                  val uiContext: CoroutineContext) {
     private val navigationMiddleware = NavigationMiddleware(navigator)
-    private val viewEffectsMiddleware = ViewEffectsMiddleware()
-    private val presenterFactory by lazy { PresenterFactory(this, networkContext) }
+    private val viewEffectsMiddleware = ViewEffectsMiddleware<AppState>()
+    private val presenterFactory by lazy { PresenterFactory(this, networkContext, uiContext) }
     val vibrateUtil = VibrateUtil(application)
     private val settingsMiddleware by lazy { SettingsMiddleware(LocalStorageSettingsRepository(userSettings(application)), networkContext) }
 
     val appStore by lazy {
-        SimpleStore(AppState.INITIAL_STATE, ::reducer)
-                .applyMiddleware(::thunkMiddleware,
+        createStore(::reducer, AppState.INITIAL_STATE
+                , applyMiddleware(createThunkMiddleware(),
                         viewEffectsMiddleware::dispatch,
                         navigationMiddleware::dispatch,
                         settingsMiddleware::dispatch,
-                        ::loggerMiddleware)
+                        ::loggerMiddleware))
     }
 
     init {

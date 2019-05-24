@@ -1,6 +1,6 @@
 package com.willowtreeapps.common.middleware
 
-import com.beyondeye.reduks.Store
+import org.reduxkotlin.GetState
 import com.willowtreeapps.common.Actions
 import com.willowtreeapps.common.Actions.ChangeNumQuestionsSettingsAction
 import com.willowtreeapps.common.AppState
@@ -20,7 +20,7 @@ internal class SettingsMiddleware(private val settingsRepo: LocalStorageSettings
         get() = backgroundContext + Job()
 
 
-    fun dispatch(store: Store<AppState>, nextDispatcher: (Any) -> Any, action: Any): Any {
+    fun dispatch(getState: GetState<AppState>, nextDispatcher: (Any) -> Any, action: Any): Any {
         launch {
             when (action) {
                 is ChangeNumQuestionsSettingsAction -> settingsRepo.numRounds = action.num
@@ -31,7 +31,7 @@ internal class SettingsMiddleware(private val settingsRepo: LocalStorageSettings
                     val settings = UserSettings(numQuestions = settingsRepo.numRounds,
                             categoryId = settingsRepo.categoryId,
                             microphoneMode = settingsRepo.microphoneMode)
-                    store.dispatch(Actions.SettingsLoadedAction(settings))
+                    nextDispatcher(Actions.SettingsLoadedAction(settings))
                 }
 
                 is Actions.ChangeMicrophoneModeSettingsAction ->  settingsRepo.microphoneMode = action.enabled
@@ -40,3 +40,4 @@ internal class SettingsMiddleware(private val settingsRepo: LocalStorageSettings
         return nextDispatcher(action)
     }
 }
+

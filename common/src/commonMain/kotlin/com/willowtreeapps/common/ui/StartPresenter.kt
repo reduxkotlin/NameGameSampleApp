@@ -26,7 +26,7 @@ class StartPresenter(private val engine: GameEngine,
 
     fun startGame() {
         engine.dispatch(Actions.ResetGameStateAction())
-        engine.dispatch(networkThunks.fetchItems(engine.state.settings.categoryId))
+        engine.dispatch(networkThunks.fetchItems(engine.state.settings.categoryId, engine.appStore.state.settings.numQuestions))
     }
 
     fun settingsTapped() {

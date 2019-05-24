@@ -1,12 +1,12 @@
 package com.willowtreeapps.common.middleware
 
-import com.beyondeye.reduks.Store
+import org.reduxkotlin.GetState
 import com.willowtreeapps.common.Actions
 import com.willowtreeapps.common.AppState
 
 internal class NavigationMiddleware(private val navigator: Navigator) {
 
-    fun dispatch(store: Store<AppState>, nextDispatcher: (Any) -> Any, action: Any): Any {
+    fun dispatch(getState: GetState<AppState>, nextDispatcher: (Any) -> Any, action: Any): Any {
         val result = nextDispatcher(action)
         when (action) {
             is Actions.FetchingItemsSuccessAction -> navigator.goto(Screen.QUESTION)

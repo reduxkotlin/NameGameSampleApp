@@ -1,11 +1,23 @@
 package com.beyondeye.reduks
 
-/**
- * single method interface, mainly used because kotlin does not support yet type alias for function types
- * Created by daely on 5/24/2016.
- */
-//TODO find way to check is action is instance of Thunk type alias in ThunkMiddleware
-//typealias Thunk = (((Any) -> Any), state: Any) -> Any
-interface Thunk<S> : Action {
-    fun execute(dispatcher: (Any)->Any, state: S): Any
+import com.willowtreeapps.common.Logger
+import org.reduxkotlin.Dispatcher
+import org.reduxkotlin.GetState
+import org.reduxkotlin.Middleware
+
+typealias Thunk = (Dispatcher)->Any
+
+
+fun <S : Any> createThunkMiddleware(): Middleware<S> {
+    return { getState: GetState<S>, nextDispatcher: Dispatcher, action: Any ->
+        if (action is Function<*>) {
+            try {
+                (action as Thunk)(nextDispatcher)
+            } catch (e: Exception) {
+                Logger.d("Dispatching functions must use type Thunk: " + e.message)
+            }
+        } else {
+            nextDispatcher(action)
+        }
+    }
 }
