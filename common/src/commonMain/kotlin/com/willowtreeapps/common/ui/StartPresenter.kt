@@ -10,7 +10,7 @@ class StartPresenter(private val engine: GameEngine,
         //no-op
     }
 
-    override fun makeSubscriber() = SelectorSubscriberFn(engine.appStore) {
+    override fun makeSubscriber() = SelectorSubscriberFn<AppState>(engine.appStore) {
         withSingleField({ it.isLoadingItems }) {
             if (state.isLoadingItems) {
                 view?.showLoading()
@@ -26,7 +26,7 @@ class StartPresenter(private val engine: GameEngine,
 
     fun startGame() {
         engine.dispatch(Actions.ResetGameStateAction())
-        engine.dispatch(networkThunks.fetchItems(engine.state.settings.categoryId, engine.appStore.state.settings.numQuestions))
+        engine.dispatch(networkThunks.fetchItems(engine.state.settings.categoryId, engine.state.settings.numQuestions))
     }
 
     fun settingsTapped() {

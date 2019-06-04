@@ -1,7 +1,6 @@
 package com.willowtreeapps.common
 
 import org.reduxkotlin.createStore
-import com.beyondeye.reduks.createThunkMiddleware
 import org.reduxkotlin.applyMiddleware
 import com.willowtreeapps.common.middleware.*
 import com.willowtreeapps.common.middleware.NavigationMiddleware
@@ -15,6 +14,7 @@ import com.willowtreeapps.common.ui.View
 import com.willowtreeapps.common.util.VibrateUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.reduxkotlin.thunk
 import kotlin.coroutines.CoroutineContext
 
 class GameEngine(navigator: Navigator,
@@ -28,12 +28,9 @@ class GameEngine(navigator: Navigator,
     private val settingsMiddleware by lazy { SettingsMiddleware(LocalStorageSettingsRepository(userSettings(application)), networkContext) }
 
     val appStore by lazy {
-        createStore(::reducer, AppState.INITIAL_STATE
-                , applyMiddleware(createThunkMiddleware(),
-                        viewEffectsMiddleware::dispatch,
-                        navigationMiddleware::dispatch,
-                        settingsMiddleware::dispatch,
-                        ::loggerMiddleware))
+        createStore(reducer, AppState.INITIAL_STATE, applyMiddleware(thunk,
+                navigationMiddleware::dispatch,
+                settingsMiddleware::dispatch))
     }
 
     init {
@@ -49,7 +46,7 @@ class GameEngine(navigator: Navigator,
     }
 
     val state: AppState
-        get() = appStore.state
+        get() = appStore.state as AppState
 
     fun <T : Presenter<*>> attachView(view: View<T>) = presenterFactory.attachView(view as View<Presenter<*>>)
 

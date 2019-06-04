@@ -1,8 +1,8 @@
 package com.willowtreeapps.common
 
-import com.beyondeye.reduks.*
 import com.willowtreeapps.common.repo.*
 import kotlinx.coroutines.*
+import org.reduxkotlin.Thunk
 import kotlin.coroutines.CoroutineContext
 
 /**

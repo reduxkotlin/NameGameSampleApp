@@ -2,6 +2,8 @@ package com.willowtreeapps.common.middleware
 
 import org.reduxkotlin.GetState
 import com.willowtreeapps.common.ViewEffect
+import org.reduxkotlin.Dispatcher
+import org.reduxkotlin.Store
 
 typealias ViewEffectsSubscriber = (ViewEffect) -> Unit
 
@@ -25,12 +27,13 @@ internal class ViewEffectsMiddleware<S> {
         viewEffectsSubscribers.remove(subscriber)
     }
 
-    fun dispatch(getState: GetState<S>, nextDispatcher: (Any) -> Any, action: Any): Any {
-        val result = nextDispatcher(action)
-        when (action) {
+    fun dispatch(store: Store) = { next: Dispatcher ->
+        { action: Any ->
+            when (action) {
 //            is Actions.OpenQuantityPickerAction -> notifySubscribers(ShowPickerViewEffect(action.itemId))
+            }
+            next(action)
         }
-        return result
     }
 
     private fun notifySubscribers(data: ViewEffect) {

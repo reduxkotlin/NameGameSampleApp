@@ -3,9 +3,9 @@ package com.beyondeye.reduks
 import org.reduxkotlin.Store
 import org.reduxkotlin.StoreSubscriber
 
-class SelectorSubscriberBuilder<S : Any>(val store: Store<S>) {
+class SelectorSubscriberBuilder<S : Any>(val store: Store) {
     val state: S
-        get() = store.getState()
+        get() = store.getState() as S
 
     var withAnyChangeFun: (() -> Unit)? = null
 
@@ -35,12 +35,12 @@ class SelectorSubscriberBuilder<S : Any>(val store: Store<S>) {
  *          }
  *      }
  */
-fun <S : Any> SelectorSubscriberFn(store: Store<S>, selectorSubscriberBuilderInit: SelectorSubscriberBuilder<S>.() -> Unit): StoreSubscriber {
-    val subBuilder = SelectorSubscriberBuilder(store)
+fun <S : Any> SelectorSubscriberFn(store: Store, selectorSubscriberBuilderInit: SelectorSubscriberBuilder<S>.() -> Unit): StoreSubscriber {
+    val subBuilder = SelectorSubscriberBuilder<S>(store)
     subBuilder.selectorSubscriberBuilderInit()
     return {
         subBuilder.selectorList.forEach { entry ->
-            entry.key.onChangeIn(store.getState()) { entry.value(store.getState()) }
+            entry.key.onChangeIn(store.getState() as S) { entry.value(store.getState()) }
         }
         subBuilder.withAnyChangeFun?.invoke()
     }

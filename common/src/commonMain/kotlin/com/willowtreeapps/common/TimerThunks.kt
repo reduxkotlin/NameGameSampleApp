@@ -1,7 +1,7 @@
 package com.willowtreeapps.common
 
-import com.beyondeye.reduks.Thunk
 import kotlinx.coroutines.*
+import org.reduxkotlin.Thunk
 import kotlin.coroutines.CoroutineContext
 
 class TimerThunks(private val backgroundContext: CoroutineContext) : CoroutineScope {
