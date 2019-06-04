@@ -1,9 +1,9 @@
 package com.willowtreeapps.common.middleware
 
-import com.beyondeye.reduks.Store
-import com.willowtreeapps.common.Actions
-import com.willowtreeapps.common.AppState
+import org.reduxkotlin.GetState
 import com.willowtreeapps.common.ViewEffect
+import org.reduxkotlin.Dispatcher
+import org.reduxkotlin.Store
 
 typealias ViewEffectsSubscriber = (ViewEffect) -> Unit
 
@@ -16,7 +16,7 @@ typealias ViewEffectsSubscriber = (ViewEffect) -> Unit
  *
  *  Must be unsubscribed to avoid leaks.
  */
-internal class ViewEffectsMiddleware {
+internal class ViewEffectsMiddleware<S> {
     private val viewEffectsSubscribers = mutableSetOf<ViewEffectsSubscriber>()
 
     fun subscribeToViewEffects(subscriber: ViewEffectsSubscriber) {
@@ -27,12 +27,13 @@ internal class ViewEffectsMiddleware {
         viewEffectsSubscribers.remove(subscriber)
     }
 
-    fun dispatch(store: Store<AppState>, nextDispatcher: (Any) -> Any, action: Any): Any {
-        val result = nextDispatcher(action)
-        when (action) {
+    fun dispatch(store: Store) = { next: Dispatcher ->
+        { action: Any ->
+            when (action) {
 //            is Actions.OpenQuantityPickerAction -> notifySubscribers(ShowPickerViewEffect(action.itemId))
+            }
+            next(action)
         }
-        return result
     }
 
     private fun notifySubscribers(data: ViewEffect) {

@@ -2,6 +2,7 @@ package com.willowtreeapps.common.ui
 
 import com.beyondeye.reduks.SelectorSubscriberFn
 import com.willowtreeapps.common.Actions
+import com.willowtreeapps.common.AppState
 import com.willowtreeapps.common.GameEngine
 import com.willowtreeapps.common.boundary.toGameResultsViewState
 
@@ -11,7 +12,7 @@ class GameResultsPresenter(private val engine: GameEngine) : Presenter<GameResul
         view?.showResults(engine.state.toGameResultsViewState())
     }
 
-    override fun makeSubscriber() = SelectorSubscriberFn(engine.appStore) {
+    override fun makeSubscriber() = SelectorSubscriberFn<AppState>(engine.appStore) {
         withAnyChange { view?.showResults(state.toGameResultsViewState()) }
     }
 

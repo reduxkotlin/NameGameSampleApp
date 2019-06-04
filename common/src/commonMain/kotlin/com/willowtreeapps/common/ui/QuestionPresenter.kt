@@ -6,6 +6,7 @@ import com.willowtreeapps.common.boundary.toQuestionViewState
 import com.willowtreeapps.common.util.VibrateUtil
 import com.willowtreeapps.common.util.debounce
 import com.willowtreeapps.common.util.isAndroid
+import org.reduxkotlin.Store
 
 
 class QuestionPresenter(
@@ -18,7 +19,7 @@ class QuestionPresenter(
     }
 
     //TODO consider SelectorSubscriberFn take coroutineContext as param so activity.runOnUiThread is not needed
-    override fun makeSubscriber() = SelectorSubscriberFn(engine.appStore) {
+    override fun makeSubscriber() = SelectorSubscriberFn<AppState>(engine.appStore) {
         withSingleField({ it.questionClock }, { view?.setTimerText(state.toQuestionViewState()) })
         withSingleField({
             it.currentQuestion?.itemId?.id ?: Any()

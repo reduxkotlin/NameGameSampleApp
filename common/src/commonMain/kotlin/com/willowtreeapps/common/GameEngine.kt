@@ -1,8 +1,7 @@
 package com.willowtreeapps.common
 
-import com.beyondeye.reduks.SimpleStore
-import com.beyondeye.reduks.middlewares.applyMiddleware
-import com.beyondeye.reduks.middlewares.thunkMiddleware
+import org.reduxkotlin.createStore
+import org.reduxkotlin.applyMiddleware
 import com.willowtreeapps.common.middleware.*
 import com.willowtreeapps.common.middleware.NavigationMiddleware
 import com.willowtreeapps.common.middleware.SettingsMiddleware
@@ -15,6 +14,7 @@ import com.willowtreeapps.common.ui.View
 import com.willowtreeapps.common.util.VibrateUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.reduxkotlin.thunk
 import kotlin.coroutines.CoroutineContext
 
 class GameEngine(navigator: Navigator,
@@ -22,18 +22,15 @@ class GameEngine(navigator: Navigator,
                  networkContext: CoroutineContext,
                  val uiContext: CoroutineContext) {
     private val navigationMiddleware = NavigationMiddleware(navigator)
-    private val viewEffectsMiddleware = ViewEffectsMiddleware()
-    private val presenterFactory by lazy { PresenterFactory(this, networkContext) }
+    private val viewEffectsMiddleware = ViewEffectsMiddleware<AppState>()
+    private val presenterFactory by lazy { PresenterFactory(this, networkContext, uiContext) }
     val vibrateUtil = VibrateUtil(application)
     private val settingsMiddleware by lazy { SettingsMiddleware(LocalStorageSettingsRepository(userSettings(application)), networkContext) }
 
     val appStore by lazy {
-        SimpleStore(AppState.INITIAL_STATE, ::reducer)
-                .applyMiddleware(::thunkMiddleware,
-                        viewEffectsMiddleware::dispatch,
-                        navigationMiddleware::dispatch,
-                        settingsMiddleware::dispatch,
-                        ::loggerMiddleware)
+        createStore(reducer, AppState.INITIAL_STATE, applyMiddleware(thunk,
+                navigationMiddleware::dispatch,
+                settingsMiddleware::dispatch))
     }
 
     init {
@@ -49,7 +46,7 @@ class GameEngine(navigator: Navigator,
     }
 
     val state: AppState
-        get() = appStore.state
+        get() = appStore.state as AppState
 
     fun <T : Presenter<*>> attachView(view: View<T>) = presenterFactory.attachView(view as View<Presenter<*>>)
 

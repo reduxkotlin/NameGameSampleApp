@@ -10,7 +10,7 @@ class SettingsPresenter(private val engine: GameEngine) : Presenter<SettingsView
         view?.showSettings(engine.state.settings.toViewState())
     }
 
-    override fun makeSubscriber() = SelectorSubscriberFn(engine.appStore) {
+    override fun makeSubscriber() = SelectorSubscriberFn<AppState>(engine.appStore) {
         withSingleField({ it.settings }) { view?.showSettings(state.settings.toViewState()) }
     }
 

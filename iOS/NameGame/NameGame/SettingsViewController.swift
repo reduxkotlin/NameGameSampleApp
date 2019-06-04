@@ -11,7 +11,7 @@ SettingsView {
     @IBAction func okButtonTap(_ sender: Any?) {
         let selectedValue = pickerData[numPicker.selectedRow(inComponent: 0)]
         let selectedCategory = QuestionCategoryId.Companion.init().fromOrdinal(ordinal: Int32(categoryPicker.selectedRow(inComponent: 0)))
-
+        
         getPresenter()?.numQuestionsChanged(numQuestions: Int32(selectedValue))
         getPresenter()?.categoryChanged(categoryId: selectedCategory)
         self.dismiss(animated: true)
