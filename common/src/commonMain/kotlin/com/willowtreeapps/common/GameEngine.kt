@@ -30,6 +30,8 @@ class GameEngine(navigator: Navigator,
     val appStore by lazy {
         createStore(reducer, AppState.INITIAL_STATE, applyMiddleware(thunk,
                 navigationMiddleware::dispatch,
+                ::logMiddleware,
+                loggerMiddleware3,
                 settingsMiddleware::dispatch))
     }
 

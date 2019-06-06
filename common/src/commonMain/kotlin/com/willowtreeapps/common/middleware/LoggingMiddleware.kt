@@ -1,11 +1,8 @@
 package com.willowtreeapps.common.middleware
 
-import org.reduxkotlin.GetState
 import com.willowtreeapps.common.AppState
 import com.willowtreeapps.common.Logger
-import org.reduxkotlin.Dispatcher
-import org.reduxkotlin.Middleware
-import org.reduxkotlin.Store
+import org.reduxkotlin.*
 
 fun loggerMiddleware(getState: GetState, nextDispatcher: (Any) -> Any, action: Any): Any {
     val result = nextDispatcher(action)
@@ -26,18 +23,14 @@ val loggerMiddleware2: Middleware =
             }
         }
 
-val loggerMiddleware3 = middleWare { store, next, action ->
+fun logMiddleware(store: Store) = { next: Dispatcher ->
+    { action: Any ->
+        next(action)
+    }
+}
+
+
+val loggerMiddleware3 = middleware { store, next, action ->
     Logger.d("DISPATCH action: ${action::class.simpleName}: $action")
     next(action)
 }
-
-fun middleWare(dispatch: (Store, Dispatcher, Any) -> Any): Middleware =
-        { store ->
-            { next ->
-                { action: Any ->
-                    {
-                        dispatch(store, next, action)
-                    }
-                }
-            }
-        }
