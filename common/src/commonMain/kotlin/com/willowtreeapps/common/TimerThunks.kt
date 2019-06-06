@@ -14,7 +14,7 @@ class TimerThunks(private val backgroundContext: CoroutineContext) : CoroutineSc
      * Only one timer is active at a time.  If called while a timer is active, it will cancel
      * the timer and start the new one.
      */
-    fun startCountDownTimer(initialValue: Int): Thunk = { dispatch ->
+    fun startCountDownTimer(initialValue: Int): Thunk = { dispatch, _, _->
         if (countDownTimerJob == null || countDownTimerJob?.isCompleted == true) {
             var localQuestionClock = initialValue
             Logger.d("Launching new Timer")
@@ -36,12 +36,12 @@ class TimerThunks(private val backgroundContext: CoroutineContext) : CoroutineSc
         }
     }
 
-    fun stopTimer(): Thunk = { dispatch ->
+    fun stopTimer(): Thunk = { dispatch, _, _ ->
         countDownTimerJob?.cancel()
         Unit
     }
 
-    fun dispatchDelayed(delayMs: Long, action: Any): Thunk = { dispatch ->
+    fun dispatchDelayed(delayMs: Long, action: Any): Thunk = { dispatch, _, _ ->
         delayedJob?.cancel()
         delayedJob = CoroutineScope(coroutineContext).launch {
             delay(delayMs)
@@ -50,7 +50,7 @@ class TimerThunks(private val backgroundContext: CoroutineContext) : CoroutineSc
         Unit
     }
 
-    fun cancelDelayed(): Thunk = { dispatcher ->
+    fun cancelDelayed(): Thunk = { dispatcher, _, _ ->
         delayedJob?.cancel()
         Unit
     }
