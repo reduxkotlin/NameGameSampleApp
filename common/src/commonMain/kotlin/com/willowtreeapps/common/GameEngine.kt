@@ -22,7 +22,6 @@ class GameEngine(navigator: Navigator,
                  networkContext: CoroutineContext,
                  val uiContext: CoroutineContext) {
     private val navigationMiddleware = NavigationMiddleware(navigator)
-    private val viewEffectsMiddleware = ViewEffectsMiddleware<AppState>()
     private val presenterFactory by lazy { PresenterFactory(this, networkContext, uiContext) }
     val vibrateUtil = VibrateUtil(application)
     private val settingsMiddleware by lazy { SettingsMiddleware(LocalStorageSettingsRepository(userSettings(application)), networkContext) }

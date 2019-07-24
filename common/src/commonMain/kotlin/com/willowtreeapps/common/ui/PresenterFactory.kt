@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import org.reduxkotlin.StoreSubscriber
 import org.reduxkotlin.StoreSubscription
 import kotlin.coroutines.CoroutineContext
+import kotlin.reflect.KClass
 
 /**
  * PresenterFactory that creates presenters for all views in the application.
@@ -20,13 +21,13 @@ internal class PresenterFactory(private val gameEngine: GameEngine,
 
     private val timerThunks = TimerThunks(networkContext)
     private val networkThunks = NetworkThunks(networkContext)
-    //    private val presenters = mutableSetOf<Presenter>()
     private var subscription: StoreSubscription? = null
 
     private val startPresenter by lazy { StartPresenter(gameEngine, networkThunks) }
     private val questionPresenter by lazy { QuestionPresenter(gameEngine, gameEngine.vibrateUtil, timerThunks) }
     private val gameResultsPresenter by lazy { GameResultsPresenter(gameEngine) }
     private val settingsPresenter by lazy { SettingsPresenter(gameEngine) }
+
     override val coroutineContext: CoroutineContext = uiContext + Job()
 
     fun <T : View<Presenter<*>>> attachView(view: T) {
@@ -121,6 +122,9 @@ abstract class Presenter<T : View<*>?> {
         }
     }
 
+    /**
+     * @return a StoreSubscriber for the presenter
+     */
     abstract fun makeSubscriber(): StoreSubscriber
 
     fun onStateChange() {

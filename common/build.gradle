@@ -33,13 +33,15 @@ kotlin {
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:$serializationVersion"
                 implementation "io.ktor:ktor-client-logging:$ktorVersion"
                 implementation "com.russhwolf:multiplatform-settings:$multiplatformSettingsVersion"
-                implementation "com.willowtreeapps:fuzzywuzzy-kotlin:0.1.1"
-                implementation "org.reduxkotlin:redux-kotlin:0.2.2"
-                implementation "org.reduxkotlin:redux-kotlin-thunk:0.2.3"
+                implementation "com.willowtreeapps:fuzzywuzzy-kotlin:0.2.1"
+                implementation "org.reduxkotlin:redux-kotlin:0.2.4"
+                implementation "org.reduxkotlin:redux-kotlin-thunk:0.2.5"
+                implementation "org.reduxkotlin:redux-kotlin-reselect:0.2.5"
 
 
                 implementation "io.ktor:ktor-client-core:$ktorVersion"
                 implementation "io.ktor:ktor-client-json:$ktorVersion"
+                implementation "io.ktor:ktor-client-serialization:$ktorVersion"
 
             }
         }
@@ -47,6 +49,7 @@ kotlin {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-test-common"
                 implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
+                implementation "io.ktor:ktor-client-serialization:$ktorVersion"
             }
         }
         androidMain {
@@ -59,8 +62,10 @@ kotlin {
                 implementation "io.ktor:ktor-client-core-jvm:$ktorVersion"
                 implementation "io.ktor:ktor-client-json-jvm:$ktorVersion"
                 implementation "io.ktor:ktor-client-logging-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-serialization-jvm:$ktorVersion"
             }
         }
+
         jvmMain {
             dependencies {
                 implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
@@ -71,12 +76,14 @@ kotlin {
                 implementation "io.ktor:ktor-client-core-jvm:$ktorVersion"
                 implementation "io.ktor:ktor-client-json-jvm:$ktorVersion"
                 implementation "io.ktor:ktor-client-logging-jvm:$ktorVersion"
+                implementation "io.ktor:ktor-client-serialization-jvm:$ktorVersion"
             }
         }
         jvmTest {
             dependencies {
                 implementation 'org.jetbrains.kotlin:kotlin-test'
                 implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+                implementation "io.ktor:ktor-client-serialization-jvm:$ktorVersion"
             }
         }
 
@@ -85,14 +92,17 @@ kotlin {
                 implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:$coroutinesVersion"
                 implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:$serializationVersion"
                 implementation "io.ktor:ktor-client-logging-native:$ktorVersion"
+                implementation "org.reduxkotlin:redux-kotlin-reselect-iossim:0.2.4"
 
                 implementation "io.ktor:ktor-client-ios:$ktorVersion"
                 implementation "io.ktor:ktor-client-core-native:$ktorVersion"
                 implementation "io.ktor:ktor-client-json-native:$ktorVersion"
+                implementation "io.ktor:ktor-client-serialization-native:$ktorVersion"
             }
         }
     }
 }
+
 
 android {
     compileSdkVersion 28

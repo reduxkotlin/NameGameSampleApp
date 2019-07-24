@@ -1,10 +1,10 @@
 package com.willowtreeapps.common.ui
 
-import com.beyondeye.reduks.SelectorSubscriberFn
 import com.willowtreeapps.common.Actions
 import com.willowtreeapps.common.AppState
 import com.willowtreeapps.common.GameEngine
 import com.willowtreeapps.common.boundary.toGameResultsViewState
+import org.reduxkotlin.SelectorSubscriberFn
 
 class GameResultsPresenter(private val engine: GameEngine) : Presenter<GameResultsView>() {
 
