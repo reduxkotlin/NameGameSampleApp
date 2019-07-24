@@ -1,6 +1,5 @@
 package com.willowtreeapps.common.repo
 
-import com.willowtreeapps.common.util.TimeUtil
 import com.willowtreeapps.common.util.profile
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
@@ -12,7 +11,6 @@ import io.ktor.client.features.logging.Logging
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.header
-import io.ktor.http.CacheControl
 import io.ktor.http.HttpHeaders
 import io.ktor.http.takeFrom
 import kotlinx.coroutines.*
@@ -37,6 +35,7 @@ open class KtorDogsRepository(private val networkContext: CoroutineContext) : Co
             val response: DogResponse = client.get {
                 apiUrl(ALL_BREEDS_PATH)
             }
+
             val listOfBreeds = profile("fetching all ${response.message.keys.size} dog image data") {
                 response.message.map { breed ->
                     if (breed.value.isNotEmpty()) {

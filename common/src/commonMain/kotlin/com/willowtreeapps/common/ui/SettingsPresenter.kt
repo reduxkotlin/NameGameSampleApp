@@ -1,8 +1,8 @@
 package com.willowtreeapps.common.ui
 
-import com.beyondeye.reduks.SelectorSubscriberFn
 import com.willowtreeapps.common.*
 import com.willowtreeapps.common.boundary.toViewState
+import org.reduxkotlin.SelectorSubscriberFn
 
 class SettingsPresenter(private val engine: GameEngine) : Presenter<SettingsView>() {
 

@@ -1,6 +1,7 @@
 package com.willowtreeapps.common
 
 import com.willowtreeapps.common.repo.ItemsHolder
+import org.reduxkotlin.Thunk
 
 sealed class Actions {
 
@@ -31,5 +32,7 @@ sealed class Actions {
 
     class WillowTreeSignInSuccessAction
     class WillowTreeSignOutSuccessAction
+    open class ThrottledAction(val waitTimeMs: Long, val thunk: Thunk)
+
 }
 

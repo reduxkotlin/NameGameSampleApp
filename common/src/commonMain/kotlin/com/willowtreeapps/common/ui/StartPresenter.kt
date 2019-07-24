@@ -1,7 +1,7 @@
 package com.willowtreeapps.common.ui
 
-import com.beyondeye.reduks.SelectorSubscriberFn
 import com.willowtreeapps.common.*
+import org.reduxkotlin.SelectorSubscriberFn
 
 
 class StartPresenter(private val engine: GameEngine,

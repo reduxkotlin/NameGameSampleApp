@@ -3,6 +3,8 @@ package com.willowtreeapps.namegame
 import com.willowtreeapps.common.*
 import com.willowtreeapps.common.repo.MockRepositoryFactory
 import com.willowtreeapps.common.repo.ProfileItemRepository
+import com.willowtreeapps.common.repo.generateQuestions
+import com.willowtreeapps.common.util.takeRandomDistinct
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.*
 import org.junit.Test
@@ -34,7 +36,7 @@ class ReducersTest {
     @Test
     fun `generate N distinct random rounds`() {
 
-        val itemHolder = runBlocking { ProfileItemRepository(MockRepositoryFactory().success()).fetchItems() }.response
+        val itemHolder = runBlocking { ProfileItemRepository(MockRepositoryFactory().success()).fetchItems(10) }.response
         val rounds = generateQuestions(itemHolder?.items!!, 10)
 
         assertEquals(10, rounds.size)
@@ -43,7 +45,7 @@ class ReducersTest {
 
     @Test
     fun `isLoadingProfiles set true`() {
-        val final = reducer(generateInitialTestState(), Actions.FetchingItemsStartedAction())
+        val final = reducer(generateInitialTestState(), Actions.FetchingItemsStartedAction()) as AppState
 
         assertTrue(final.isLoadingItems)
     }
@@ -51,7 +53,7 @@ class ReducersTest {
     @Test
     fun `isLoadingProfiles set false on success`() {
         val initial = generateInitialTestState().copy(isLoadingItems = true)
-        val final = reducer(initial, Actions.FetchingItemsSuccessAction(runBlocking { ProfileItemRepository(MockRepositoryFactory().success()).fetchItems() }.response!!))
+        val final = reducer(initial, Actions.FetchingItemsSuccessAction(runBlocking { ProfileItemRepository(MockRepositoryFactory().success()).fetchItems(10) }.response!!)) as AppState
 
         assertFalse(final.isLoadingItems)
     }
@@ -59,7 +61,7 @@ class ReducersTest {
     @Test
     fun `isLoadingProfiles set false on failure`() {
         val initial = generateInitialTestState().copy(isLoadingItems = true)
-        val final = reducer(initial, Actions.FetchingItemsFailedAction("Test failure"))
+        val final = reducer(initial, Actions.FetchingItemsFailedAction("Test failure")) as AppState
 
         assertFalse(final.isLoadingItems)
     }
@@ -67,7 +69,7 @@ class ReducersTest {
     @Test
     fun `NextQuestionAction - increments currentRoundIndex`() {
         val initial = generateInitialTestState()
-        val final = reducer(initial, Actions.NextQuestionAction())
+        val final = reducer(initial, Actions.NextQuestionAction()) as AppState
 
         assertEquals(1, final.currentQuestionIndex)
     }
@@ -75,7 +77,7 @@ class ReducersTest {
     @Test
     fun `NextQuestionAction - sets waitingForNextQuestion = false`() {
         val initial = generateInitialTestState()
-        val final = reducer(initial, Actions.NextQuestionAction())
+        val final = reducer(initial, Actions.NextQuestionAction()) as AppState
 
         assertEquals(false, final.waitingForNextQuestion)
     }
@@ -85,7 +87,7 @@ class ReducersTest {
         val initial = generateInitialTestState()
         val answer = initial.currentQuestionItem().displayName()
 
-        val final = reducer(initial, Actions.NamePickedAction(answer))
+        val final = reducer(initial, Actions.NamePickedAction(answer)) as AppState
 
         assertEquals(Question.Status.CORRECT, final.currentQuestion?.status)
     }
@@ -95,7 +97,7 @@ class ReducersTest {
         val initial = generateInitialTestState()
         val answer = "wrong answer"
 
-        val final = reducer(initial, Actions.NamePickedAction(answer))
+        val final = reducer(initial, Actions.NamePickedAction(answer)) as AppState
 
         assertEquals(Question.Status.INCORRECT, final.currentQuestion?.status)
     }
@@ -105,7 +107,7 @@ class ReducersTest {
         val initial = staticTestState(stanLee)
         val answer = justinTimberlake.displayName()
 
-        val final = reducer(initial, Actions.NamePickedAction(answer))
+        val final = reducer(initial, Actions.NamePickedAction(answer)) as AppState
 
         assertEquals(Question.Status.INCORRECT, final.currentQuestion?.status)
     }
@@ -116,7 +118,7 @@ class ReducersTest {
             val initial = generateInitialTestState()
             val answer = "wrong answer"
 
-            val final = reducer(initial, Actions.NamePickedAction(answer))
+            val final = reducer(initial, Actions.NamePickedAction(answer)) as AppState
 
             assertEquals(null, final.currentQuestion?.answerName)
         }
@@ -128,7 +130,7 @@ class ReducersTest {
             val initial = staticTestState(stanLee)
             val answer = "stan bee"
 
-            val final = reducer(initial, Actions.NamePickedAction(answer))
+            val final = reducer(initial, Actions.NamePickedAction(answer)) as AppState
 
             assertEquals("Stan Lee", final.currentQuestion?.answerName)
         }
@@ -140,7 +142,7 @@ class ReducersTest {
             val initial = staticTestState(stanLee)
             val answer = "stan bee"
 
-            val final = reducer(initial, Actions.NamePickedAction(answer))
+            val final = reducer(initial, Actions.NamePickedAction(answer)) as AppState
 
             assertEquals(Question.Status.CORRECT, final.currentQuestion?.status)
         }
@@ -150,7 +152,7 @@ class ReducersTest {
     fun `mark current round as TIMES when time is up`() {
         val initial = generateInitialTestState()
 
-        val final = reducer(initial, Actions.TimesUpAction())
+        val final = reducer(initial, Actions.TimesUpAction()) as AppState
 
         assertEquals(Question.Status.TIMES_UP, final.currentQuestion?.status)
     }
@@ -159,7 +161,7 @@ class ReducersTest {
     fun `decrement timer`() {
         val initial = generateInitialTestState()
 
-        val final = reducer(initial, Actions.DecrementCountDownAction())
+        val final = reducer(initial, Actions.DecrementCountDownAction()) as AppState
 
         assertEquals(initial.questionClock - 1, final.questionClock)
     }
@@ -168,7 +170,7 @@ class ReducersTest {
     fun `start question timer with initial value`() {
         val initial = generateInitialTestState()
 
-        val final = reducer(initial, Actions.StartQuestionTimerAction(10))
+        val final = reducer(initial, Actions.StartQuestionTimerAction(10)) as AppState
 
         assertEquals(10, final.questionClock)
     }
@@ -177,7 +179,7 @@ class ReducersTest {
     fun `ChangeNumQuestionsAction should update AppState`() {
         val initial = generateInitialTestState()
 
-        val final = reducer(initial, Actions.ChangeNumQuestionsSettingsAction(10))
+        val final = reducer(initial, Actions.ChangeNumQuestionsSettingsAction(10)) as AppState
 
         assertEquals(10, final.settings.numQuestions)
     }
@@ -186,7 +188,7 @@ class ReducersTest {
     fun `ChangeMicrophoneModeAction should update settings`() {
         val initial = generateInitialTestState()
 
-        val final = reducer(initial, Actions.ChangeMicrophoneModeSettingsAction(true))
+        val final = reducer(initial, Actions.ChangeMicrophoneModeSettingsAction(true)) as AppState
 
         assertEquals(true, final.settings.microphoneMode)
     }
@@ -195,7 +197,7 @@ class ReducersTest {
     fun `WillowTreeSignInSuccess should update is state`() {
         val initial = generateInitialTestState()
 
-        val final = reducer(initial, Actions.WillowTreeSignInSuccessAction())
+        val final = reducer(initial, Actions.WillowTreeSignInSuccessAction()) as AppState
 
         assertEquals(true, final.settings.isWillowTree)
     }
@@ -205,20 +207,20 @@ class ReducersTest {
         var initial = generateInitialTestState()
         initial = initial.copy(settings = initial.settings.copy(isWillowTree = true))
 
-        val final = reducer(initial, Actions.WillowTreeSignOutSuccessAction())
+        val final = reducer(initial, Actions.WillowTreeSignOutSuccessAction()) as AppState
 
         assertEquals(false, final.settings.isWillowTree)
     }
 
     private fun generateInitialTestState(): AppState {
-        val initialState = reducer(AppState(), Actions.FetchingItemsSuccessAction(runBlocking { ProfileItemRepository(MockRepositoryFactory().success()).fetchItems() }.response!!))
+        val initialState = reducer(AppState(), Actions.FetchingItemsSuccessAction(runBlocking { ProfileItemRepository(MockRepositoryFactory().success()).fetchItems(10) }.response!!)) as AppState
         return initialState
     }
 
-    val justinTimberlake = Item(ItemId("0"), "", "Justin", "Timberlake")
-    val bobEvans = Item(ItemId("1"), "", "Bob", "Evans")
-    val stanLee = Item(ItemId("2"), "", "Stan", "Lee")
-    val lukeSkywalker = Item(ItemId("3"), "", "Luke", "Skywalker")
+    private val justinTimberlake = Item(ItemId("0"), "", "Justin", "Timberlake")
+    private val bobEvans = Item(ItemId("1"), "", "Bob", "Evans")
+    private val stanLee = Item(ItemId("2"), "", "Stan", "Lee")
+    private val lukeSkywalker = Item(ItemId("3"), "", "Luke", "Skywalker")
 
     fun staticTestState(correctAnswer: Item): AppState {
 

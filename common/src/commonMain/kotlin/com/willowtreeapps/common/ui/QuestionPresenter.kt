@@ -1,12 +1,11 @@
 package com.willowtreeapps.common.ui
 
-import com.beyondeye.reduks.*
 import com.willowtreeapps.common.*
 import com.willowtreeapps.common.boundary.toQuestionViewState
 import com.willowtreeapps.common.util.VibrateUtil
 import com.willowtreeapps.common.util.debounce
 import com.willowtreeapps.common.util.isAndroid
-import org.reduxkotlin.Store
+import org.reduxkotlin.SelectorSubscriberFn
 
 
 class QuestionPresenter(

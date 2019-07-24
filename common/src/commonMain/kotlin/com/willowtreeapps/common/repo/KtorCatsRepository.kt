@@ -108,14 +108,12 @@ data class CatBreed(val id: String,
                     val origin: String,
                     val temperament: String,
                     val description: String,
-                    @Optional
                     val vetstreet_url: String = "",
-                    @Optional
                     val alt_names: String? = null)
 
 
 @Serializable
-data class CatImageResponse(@Optional val breed: CatBreed? = null,
+data class CatImageResponse(val breed: CatBreed? = null,
                             val url: String)
 
 
