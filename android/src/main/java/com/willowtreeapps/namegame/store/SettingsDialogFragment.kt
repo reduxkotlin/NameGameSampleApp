@@ -1,7 +1,6 @@
 package com.willowtreeapps.namegame.store
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
-import com.firebase.ui.auth.AuthUI
-import com.google.firebase.auth.FirebaseAuth
 import com.willowtreeapps.common.*
 import com.willowtreeapps.common.middleware.UiActions
 //import com.google.firebase.auth.FirebaseAuth
@@ -53,7 +50,6 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
             dispatch(UiActions.CategoryPicked(newCategory))
         }
         btn_ok.setOnClickListener { dismiss() }
-        btn_sign_in.setOnClickListener { launchSignIn() }
         switch_mic.setOnCheckedChangeListener { buttonView, isChecked ->
             //TODO consider moving this logic somewhere else
             if (isChecked) {
@@ -71,16 +67,6 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
         numberPicker.value = viewState.numQuestions
         categoryPicker.value = viewState.categoryDisplayValues.indexOf(viewState.categoryId.displayName)
         switch_mic.isChecked = viewState.isMicModeEnabled
-        btn_sign_in.setOnClickListener {
-            if (viewState.isWillowTree) {
-                signOut()
-            } else {
-                launchSignIn()
-            }
-        }
-//        btn_sign_in.visibility = if (viewState.showSignIn) View.VISIBLE else View.GONE
-
-        btn_sign_in.text = viewState.signInBtnText
     }
 
     override fun askForMicPermissions() {
@@ -112,31 +98,5 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
                 }
             }
         }
-    }
-
-
-    private fun launchSignIn() {
-        startActivityForResult(
-                AuthUI.getInstance().createSignInIntentBuilder()
-                        .setAvailableProviders(listOf(AuthUI.IdpConfig.GoogleBuilder().build()))
-                        .build(), 0)
-    }
-
-    private fun signOut() {
-        AuthUI.getInstance()
-                .signOut(activity?.applicationContext!!)
-                .addOnCompleteListener {
-                    dispatch(Actions.WillowTreeSignInSuccessAction())
-                }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0) {
-            val auth = FirebaseAuth.getInstance()
-            val email = auth.currentUser?.email!!
-            dispatch(Actions.WillowTreeSignOutSuccessAction())
-        }
-
     }
 }

@@ -5,9 +5,7 @@ import com.willowtreeapps.common.QuestionCategoryId
 data class SettingsViewState(val numQuestions: Int,
                              val categoryId: QuestionCategoryId,
                              val categoryDisplayValues: List<String>,
-                             val isMicModeEnabled: Boolean,
-                             val isWillowTree: Boolean = false,
-                             val signInBtnText: String)
+                             val isMicModeEnabled: Boolean)
 
 data class QuestionViewState(
         val title: String,

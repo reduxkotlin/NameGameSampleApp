@@ -19,29 +19,6 @@ data class ItemsHolder(val questionTitle: String,
                        val questions: List<Question>,
                        val gameResultResponses: GameResultResponses = GameResultResponses())
 
-class ProfileItemRepository(val repo: ProfilesRepository = KtorProfilesRepository()) : ItemRepository {
-
-    override suspend fun fetchItems(numQuestions: Int): GatewayResponse<ItemsHolder, GenericError> {
-        val results = repo.profiles()
-        return if (results.isSuccessful) {
-            val items = results.response?.map {
-                Item(id = ItemId(it.id),
-                        firstName = it.firstName,
-                        lastName = it.lastName,
-                        imageUrl = "https:${it.headshot.url}")
-            }!!
-
-            val itemHolder = ItemsHolder(questionTitle = "Who is this?",
-                    items = items,
-                    questions = generateQuestions(items, numQuestions))
-            GatewayResponse.createSuccess(itemHolder, 200, "")
-        } else {
-            GatewayResponse.createError(GenericError("Error"), 500, "")
-        }
-    }
-
-}
-
 class DogItemRepository(val repo: KtorDogsRepository = KtorDogsRepository(PlatformDispatcher)) : ItemRepository {
 
     override suspend fun fetchItems(numQuestions: Int): GatewayResponse<ItemsHolder, GenericError> {

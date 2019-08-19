@@ -68,16 +68,12 @@ data class Item(val id: ItemId,
 }
 
 enum class QuestionCategoryId(val displayName: String) {
-    WILLOW_TREE("WillowTree"),
     DOGS("Dogs"),
     CATS("Cats");
 
     companion object {
-        val displayNameListWithWT by lazy {
-            values().map { it.displayName }
-        }
         val displayNameListWithoutWT by lazy {
-            values().filter { it != WILLOW_TREE }.map { it.displayName }
+            values().map { it.displayName }
         }
 
         fun fromOrdinal(ordinal: Int) = values()[ordinal]
@@ -88,7 +84,6 @@ enum class QuestionCategoryId(val displayName: String) {
 
 data class UserSettings(val numQuestions: Int,
                         val categoryId: QuestionCategoryId,
-                        val isWillowTree: Boolean = false,
                         val microphoneMode: Boolean) {
     companion object {
         fun defaults() = UserSettings(3,

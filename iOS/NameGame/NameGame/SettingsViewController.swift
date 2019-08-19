@@ -28,7 +28,7 @@ SettingsView {
     }
     
     let pickerData: [Int] = Array(1...20)
-    let categoryData: [String] = QuestionCategoryId.Companion.init().displayNameListWithWT
+    let categoryData: [String] = QuestionCategoryId.Companion.init().displayNameListWithoutWT
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +40,7 @@ SettingsView {
 
     func showSettings(viewState: SettingsViewState) {
         numPicker.selectRow((Int(viewState.numQuestions - 1)), inComponent: 0, animated: true)
-        categoryPicker.selectRow(Int(QuestionCategoryId.Companion.init().displayNameListWithWT.firstIndex(of: viewState.categoryId.displayName)!), inComponent: 0, animated: true)
+        categoryPicker.selectRow(Int(QuestionCategoryId.Companion.init().displayNameListWithoutWT.firstIndex(of: viewState.categoryId.displayName)!), inComponent: 0, animated: true)
     }
     
     func askForMicPermissions() {

@@ -19,7 +19,6 @@ class NetworkThunks(private val networkContext: CoroutineContext) : CoroutineSco
 
     //TODO cache the repositories
     private fun repoForCategory(categoryId: QuestionCategoryId) = when (categoryId) {
-        QuestionCategoryId.WILLOW_TREE -> ProfileItemRepository()
         QuestionCategoryId.CATS -> CatItemRepository()
         QuestionCategoryId.DOGS -> DogItemRepository()
     }

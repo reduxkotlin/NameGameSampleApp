@@ -3,7 +3,6 @@ package com.willowtreeapps.namegame
 import android.app.Activity
 import android.app.Application
 import android.os.Bundle
-import com.google.firebase.FirebaseApp
 import com.willowtreeapps.common.GameEngine
 import com.willowtreeapps.common.Logger
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +16,6 @@ class NameGameApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        FirebaseApp.initializeApp(this)
         instance = this
         val navigator = AndroidNavigator()
         gameEngine = GameEngine(navigator, this, Dispatchers.IO, Dispatchers.Main)

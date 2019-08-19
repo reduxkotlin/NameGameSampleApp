@@ -70,8 +70,6 @@ val reducer: Reducer<AppState> = { state: AppState, action ->
         is ChangeMicrophoneModeSettingsAction -> state.copy(settings = state.settings.copy(microphoneMode = action.enabled))
         is SettingsLoadedAction -> state.copy(settings = action.settings)
 
-        is WillowTreeSignInSuccessAction -> state.copy(settings = state.settings.copy(isWillowTree = true))
-        is WillowTreeSignOutSuccessAction -> state.copy(settings = state.settings.copy(isWillowTree = false))
         is LoadAllSettingsAction -> {
             state
         }

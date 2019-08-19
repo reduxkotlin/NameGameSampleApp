@@ -28,8 +28,6 @@ sealed class Actions {
     data class ChangeCategorySettingsAction(val categoryId: QuestionCategoryId)
     data class ChangeMicrophoneModeSettingsAction(val enabled: Boolean)
 
-    class WillowTreeSignInSuccessAction
-    class WillowTreeSignOutSuccessAction
     open class ThrottledAction(val waitTimeMs: Long, val thunk: Thunk<AppState>)
 
 }

@@ -56,13 +56,8 @@ fun AppState.toGameResultsViewState(): GameResultsViewState {
 fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(
         numQuestions = numQuestions,
         categoryId = categoryId,
-        categoryDisplayValues = if (isWillowTree)
-            QuestionCategoryId.displayNameListWithWT
-        else
-            QuestionCategoryId.displayNameListWithoutWT,
-        isMicModeEnabled = microphoneMode,
-        isWillowTree = isWillowTree,
-        signInBtnText = if (isWillowTree) "Sign Out" else "Sign In"
+        categoryDisplayValues = QuestionCategoryId.displayNameListWithoutWT,
+        isMicModeEnabled = microphoneMode
 )
 
 private fun AppState.gameTotals() = "$numCorrect out of ${questions.size}"

@@ -30,6 +30,7 @@ kotlin {
                 implementation "org.reduxkotlin:redux-kotlin:$reduxVersion"
                 implementation "org.reduxkotlin:redux-kotlin-thunk:$reduxThunkVersion"
                 implementation "org.reduxkotlin:redux-kotlin-reselect:$reduxReselectVersion"
+                implementation "org.reduxkotlin:presenter-middleware:$reduxPresenterMiddlewareVersion"
                 implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
 

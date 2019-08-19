@@ -81,9 +81,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-beta2'
-    implementation 'com.google.firebase:firebase-core:16.0.8'
-    implementation 'com.google.firebase:firebase-auth:16.2.1'
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.2'
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-core:0.9.27'
     releaseImplementation 'com.willowtreeapps.hyperion:hyperion-core-no-op:0.9.27'
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-measurement:0.9.27'
