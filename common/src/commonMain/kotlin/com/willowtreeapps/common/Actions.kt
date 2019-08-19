@@ -15,7 +15,6 @@ sealed class Actions {
 
     class GameCompleteAction
 
-    class StartOverAction
     class ResetGameStateAction
 
     data class StartQuestionTimerAction(val initialValue: Int)
@@ -23,7 +22,6 @@ sealed class Actions {
     class TimesUpAction
 
 
-    class SettingsTappedAction
     class LoadAllSettingsAction
     data class SettingsLoadedAction(val settings: UserSettings)
     data class ChangeNumQuestionsSettingsAction(val num: Int)
@@ -32,7 +30,7 @@ sealed class Actions {
 
     class WillowTreeSignInSuccessAction
     class WillowTreeSignOutSuccessAction
-    open class ThrottledAction(val waitTimeMs: Long, val thunk: Thunk)
+    open class ThrottledAction(val waitTimeMs: Long, val thunk: Thunk<AppState>)
 
 }
 

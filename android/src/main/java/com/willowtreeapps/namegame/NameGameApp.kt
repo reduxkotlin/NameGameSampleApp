@@ -7,6 +7,9 @@ import com.google.firebase.FirebaseApp
 import com.willowtreeapps.common.GameEngine
 import com.willowtreeapps.common.Logger
 import kotlinx.coroutines.Dispatchers
+import org.reduxkotlin.Dispatcher
+
+lateinit var dispatch: Dispatcher
 
 class NameGameApp : Application() {
 
@@ -18,6 +21,7 @@ class NameGameApp : Application() {
         instance = this
         val navigator = AndroidNavigator()
         gameEngine = GameEngine(navigator, this, Dispatchers.IO, Dispatchers.Main)
+        dispatch = gameEngine.appStore.dispatch
 
         registerActivityLifecycleCallbacks(navigator)
         registerActivityLifecycleCallbacks(LifeCycleLogger)

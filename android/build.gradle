@@ -50,11 +50,13 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'com.google.android.material:material:1.1.0-alpha08'
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    implementation 'com.google.android.material:material:1.1.0-alpha09'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     implementation "android.arch.navigation:navigation-fragment-ktx:$ktxVersion"
     implementation "android.arch.navigation:navigation-ui-ktx:$ktxVersion"
+    implementation "org.reduxkotlin:redux-kotlin:$reduxVersion"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
     implementation "com.facebook.stetho:stetho:$stethoVersion"
     implementation "com.facebook.stetho:stetho-okhttp3:$stethoVersion"

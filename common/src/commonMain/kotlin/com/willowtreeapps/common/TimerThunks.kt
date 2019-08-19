@@ -1,10 +1,9 @@
 package com.willowtreeapps.common
 
 import kotlinx.coroutines.*
-import org.reduxkotlin.Thunk
 import kotlin.coroutines.CoroutineContext
 
-class TimerThunks(private val backgroundContext: CoroutineContext) : CoroutineScope {
+class TimerThunks(backgroundContext: CoroutineContext) : CoroutineScope {
     override val coroutineContext = backgroundContext + Job()
     private var countDownTimerJob: Job? = null
     private var delayedJob: Job? = null
@@ -14,7 +13,7 @@ class TimerThunks(private val backgroundContext: CoroutineContext) : CoroutineSc
      * Only one timer is active at a time.  If called while a timer is active, it will cancel
      * the timer and start the new one.
      */
-    fun startCountDownTimer(initialValue: Int): Thunk = { dispatch, _, _->
+    fun startCountDownTimer(initialValue: Int) = thunk { dispatch, _, _->
         if (countDownTimerJob == null || countDownTimerJob?.isCompleted == true) {
             var localQuestionClock = initialValue
             Logger.d("Launching new Timer")
@@ -36,12 +35,12 @@ class TimerThunks(private val backgroundContext: CoroutineContext) : CoroutineSc
         }
     }
 
-    fun stopTimer(): Thunk = { dispatch, _, _ ->
+    fun stopTimer() = thunk { _, _, _ ->
         countDownTimerJob?.cancel()
         Unit
     }
 
-    fun dispatchDelayed(delayMs: Long, action: Any): Thunk = { dispatch, _, _ ->
+    fun dispatchDelayed(delayMs: Long, action: Any) = thunk { dispatch, _, _ ->
         delayedJob?.cancel()
         delayedJob = CoroutineScope(coroutineContext).launch {
             delay(delayMs)
@@ -50,7 +49,7 @@ class TimerThunks(private val backgroundContext: CoroutineContext) : CoroutineSc
         Unit
     }
 
-    fun cancelDelayed(): Thunk = { dispatcher, _, _ ->
+    fun cancelDelayed() = thunk { _, _, _ ->
         delayedJob?.cancel()
         Unit
     }

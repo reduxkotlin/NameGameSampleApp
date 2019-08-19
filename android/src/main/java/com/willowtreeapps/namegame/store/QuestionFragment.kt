@@ -11,7 +11,7 @@ import android.speech.SpeechRecognizer
 import android.view.*
 import android.view.animation.BounceInterpolator
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.willowtreeapps.common.QuestionViewState
+import com.willowtreeapps.common.ui.QuestionViewState
 import com.willowtreeapps.common.ui.QuestionView
 import kotlinx.android.synthetic.main.fragment_question.*
 import nl.dionsegijn.konfetti.models.Shape
@@ -20,12 +20,12 @@ import android.widget.Button
 import androidx.core.content.res.ResourcesCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import com.willowtreeapps.common.Logger
-import com.willowtreeapps.common.ui.QuestionPresenter
+import com.willowtreeapps.common.middleware.UiActions
 import com.willowtreeapps.namegame.*
 import java.util.*
 
 
-class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), QuestionView, MainActivity.IOnBackPressed {
+class QuestionFragment : BaseNameGameViewFragment<QuestionView>(), QuestionView, MainActivity.IOnBackPressed {
     private lateinit var speechRecognizer: SpeechRecognizer
     private val speechRecognizerIntent by lazy {
         val speechRecIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
@@ -53,7 +53,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
 
                 //displaying the first match
                 if (matches != null)
-                    presenter.namePicked(matches[0])
+                    dispatch(UiActions.NamePicked(matches[0]))
             }
 
             override fun onEvent(eventType: Int, params: Bundle?) {
@@ -75,7 +75,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
 
                 //displaying the first match
                 if (matches != null)
-                    presenter.namePicked(matches[0])
+                    dispatch(UiActions.NamePicked(matches[0]))
             }
 
         })
@@ -103,18 +103,19 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
     }
 
     private fun initViews() {
-        button1.setOnClickListener { presenter.namePicked(button1.text.toString()) }
-        button2.setOnClickListener { presenter.namePicked(button2.text.toString()) }
-        button3.setOnClickListener { presenter.namePicked(button3.text.toString()) }
-        button4.setOnClickListener { presenter.namePicked(button4.text.toString()) }
-        btn_next.setOnClickListener { presenter.nextTapped() }
-        btn_end_game.setOnClickListener { presenter.endGameTapped() }
+        button1.setOnClickListener { dispatch(UiActions.NamePicked(button1.text.toString())) }
+        button2.setOnClickListener { dispatch(UiActions.NamePicked(button2.text.toString())) }
+        button3.setOnClickListener { dispatch(UiActions.NamePicked(button3.text.toString())) }
+        button4.setOnClickListener { dispatch(UiActions.NamePicked(button4.text.toString())) }
+        btn_next.setOnClickListener { dispatch(UiActions.NextTapped()) }
+        btn_end_game.setOnClickListener { dispatch(UiActions.EndGameTapped()) }
     }
 
 
     override fun onBackPressed(): Boolean {
-        NameGameApp.gameEngine().detachView(this)
-        presenter.onBackPressed()
+        //TODO revisit this - is needed with presenter middleware
+//        NameGameApp.gameEngine().detachView(this)
+//        presenter.onBackPressed()
         return false
     }
 
@@ -153,7 +154,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
                         btn_end_game.visibility = View.GONE
                         btn_end_game.alpha = 1f
                         //start timer again
-                        presenter.profileImageIsVisible()
+                        dispatch(UiActions.ProfileImageDidShow())
                     }
 
                 }
@@ -309,7 +310,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionPresenter>(), Question
                         .onComplete {
                             showButtons()
                             txt_timer.visibility = View.VISIBLE
-                            presenter.profileImageIsVisible()
+                            dispatch(UiActions.ProfileImageDidShow())
                         }
                         .into(imageView)
                 setButtonText(viewState)

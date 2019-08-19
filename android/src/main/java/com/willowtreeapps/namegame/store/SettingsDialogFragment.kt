@@ -11,20 +11,24 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.firebase.ui.auth.AuthUI
 import com.google.firebase.auth.FirebaseAuth
+import com.willowtreeapps.common.*
+import com.willowtreeapps.common.middleware.UiActions
 //import com.google.firebase.auth.FirebaseAuth
-import com.willowtreeapps.common.Logger
-import com.willowtreeapps.common.QuestionCategoryId
-import com.willowtreeapps.common.SettingsViewState
-import com.willowtreeapps.common.ui.SettingsPresenter
 import com.willowtreeapps.common.ui.SettingsView
+import com.willowtreeapps.common.ui.SettingsViewState
 import com.willowtreeapps.namegame.MainActivity
-import com.willowtreeapps.namegame.NameGameApp
 import com.willowtreeapps.namegame.R
+import com.willowtreeapps.namegame.dispatch
 import kotlinx.android.synthetic.main.fragment_settings.*
 
 class SettingsDialogFragment : DialogFragment(), SettingsView {
 
-    override lateinit var presenter: SettingsPresenter
+    private val presenterObserver = PresenterLifecycleObserver(this)
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycle.addObserver(presenterObserver)
+    }
 
     companion object {
         fun newInstance(): SettingsDialogFragment {
@@ -41,27 +45,23 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
         numberPicker.minValue = 1
         numberPicker.maxValue = 20
         numberPicker.setOnValueChangedListener { _, _, newVal ->
-            presenter.numQuestionsChanged(newVal)
+            dispatch(UiActions.NumQuestionsPicked(newVal))
         }
 
         categoryPicker.setOnValueChangedListener { _, _, newVal ->
-            presenter.categoryChanged(QuestionCategoryId.fromDisplayName(categoryPicker.displayedValues[categoryPicker.value])!!)
+            val newCategory = QuestionCategoryId.fromDisplayName(categoryPicker.displayedValues[categoryPicker.value])!!
+            dispatch(UiActions.CategoryPicked(newCategory))
         }
         btn_ok.setOnClickListener { dismiss() }
         btn_sign_in.setOnClickListener { launchSignIn() }
         switch_mic.setOnCheckedChangeListener { buttonView, isChecked ->
-            presenter.microphoneModeChanged(isChecked)
+            //TODO consider moving this logic somewhere else
+            if (isChecked) {
+                askForMicPermissions()
+            } else {
+                dispatch(UiActions.MicrophoneModeToggled(false))
+            }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        NameGameApp.gameEngine().attachView(this)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        NameGameApp.gameEngine().detachView(this)
     }
 
     override fun showSettings(viewState: SettingsViewState) {
@@ -97,7 +97,7 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
                     arrayOf(Manifest.permission.RECORD_AUDIO),
                     MainActivity.RECORD_REQUEST_CODE)
         } else {
-            presenter.microphonePermissionGranted()
+            dispatch(UiActions.MicrophoneModeToggled(true))
         }
     }
 
@@ -106,9 +106,9 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
         when (requestCode) {
             MainActivity.RECORD_REQUEST_CODE -> {
                 if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    presenter.microphonePermissionDenied()
+                    dispatch(UiActions.MicrophoneModeToggled(false))
                 } else {
-                    presenter.microphonePermissionGranted()
+                    dispatch(UiActions.MicrophoneModeToggled(true))
                 }
             }
         }
@@ -126,7 +126,7 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
         AuthUI.getInstance()
                 .signOut(activity?.applicationContext!!)
                 .addOnCompleteListener {
-                    presenter.signOutSuccess()
+                    dispatch(Actions.WillowTreeSignInSuccessAction())
                 }
     }
 
@@ -135,7 +135,7 @@ class SettingsDialogFragment : DialogFragment(), SettingsView {
         if (requestCode == 0) {
             val auth = FirebaseAuth.getInstance()
             val email = auth.currentUser?.email!!
-            presenter.signInSuccess()
+            dispatch(Actions.WillowTreeSignOutSuccessAction())
         }
 
     }

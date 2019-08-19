@@ -1,16 +1,31 @@
 import UIKit
 import common
 
+var dispatch: (Any) -> Any {
+    get {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        return appDelegate.gameEngine!.appStore.dispatch
+    }
+}
+
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     var gameEngine: GameEngine?
+    var dispatch: (Any) -> Any = {any -> Any in KotlinUnit() }
 
+    public func initilize() {
+        if (gameEngine == nil) {
+            let navi: Navigator = IosNavigator()
+            gameEngine = GameEngine(navigator: navi, application: NSObject(), networkContext: UI(), uiContext: UI())
+            dispatch = gameEngine!.appStore.dispatch
+        }
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        let navi: Navigator = IosNavigator()
-        gameEngine = GameEngine(navigator: navi, application: NSObject(), networkContext: UI(), uiContext: UI())
+       
         return true
     }
 

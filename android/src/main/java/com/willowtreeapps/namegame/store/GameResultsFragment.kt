@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.willowtreeapps.common.GameResultsViewState
-import com.willowtreeapps.common.ui.GameResultsPresenter
+import com.willowtreeapps.common.middleware.UiActions
+import com.willowtreeapps.common.ui.GameResultsViewState
 import com.willowtreeapps.common.ui.GameResultsView
 import com.willowtreeapps.namegame.MainActivity
 import com.willowtreeapps.namegame.NameGameApp
 import com.willowtreeapps.namegame.R
+import com.willowtreeapps.namegame.dispatch
 import kotlinx.android.synthetic.main.fragment_game_results.*
 
-class GameResultsFragment : BaseNameGameViewFragment<GameResultsPresenter>(), GameResultsView, MainActivity.IOnBackPressed {
+class GameResultsFragment : BaseNameGameViewFragment<GameResultsView>(), GameResultsView, MainActivity.IOnBackPressed {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_game_results, container, false)
@@ -24,8 +25,9 @@ class GameResultsFragment : BaseNameGameViewFragment<GameResultsPresenter>(), Ga
 
     private fun initViews() {
         btn_start_over.setOnClickListener {
-            NameGameApp.gameEngine().detachView(this)
-            presenter.startOverTapped()
+            //TODO is this needed?
+//            NameGameApp.gameEngine().detachView(this)
+            dispatch(UiActions.StartOverTapped())
         }
     }
 
@@ -35,7 +37,7 @@ class GameResultsFragment : BaseNameGameViewFragment<GameResultsPresenter>(), Ga
     }
 
     override fun onBackPressed(): Boolean {
-        presenter.onBackPressed()
+//        presenter.onBackPressed()
         return false
     }
 

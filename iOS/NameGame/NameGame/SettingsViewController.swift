@@ -3,17 +3,20 @@ import UIKit
 import common
 import Speech
 
-class SettingsViewController: BaseNameViewController<SettingsPresenter>,
+class SettingsViewController: BaseNameViewController,
         UIPickerViewDelegate,
         UIPickerViewDataSource,
 SettingsView {
+    func presenter() -> (View, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
+        return SettingsPresenterKt.settingsPresenter
+    }
+    
 
     @IBAction func okButtonTap(_ sender: Any?) {
         let selectedValue = pickerData[numPicker.selectedRow(inComponent: 0)]
         let selectedCategory = QuestionCategoryId.Companion.init().fromOrdinal(ordinal: Int32(categoryPicker.selectedRow(inComponent: 0)))
-        
-        getPresenter()?.numQuestionsChanged(numQuestions: Int32(selectedValue))
-        getPresenter()?.categoryChanged(categoryId: selectedCategory)
+        dispatch(UiActions.CategoryPicked(categoryId: selectedCategory))
+        dispatch(UiActions.NumQuestionsPicked(numQuestions: Int32(selectedValue)))
         self.dismiss(animated: true)
     }
 
@@ -21,7 +24,7 @@ SettingsView {
     @IBOutlet weak var categoryPicker: UIPickerView!
 
     @IBAction func voiceModeSwitched(_ sender: UISwitch) {
-        getPresenter()?.microphoneModeChanged(enabled: sender.isOn)
+        dispatch(UiActions.MicrophoneModeToggled(enabled: sender.isOn))
     }
     
     let pickerData: [Int] = Array(1...20)
@@ -70,13 +73,13 @@ SettingsView {
             OperationQueue.main.addOperation {
                 switch authStatus {
                 case .authorized:
-                    self.getPresenter()?.microphonePermissionGranted()
+                    dispatch(UiActions.MicrophoneModeToggled(enabled: true))
                 case .denied:
-                    self.getPresenter()?.microphonePermissionDenied()
+                    dispatch(UiActions.MicrophoneModeToggled(enabled: false))
                 case .restricted:
-                    self.getPresenter()?.microphonePermissionDenied()
+                    dispatch(UiActions.MicrophoneModeToggled(enabled: false))
                 case .notDetermined:
-                    self.getPresenter()?.microphonePermissionDenied()
+                    dispatch(UiActions.MicrophoneModeToggled(enabled: false))
 
                 }
             }

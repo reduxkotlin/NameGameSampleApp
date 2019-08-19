@@ -1,6 +1,6 @@
-package com.willowtreeapps.common
+package com.willowtreeapps.common.ui
 
-sealed class ViewStates
+import com.willowtreeapps.common.QuestionCategoryId
 
 data class SettingsViewState(val numQuestions: Int,
                              val categoryId: QuestionCategoryId,

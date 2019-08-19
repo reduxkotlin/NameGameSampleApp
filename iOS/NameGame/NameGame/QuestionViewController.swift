@@ -4,8 +4,10 @@ import common
 import Speech
 
 
-class QuestionViewController: BaseNameViewController<QuestionPresenter>, QuestionView {
-
+class QuestionViewController: BaseNameViewController, QuestionView {
+    func presenter() -> (View, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
+            return QuestionPresenterKt.questionPresenter
+    }
     
     
     @IBOutlet weak var labelQuestion: UILabel!
@@ -19,15 +21,15 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
     @IBOutlet weak var labelTimer: UILabel!
 
     @IBAction func onAnswerTap(_ sender: Any) {
-        getPresenter()?.namePicked(name: (sender as? UIButton)!.titleLabel!.text!)
+        dispatch(UiActions.NamePicked(name: (sender as? UIButton)!.titleLabel!.text!))
     }
 
     @IBAction func onNextTreeTap(_ sender: Any) {
-        getPresenter()?.nextTapped()
+        dispatch(UiActions.NextTapped())
     }
 
     @IBAction func onEndGameTap(_ sender: Any) {
-        getPresenter()?.endGameTapped()
+        dispatch(UiActions.EndGameTapped())
     }
 
     var confettiView: SAConfettiView?
@@ -81,10 +83,10 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
                 
                 var lastString: String = ""
                 Logger.init().d(message: "speech: " + bestString)
-                self.getPresenter()?.namePicked(name: bestString)
+                dispatch(UiActions.NamePicked(name: bestString))
 
                 if (result.isFinal) {
-                    self.getPresenter()?.namePicked(name: bestString)
+                    dispatch(UiActions.NamePicked(name: bestString))
                 }
             } else if let error = error {
                 print(error)
@@ -103,7 +105,8 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if (isMovingFromParent) {
-            getPresenter()?.onBackPressed()
+            //TODO fix this
+            //getPresenter()?.onBackPressed()
         }
     }
 
@@ -225,7 +228,7 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
         button4.setTitle(viewState.button4Text, for: .normal)
         profileImageView.downloaded(from: viewState.itemImageUrl, onComplete: {
             self.showButtons()
-            self.getPresenter()?.profileImageIsVisible()
+            dispatch(UiActions.ProfileImageDidShow())
         })
     }
 

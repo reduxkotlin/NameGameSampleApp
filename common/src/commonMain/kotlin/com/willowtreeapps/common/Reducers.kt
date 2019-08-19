@@ -1,6 +1,7 @@
 package com.willowtreeapps.common
 
 import com.willowtreeapps.common.Actions.*
+import com.willowtreeapps.common.middleware.UiActions
 import com.willowtreeapps.common.util.NO_MATCH
 import com.willowtreeapps.common.util.match
 import org.reduxkotlin.*
@@ -9,7 +10,7 @@ import org.reduxkotlin.*
  * Reducers and functions used by reducers are in this file.  Functions must be pure functions without
  * side effects.
  */
-val reducer= castingReducer { state: AppState, action ->
+val reducer: Reducer<AppState> = { state: AppState, action ->
     when (action) {
         is ActionTypes.INIT -> {
             AppState.INITIAL_STATE
@@ -22,7 +23,7 @@ val reducer= castingReducer { state: AppState, action ->
                     questions = action.itemsHolder.questions)
         }
         is FetchingItemsFailedAction -> state.copy(isLoadingItems = false, errorLoadingItems = true, errorMsg = action.message)
-        is NamePickedAction -> {
+        is UiActions.NamePicked -> {
             val answerName: String?
             val status = if (state.currentQuestionItem().equalsDisplayName(action.name)) {
                 answerName = action.name
@@ -54,7 +55,7 @@ val reducer= castingReducer { state: AppState, action ->
         }
         is NextQuestionAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
         is GameCompleteAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
-        is StartOverAction, is ResetGameStateAction -> AppState.INITIAL_STATE.copy(settings = state.settings)
+        is ResetGameStateAction -> AppState.INITIAL_STATE.copy(settings = state.settings)
         is StartQuestionTimerAction -> state.copy(questionClock = action.initialValue)
         is DecrementCountDownAction -> state.copy(questionClock = state.questionClock - 1)
         is TimesUpAction -> {
@@ -79,12 +80,5 @@ val reducer= castingReducer { state: AppState, action ->
 //            Logger.d("Action ${action::class.simpleName} not handled")
             state
         }
-    }
-}
-inline fun <reified T> castingReducer(crossinline reducer: ((T, Any) -> Any)): Reducer = { state: Any, action: Any ->
-    if (state is T) {
-        reducer(state as T, action)
-    } else {
-        { s: Any, _: Any -> s }
     }
 }

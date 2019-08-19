@@ -2,12 +2,16 @@ import Foundation
 import common
 import UIKit
 
-class GameResultsViewController: BaseNameViewController<GameResultsPresenter>, GameResultsView {
+class GameResultsViewController: BaseNameViewController, GameResultsView {
+    func presenter() -> (View, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
+        return GameResultsPresenterKt.gameResultsPresenter
+    }
+    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var msgLabel: UILabel!
 
     @IBAction func viewTapped(_ sender: Any) {
-        getPresenter()?.startOverTapped()
+        dispatch(UiActions.StartOverTapped())
     }
 
     override func viewWillAppear(_ animated: Bool) {

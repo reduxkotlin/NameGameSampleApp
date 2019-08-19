@@ -2,13 +2,17 @@ import Foundation
 import UIKit
 import common
 
-class StartViewController: BaseNameViewController<StartPresenter>, StartView {
+class StartViewController: BaseNameViewController, StartView {
+    func presenter() -> (View, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
+        return StartPresenterKt.startPresenter
+    }
+    
 
     @IBOutlet weak var labelError: UILabel!
     @IBOutlet weak var progressView: UIProgressView!
 
     @IBAction func viewTapped(_ sender: Any) {
-        getPresenter()?.startGame()
+        dispatch(UiActions.StartGameTapped())
         progressView.setProgress(0, animated: false)
         UIView.animate(withDuration: 3) {
             self.progressView.setProgress(1.0, animated: true)
@@ -16,7 +20,7 @@ class StartViewController: BaseNameViewController<StartPresenter>, StartView {
         
     }
     @IBAction func settingsTapped(_ sender: Any) {
-        getPresenter()?.settingsTapped()
+        dispatch(UiActions.SettingsTapped())
     }
 
     override func viewDidAppear(_ animated: Bool) {

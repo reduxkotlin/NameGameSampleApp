@@ -1,8 +1,7 @@
 package com.willowtreeapps.common.ui
 
-import com.willowtreeapps.common.QuestionViewState
-
-interface QuestionView : View<QuestionPresenter> {
+interface QuestionView : GameBaseView {
+    override fun presenter() = questionPresenter
 
     fun showProfile(viewState: QuestionViewState)
 

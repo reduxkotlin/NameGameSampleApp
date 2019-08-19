@@ -1,6 +1,9 @@
 package com.willowtreeapps.common.boundary
 
 import com.willowtreeapps.common.*
+import com.willowtreeapps.common.ui.GameResultsViewState
+import com.willowtreeapps.common.ui.QuestionViewState
+import com.willowtreeapps.common.ui.SettingsViewState
 
 /**
  * Functions for transforming AppState data into ViewState data to be used by Views.
@@ -61,9 +64,6 @@ fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(
         isWillowTree = isWillowTree,
         signInBtnText = if (isWillowTree) "Sign Out" else "Sign In"
 )
-
-//TODO should this be here?
-private fun AppState.roundTotals() = "${currentQuestionIndex + 1} out of ${questions.size}"
 
 private fun AppState.gameTotals() = "$numCorrect out of ${questions.size}"
 

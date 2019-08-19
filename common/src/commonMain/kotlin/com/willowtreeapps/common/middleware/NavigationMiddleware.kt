@@ -1,22 +1,21 @@
 package com.willowtreeapps.common.middleware
 
 import com.willowtreeapps.common.Actions
+import com.willowtreeapps.common.AppState
 import org.reduxkotlin.Dispatcher
 import org.reduxkotlin.Store
+import org.reduxkotlin.middleware
 
-internal class NavigationMiddleware(private val navigator: Navigator) {
-
-    fun dispatch(store: Store) = { next: Dispatcher ->
-        { action: Any ->
-            when (action) {
-                is Actions.FetchingItemsSuccessAction -> navigator.goto(Screen.QUESTION)
-                is Actions.GameCompleteAction -> navigator.goto(Screen.GAME_COMPLETE)
-                is Actions.StartOverAction -> navigator.goto(Screen.START)
-                is Actions.SettingsTappedAction -> navigator.goto(Screen.SETTINGS)
-            }
-            next(action)
-        }
+internal fun navigationMiddleware(navigator: Navigator) = middleware<AppState> { store, next, action ->
+    when (action) {
+        is NavigationActions.NavigateTo -> navigator.goto(action.screen)
+        is Actions.FetchingItemsSuccessAction -> navigator.goto(Screen.QUESTION)
     }
+    next(action)
+}
+
+internal class NavigationActions {
+    data class NavigateTo(val screen: Screen)
 }
 
 enum class Screen {

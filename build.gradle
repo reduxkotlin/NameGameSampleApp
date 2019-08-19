@@ -45,4 +45,8 @@ ext {
     ktorVersion = '1.2.2'
     serializationVersion = '0.11.1'
     multiplatformSettingsVersion = '0.3.2'
+    reduxVersion = '0.2.6'
+    reduxThunkVersion = '0.2.8'
+    reduxPresenterMiddlewareVersion = '0.2.7'
+    reduxReselectVersion = '0.2.7'
 }

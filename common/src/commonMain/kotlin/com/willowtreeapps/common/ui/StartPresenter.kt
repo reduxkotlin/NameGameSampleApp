@@ -1,35 +1,32 @@
 package com.willowtreeapps.common.ui
 
 import com.willowtreeapps.common.*
-import org.reduxkotlin.SelectorSubscriberFn
+import com.willowtreeapps.common.external.*
+import com.willowtreeapps.common.util.isAndroid
+import org.reduxkotlin.middleware
 
 
-class StartPresenter(private val engine: GameEngine,
-                     private val networkThunks: NetworkThunks) : Presenter<StartView>() {
-    override fun recreateView() {
-        //no-op
-    }
+typealias GameBaseView = ViewWithProvider<AppState>
 
-    override fun makeSubscriber() = SelectorSubscriberFn<AppState>(engine.appStore) {
-        withSingleField({ it.isLoadingItems }) {
-            if (state.isLoadingItems) {
-                view?.showLoading()
-            } else {
-                view?.hideLoading()
-            }
-        }
-
-        withSingleField({ it.errorLoadingItems }) {
-            view?.showError(state.errorMsg)
-        }
-    }
-
-    fun startGame() {
-        engine.dispatch(Actions.ResetGameStateAction())
-        engine.dispatch(networkThunks.fetchItems(engine.state.settings.categoryId, engine.state.settings.numQuestions))
-    }
-
-    fun settingsTapped() {
-        engine.dispatch(Actions.SettingsTappedAction())
-    }
+//a Presenter typed to our app's State type for convenience
+fun <V: GameBaseView> presenter(actions: PresenterBuilder<AppState, V>): Presenter<View, AppState> {
+    return createGenericPresenter(actions) as Presenter<View, AppState>
 }
+
+fun <V: GameBaseView> presenterWithViewArg(actions: PresenterBuilderWithViewArg<AppState, V>): Presenter<View, AppState> {
+    return createGenericPresenter(actions) as Presenter<View, AppState>
+}
+
+val startPresenter = presenter<StartView> {{
+    withSingleField({ it.isLoadingItems }) {
+        if (state.isLoadingItems) {
+            showLoading()
+        } else {
+            hideLoading()
+        }
+    }
+
+    withSingleField({ it.errorLoadingItems }) {
+        showError(state.errorMsg)
+    }
+}}

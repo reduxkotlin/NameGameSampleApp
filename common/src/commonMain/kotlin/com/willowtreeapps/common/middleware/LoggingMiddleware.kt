@@ -9,35 +9,10 @@ import org.reduxkotlin.*
 import kotlin.coroutines.CoroutineContext
 import kotlin.reflect.KClass
 
-fun loggerMiddleware(getState: GetState, nextDispatcher: (Any) -> Any, action: Any): Any {
-    val result = nextDispatcher(action)
+val loggerMiddleware = middleware<AppState> { store, next, action ->
+    val result = next(action)
     Logger.d("DISPATCH action: ${action::class.simpleName}: $action")
-    return result
-}
-
-val loggerMiddleware2: Middleware =
-        { store ->
-            { next ->
-                { action ->
-                    {
-                        val result = next(action)
-                        Logger.d("DISPATCH action: ${action::class.simpleName}: $action")
-                        result
-                    }
-                }
-            }
-        }
-
-fun logMiddleware(store: Store) = { next: Dispatcher ->
-    { action: Any ->
-        next(action)
-    }
-}
-
-
-val loggerMiddleware3 = middleware { store, next, action ->
-//    Logger.d("DISPATCH action: ${action::class.simpleName}: $action")
-    next(action)
+    result
 }
 
 class ThrottleMiddleware(backgroundContext: CoroutineContext) : CoroutineScope {
@@ -45,7 +20,7 @@ class ThrottleMiddleware(backgroundContext: CoroutineContext) : CoroutineScope {
 
     private val map = mutableMapOf<KClass<*>, Pair<Job, Long>>()
 
-    val throttleMiddleware = middleware { store, next, action ->
+    val throttleMiddleware = middleware<AppState> { store, next, action ->
         if (action is Actions.ThrottledAction) {
 
             val oldJob = map[action::class]?.first

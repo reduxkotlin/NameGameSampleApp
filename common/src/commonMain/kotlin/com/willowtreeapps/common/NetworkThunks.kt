@@ -2,7 +2,10 @@ package com.willowtreeapps.common
 
 import com.willowtreeapps.common.repo.*
 import kotlinx.coroutines.*
+import org.reduxkotlin.Dispatcher
+import org.reduxkotlin.GetState
 import org.reduxkotlin.Thunk
+import org.reduxkotlin.createThunk
 import kotlin.coroutines.CoroutineContext
 
 /**
@@ -21,7 +24,7 @@ class NetworkThunks(private val networkContext: CoroutineContext) : CoroutineSco
         QuestionCategoryId.DOGS -> DogItemRepository()
     }
 
-    fun fetchItems(categoryId: QuestionCategoryId, numQuestions: Int): Thunk = { dispatch, getState, extraArgument ->
+    fun fetchItems(categoryId: QuestionCategoryId, numQuestions: Int) = thunk { dispatch, getState, extraArgument ->
         val repo = repoForCategory(categoryId)
         Logger.d("Fetching StoreInfo and Feed")
         launch {
@@ -37,3 +40,9 @@ class NetworkThunks(private val networkContext: CoroutineContext) : CoroutineSco
         }
     }
 }
+
+/**
+ * Convenience function so state type does is not needed every time a thunk is created.
+ */
+fun thunk(thunkLambda: (dispatch: Dispatcher, getState: GetState<AppState>, extraArgument: Any?) -> Any) =
+        createThunk(thunkLambda)
