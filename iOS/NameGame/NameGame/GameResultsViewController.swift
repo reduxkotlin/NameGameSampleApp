@@ -4,7 +4,7 @@ import UIKit
 
 class GameResultsViewController: BaseNameViewController, GameResultsView {
     func presenter() -> (View, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
-        return GameResultsPresenterKt.gameResultsPresenter
+        return GameResultsViewKt.gameResultsPresenter
     }
     
     @IBOutlet weak var titleLabel: UILabel!

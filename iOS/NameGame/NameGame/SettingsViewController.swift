@@ -8,7 +8,7 @@ class SettingsViewController: BaseNameViewController,
         UIPickerViewDataSource,
 SettingsView {
     func presenter() -> (View, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
-        return SettingsPresenterKt.settingsPresenter
+        return SettingsViewKt.settingsPresenter
     }
     
 

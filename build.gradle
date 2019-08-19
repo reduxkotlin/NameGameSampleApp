@@ -48,5 +48,5 @@ ext {
     reduxVersion = '0.2.6'
     reduxThunkVersion = '0.2.8'
     reduxPresenterMiddlewareVersion = '0.2.7'
-    reduxReselectVersion = '0.2.7'
+    reduxReselectVersion = '0.2.8'
 }

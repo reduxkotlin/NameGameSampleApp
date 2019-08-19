@@ -12,3 +12,17 @@ interface StartView : GameBaseView {
 
     override fun presenter(): Presenter<View, AppState> = startPresenter
 }
+
+val startPresenter = presenter<StartView> {{
+    withSingleField({ it.isLoadingItems }) {
+        if (state.isLoadingItems) {
+            showLoading()
+        } else {
+            hideLoading()
+        }
+    }
+
+    withSingleField({ it.errorLoadingItems }) {
+        showError(state.errorMsg)
+    }
+}}

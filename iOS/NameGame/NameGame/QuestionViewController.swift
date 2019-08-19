@@ -6,7 +6,7 @@ import Speech
 
 class QuestionViewController: BaseNameViewController, QuestionView {
     func presenter() -> (View, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
-            return QuestionPresenterKt.questionPresenter
+            return QuestionViewKt.questionPresenter
     }
     
     

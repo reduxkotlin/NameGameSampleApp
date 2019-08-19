@@ -4,7 +4,7 @@ import common
 
 class StartViewController: BaseNameViewController, StartView {
     func presenter() -> (View, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
-        return StartPresenterKt.startPresenter
+        return StartViewKt.startPresenter
     }
     
 

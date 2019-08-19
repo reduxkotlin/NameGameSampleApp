@@ -23,7 +23,7 @@ val reducer: Reducer<AppState> = { state: AppState, action ->
                     questions = action.itemsHolder.questions)
         }
         is FetchingItemsFailedAction -> state.copy(isLoadingItems = false, errorLoadingItems = true, errorMsg = action.message)
-        is UiActions.NamePicked -> {
+        is NamePickedAction -> {
             val answerName: String?
             val status = if (state.currentQuestionItem().equalsDisplayName(action.name)) {
                 answerName = action.name
