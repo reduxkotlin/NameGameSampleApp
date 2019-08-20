@@ -12,10 +12,8 @@ import kotlin.coroutines.CoroutineContext
  * Thunks are functions that are executed by the "ThunkMiddleware".  They are asynchronous and dispatch
  * actions.  This allows dispatching a loading, success, and failure state.
  */
-class NetworkThunks(private val networkContext: CoroutineContext) : CoroutineScope {
-    private val job = Job()
-    override val coroutineContext: CoroutineContext
-        get() = networkContext + job
+class NetworkThunks(networkContext: CoroutineContext) {
+    private val networkScope = CoroutineScope(networkContext)
 
     //TODO cache the repositories
     private fun repoForCategory(categoryId: QuestionCategoryId) = when (categoryId) {
@@ -26,7 +24,7 @@ class NetworkThunks(private val networkContext: CoroutineContext) : CoroutineSco
     fun fetchItems(categoryId: QuestionCategoryId, numQuestions: Int) = thunk { dispatch, getState, extraArgument ->
         val repo = repoForCategory(categoryId)
         Logger.d("Fetching StoreInfo and Feed")
-        launch {
+        networkScope.launch {
             dispatch(Actions.FetchingItemsStartedAction())
             val result = repo.fetchItems(numQuestions)
             if (result.isSuccessful) {

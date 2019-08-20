@@ -47,6 +47,6 @@ ext {
     multiplatformSettingsVersion = '0.3.2'
     reduxVersion = '0.2.6'
     reduxThunkVersion = '0.2.8'
-    reduxPresenterMiddlewareVersion = '0.2.8'
+    reduxPresenterMiddlewareVersion = '0.2.10'
     reduxReselectVersion = '0.2.8'
 }

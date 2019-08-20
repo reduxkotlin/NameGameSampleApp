@@ -72,7 +72,7 @@ enum class QuestionCategoryId(val displayName: String) {
     CATS("Cats");
 
     companion object {
-        val displayNameListWithoutWT by lazy {
+        val displayNameList by lazy {
             values().map { it.displayName }
         }
 

@@ -2,8 +2,8 @@ package com.willowtreeapps.common.ui
 
 import com.willowtreeapps.common.AppState
 import com.willowtreeapps.common.boundary.toViewState
-import com.willowtreeapps.common.external.Presenter
-import com.willowtreeapps.common.external.View
+import org.reduxkotlin.Presenter
+import org.reduxkotlin.View
 
 interface SettingsView: GameBaseView {
     fun showSettings(viewState: SettingsViewState)

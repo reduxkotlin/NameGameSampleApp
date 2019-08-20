@@ -56,7 +56,7 @@ fun AppState.toGameResultsViewState(): GameResultsViewState {
 fun UserSettings.toViewState(): SettingsViewState = SettingsViewState(
         numQuestions = numQuestions,
         categoryId = categoryId,
-        categoryDisplayValues = QuestionCategoryId.displayNameListWithoutWT,
+        categoryDisplayValues = QuestionCategoryId.displayNameList,
         isMicModeEnabled = microphoneMode
 )
 

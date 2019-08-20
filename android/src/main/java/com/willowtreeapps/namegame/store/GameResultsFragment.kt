@@ -8,7 +8,6 @@ import com.willowtreeapps.common.middleware.UiActions
 import com.willowtreeapps.common.ui.GameResultsViewState
 import com.willowtreeapps.common.ui.GameResultsView
 import com.willowtreeapps.namegame.MainActivity
-import com.willowtreeapps.namegame.NameGameApp
 import com.willowtreeapps.namegame.R
 import com.willowtreeapps.namegame.dispatch
 import kotlinx.android.synthetic.main.fragment_game_results.*

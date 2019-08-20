@@ -1,16 +1,12 @@
 package com.willowtreeapps.common
 
-import com.willowtreeapps.common.external.presenterEnhancer
-import org.reduxkotlin.createStore
-import org.reduxkotlin.applyMiddleware
 import com.willowtreeapps.common.middleware.*
 import com.willowtreeapps.common.repo.LocalStorageSettingsRepository
 import com.willowtreeapps.common.repo.userSettings
 import com.willowtreeapps.common.util.VibrateUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import org.reduxkotlin.compose
-import org.reduxkotlin.createThunkMiddleware
+import org.reduxkotlin.*
 import kotlin.coroutines.CoroutineContext
 
 class GameEngine(navigator: Navigator,

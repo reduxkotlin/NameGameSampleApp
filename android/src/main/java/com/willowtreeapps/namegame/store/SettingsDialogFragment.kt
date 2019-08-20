@@ -17,6 +17,7 @@ import com.willowtreeapps.namegame.MainActivity
 import com.willowtreeapps.namegame.R
 import com.willowtreeapps.namegame.dispatch
 import kotlinx.android.synthetic.main.fragment_settings.*
+import org.reduxkotlin.PresenterLifecycleObserver
 
 class SettingsDialogFragment : DialogFragment(), SettingsView {
 
