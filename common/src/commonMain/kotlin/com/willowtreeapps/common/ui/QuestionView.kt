@@ -27,13 +27,11 @@ interface QuestionView : GameBaseView {
 }
 
 val questionPresenter = presenter<QuestionView> {{
-    withSingleField({ it.questionClock }, { setTimerText(state.toQuestionViewState()) })
+    +{ state.questionClock }+ { setTimerText(state.toQuestionViewState()) }
 
-    withSingleField({
-        it.currentQuestion?.itemId?.id ?: Any()
-    }, { showProfile(state.toQuestionViewState()) })
+    +{ state.currentQuestion.itemId.id } + { showProfile(state.toQuestionViewState()) }
 
-    withSingleField({ it.waitingForNextQuestion }) {
+    +{ state.waitingForNextQuestion } + {
         if (state.waitingForNextQuestion) {
             if (state.settings.microphoneMode) {
                 closeMic()
@@ -41,7 +39,7 @@ val questionPresenter = presenter<QuestionView> {{
                     store.dispatch(UiActions.NextQuestionDelayed())
                 }
             }
-            when (state.currentQuestion?.status) {
+            when (state.currentQuestion.status) {
                 Question.Status.CORRECT -> {
                     showCorrectAnswer(state.toQuestionViewState(), state.isGameComplete())
                 }

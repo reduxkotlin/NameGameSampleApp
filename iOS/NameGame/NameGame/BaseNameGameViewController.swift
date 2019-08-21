@@ -3,7 +3,9 @@ import UIKit
 import common
 
 
-class BaseNameViewController : UIViewController, View {
+class BaseNameViewController : UIViewController, Presenter_middlewareView {
+
+    
     required init?(coder aDecoder: NSCoder) {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.initilize()
@@ -13,12 +15,12 @@ class BaseNameViewController : UIViewController, View {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        PresenterInjecterKt.rootDispatch(DetachView(view: self))
+        PresenterInjectorKt.detachView(view: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        PresenterInjecterKt.rootDispatch(AttachView(view: self))
+        PresenterInjectorKt.attachView(view: self)
     }
     
 }

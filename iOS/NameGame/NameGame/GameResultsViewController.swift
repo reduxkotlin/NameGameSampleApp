@@ -3,7 +3,8 @@ import common
 import UIKit
 
 class GameResultsViewController: BaseNameViewController, GameResultsView {
-    func presenter() -> (View, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
+    
+    func presenter() -> (Presenter_middlewareView, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
         return GameResultsViewKt.gameResultsPresenter
     }
     

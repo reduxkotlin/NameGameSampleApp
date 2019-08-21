@@ -3,10 +3,7 @@ package com.willowtreeapps.common.middleware
 import com.willowtreeapps.common.*
 import com.willowtreeapps.common.util.debounce
 import com.willowtreeapps.common.util.isAndroid
-import org.reduxkotlin.Dispatcher
-import org.reduxkotlin.Middleware
-import org.reduxkotlin.Store
-import org.reduxkotlin.middleware
+import org.reduxkotlin.*
 import kotlin.coroutines.CoroutineContext
 
 fun uiMiddleware(networkThunks: NetworkThunks,
@@ -70,6 +67,12 @@ fun uiMiddleware(networkThunks: NetworkThunks,
         is UiActions.CategoryPicked -> dispatch(Actions.ChangeCategorySettingsAction(action.categoryId))
         is UiActions.NumQuestionsPicked -> dispatch(Actions.ChangeNumQuestionsSettingsAction(action.numQuestions))
         is UiActions.MicrophoneModeToggled -> dispatch(Actions.ChangeMicrophoneModeSettingsAction(action.enabled))
+        is UiActions.BackPressOnQuestions -> {
+            dispatch(timerThunks.stopTimer())
+            dispatch(timerThunks.cancelDelayed())
+            dispatch(Actions.ResetGameStateAction())
+//            dispatch(NavigationActions.NavigateTo(Screen.START))
+        }
         else -> next(action)
     }
 }
@@ -87,5 +90,6 @@ class UiActions {
     class EndGameTapped
     class ProfileImageDidShow
     data class NamePicked(val name: String)
+    class BackPressOnQuestions
 }
 

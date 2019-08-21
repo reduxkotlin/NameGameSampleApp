@@ -5,8 +5,9 @@ import Speech
 
 
 class QuestionViewController: BaseNameViewController, QuestionView {
-    func presenter() -> (View, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
-            return QuestionViewKt.questionPresenter
+
+    func presenter() -> (Presenter_middlewareView, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
+        return QuestionViewKt.questionPresenter
     }
     
     
@@ -100,13 +101,17 @@ class QuestionViewController: BaseNameViewController, QuestionView {
         confettiView?.isUserInteractionEnabled = false
         self.labelTimer.alpha = 0
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.view.backgroundColor = .clear
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if (isMovingFromParent) {
-            //TODO fix this
-            //getPresenter()?.onBackPressed()
+            dispatch(UiActions.BackPressOnQuestions())
         }
     }
 
@@ -233,7 +238,6 @@ class QuestionViewController: BaseNameViewController, QuestionView {
     }
 
     func setTimerText(viewState: QuestionViewState) {
-
         labelTimer.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5);
 
         self.labelTimer.transform = CGAffineTransform(scaleX: 0, y: 0)

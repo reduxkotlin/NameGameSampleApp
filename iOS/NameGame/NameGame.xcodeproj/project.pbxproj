@@ -388,7 +388,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#move to the xcode-frameworks folder\n#cd \"$SRCROOT/../../common/build/xcode-frameworks\"\ncd \"$SRCROOT/../../\"\n\n#run the gradle task\n./gradlew :common:build -PXCODE_CONFIGURATION=${CONFIGURATION}\n";
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\n#move to the xcode-frameworks folder\n#cd \"$SRCROOT/../../common/build/xcode-frameworks\"\ncd \"$SRCROOT/../../\"\n\n#run the gradle task\n#./gradlew :common:build -PXCODE_CONFIGURATION=${CONFIGURATION}\n./gradlew packforxcode -PXCODE_CONFIGURATION=${CONFIGURATION}\n\n";
 		};
 		277D0BB52D26BF640FE16445 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

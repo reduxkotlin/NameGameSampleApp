@@ -19,9 +19,12 @@ import nl.dionsegijn.konfetti.models.Size
 import android.widget.Button
 import androidx.core.content.res.ResourcesCompat
 import androidx.interpolator.view.animation.FastOutSlowInInterpolator
+import com.willowtreeapps.common.Actions
 import com.willowtreeapps.common.Logger
 import com.willowtreeapps.common.middleware.UiActions
 import com.willowtreeapps.namegame.*
+import org.reduxkotlin.ClearView
+import org.reduxkotlin.DetachView
 import java.util.*
 
 
@@ -93,6 +96,7 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionView>(), QuestionView,
     private var lastSelectedBtn: Button? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         speechRecognizer = SpeechRecognizer.createSpeechRecognizer(activity!!)
         return inflater.inflate(R.layout.fragment_question, container, false)
     }
@@ -114,7 +118,10 @@ class QuestionFragment : BaseNameGameViewFragment<QuestionView>(), QuestionView,
 
     override fun onBackPressed(): Boolean {
         //TODO revisit this - is needed with presenter middleware
-//        NameGameApp.gameEngine().detachView(this)
+//        dispatch(DetachView(this))
+//        dispatch(ClearView(this))
+        dispatch(UiActions.BackPressOnQuestions())
+        closeMic()
 //        presenter.onBackPressed()
         return false
     }

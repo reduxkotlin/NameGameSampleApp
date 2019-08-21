@@ -24,11 +24,9 @@ data class AppState(val isLoadingItems: Boolean = false,
             else -> "TIME'S UP!!"
         }
 
-    val currentQuestion: Question?
-        get() = if (questions.size > currentQuestionIndex)
-            questions[currentQuestionIndex]
-        else
-            null
+    val currentQuestion: Question
+        get() = questions[currentQuestionIndex]
+
 
     fun currentQuestionItem() = currentQuestion!!.choices.find { it.id == currentQuestion!!.itemId }!!
 

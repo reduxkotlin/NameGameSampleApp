@@ -7,7 +7,8 @@ class SettingsViewController: BaseNameViewController,
         UIPickerViewDelegate,
         UIPickerViewDataSource,
 SettingsView {
-    func presenter() -> (View, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
+    
+    func presenter() -> (Presenter_middlewareView, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
         return SettingsViewKt.settingsPresenter
     }
     
@@ -28,7 +29,7 @@ SettingsView {
     }
     
     let pickerData: [Int] = Array(1...20)
-    let categoryData: [String] = QuestionCategoryId.Companion.init().displayNameListWithoutWT
+    let categoryData: [String] = QuestionCategoryId.Companion().displayNameList
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,7 +41,7 @@ SettingsView {
 
     func showSettings(viewState: SettingsViewState) {
         numPicker.selectRow((Int(viewState.numQuestions - 1)), inComponent: 0, animated: true)
-        categoryPicker.selectRow(Int(QuestionCategoryId.Companion.init().displayNameListWithoutWT.firstIndex(of: viewState.categoryId.displayName)!), inComponent: 0, animated: true)
+        categoryPicker.selectRow(Int(QuestionCategoryId.Companion().displayNameList.firstIndex(of: viewState.categoryId.displayName)!), inComponent: 0, animated: true)
     }
     
     func askForMicPermissions() {

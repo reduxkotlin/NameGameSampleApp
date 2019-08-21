@@ -1,7 +1,6 @@
 package com.willowtreeapps.common
 
 import com.willowtreeapps.common.Actions.*
-import com.willowtreeapps.common.middleware.UiActions
 import com.willowtreeapps.common.util.NO_MATCH
 import com.willowtreeapps.common.util.match
 import org.reduxkotlin.*
@@ -29,19 +28,19 @@ val reducer: Reducer<AppState> = { state: AppState, action ->
                 answerName = action.name
                 Question.Status.CORRECT
             } else {
-                val correctIndex = state.currentQuestion?.choices?.indexOfFirst { it.id == state.currentQuestion?.itemId }
-                val matchingIndex = match(action.name, state.currentQuestion!!.choices.map { it.displayName() })
+                val correctIndex = state.currentQuestion.choices.indexOfFirst { it.id == state.currentQuestion.itemId }
+                val matchingIndex = match(action.name, state.currentQuestion.choices.map { it.displayName() })
                 when (matchingIndex) {
                     NO_MATCH -> {
                         answerName = null
                         Question.Status.INCORRECT
                     }
                     correctIndex -> {
-                        answerName = state.currentQuestion!!.choices[matchingIndex].displayName()
+                        answerName = state.currentQuestion.choices[matchingIndex].displayName()
                         Question.Status.CORRECT
                     }
                     else -> {
-                        answerName = state.currentQuestion!!.choices[matchingIndex].displayName()
+                        answerName = state.currentQuestion.choices[matchingIndex].displayName()
                         Question.Status.INCORRECT
                     }
                 }
@@ -54,7 +53,7 @@ val reducer: Reducer<AppState> = { state: AppState, action ->
             state.copy(questions = newQuestions, waitingForNextQuestion = true)
         }
         is NextQuestionAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
-        is GameCompleteAction -> state.copy(waitingForNextQuestion = false, currentQuestionIndex = state.currentQuestionIndex + 1)
+        is GameCompleteAction -> state.copy(waitingForNextQuestion = false)
         is ResetGameStateAction -> AppState.INITIAL_STATE.copy(settings = state.settings)
         is StartQuestionTimerAction -> state.copy(questionClock = action.initialValue)
         is DecrementCountDownAction -> state.copy(questionClock = state.questionClock - 1)
