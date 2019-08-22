@@ -15,7 +15,7 @@ android {
     }
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.willowtreeapps.namegame"
+        applicationId "org.reduxkotlin.namegame"
         minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
@@ -88,5 +88,3 @@ dependencies {
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-build-config:0.9.27'
     debugImplementation 'com.willowtreeapps.hyperion:hyperion-attr:0.9.27'
 }
-
-apply plugin: 'com.google.gms.google-services'
