@@ -9,7 +9,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.willowtreeapps.namegame.MainActivity">
+    tools:context=".MainActivity">
 
     <Button
         android:id="@+id/btn_start"
@@ -68,6 +68,7 @@
         android:layout_height="wrap_content"
         android:indeterminateTint="@color/colorPrimary"
         android:visibility="gone"
+        tools:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

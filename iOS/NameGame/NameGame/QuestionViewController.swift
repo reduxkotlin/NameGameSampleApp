@@ -4,8 +4,11 @@ import common
 import Speech
 
 
-class QuestionViewController: BaseNameViewController<QuestionPresenter>, QuestionView {
+class QuestionViewController: BaseNameViewController, QuestionView {
 
+    func presenter() -> (Presenter_middlewareView, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
+        return QuestionViewKt.questionPresenter
+    }
     
     
     @IBOutlet weak var labelQuestion: UILabel!
@@ -19,15 +22,15 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
     @IBOutlet weak var labelTimer: UILabel!
 
     @IBAction func onAnswerTap(_ sender: Any) {
-        getPresenter()?.namePicked(name: (sender as? UIButton)!.titleLabel!.text!)
+        dispatch(UiActions.NamePicked(name: (sender as? UIButton)!.titleLabel!.text!))
     }
 
     @IBAction func onNextTreeTap(_ sender: Any) {
-        getPresenter()?.nextTapped()
+        dispatch(UiActions.NextTapped())
     }
 
     @IBAction func onEndGameTap(_ sender: Any) {
-        getPresenter()?.endGameTapped()
+        dispatch(UiActions.EndGameTapped())
     }
 
     var confettiView: SAConfettiView?
@@ -81,10 +84,10 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
                 
                 var lastString: String = ""
                 Logger.init().d(message: "speech: " + bestString)
-                self.getPresenter()?.namePicked(name: bestString)
+                dispatch(UiActions.NamePicked(name: bestString))
 
                 if (result.isFinal) {
-                    self.getPresenter()?.namePicked(name: bestString)
+                    dispatch(UiActions.NamePicked(name: bestString))
                 }
             } else if let error = error {
                 print(error)
@@ -98,12 +101,17 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
         confettiView?.isUserInteractionEnabled = false
         self.labelTimer.alpha = 0
         super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+        self.navigationController?.navigationBar.isTranslucent = true
+        self.navigationController?.view.backgroundColor = .clear
+        navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if (isMovingFromParent) {
-            getPresenter()?.onBackPressed()
+            dispatch(UiActions.BackPressOnQuestions())
         }
     }
 
@@ -225,12 +233,11 @@ class QuestionViewController: BaseNameViewController<QuestionPresenter>, Questio
         button4.setTitle(viewState.button4Text, for: .normal)
         profileImageView.downloaded(from: viewState.itemImageUrl, onComplete: {
             self.showButtons()
-            self.getPresenter()?.profileImageIsVisible()
+            dispatch(UiActions.ProfileImageDidShow())
         })
     }
 
     func setTimerText(viewState: QuestionViewState) {
-
         labelTimer.layer.anchorPoint = CGPoint(x: 0.5, y: 0.5);
 
         self.labelTimer.transform = CGAffineTransform(scaleX: 0, y: 0)

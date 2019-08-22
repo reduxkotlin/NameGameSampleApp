@@ -2,26 +2,38 @@ import Foundation
 import UIKit
 import common
 
-class StartViewController: BaseNameViewController<StartPresenter>, StartView {
+class StartViewController: BaseNameViewController, StartView {
+
+    func presenter() -> (Presenter_middlewareView, Kotlinx_coroutines_coreCoroutineScope) -> (LibStore) -> () -> KotlinUnit {
+        return StartViewKt.startPresenter
+    }
 
     @IBOutlet weak var labelError: UILabel!
     @IBOutlet weak var progressView: UIProgressView!
 
     @IBAction func viewTapped(_ sender: Any) {
-        getPresenter()?.startGame()
+        dispatch(UiActions.StartGameTapped())
+        progressView.isHidden = false
         progressView.setProgress(0, animated: false)
         UIView.animate(withDuration: 3) {
             self.progressView.setProgress(1.0, animated: true)
         }
-        
     }
+    
     @IBAction func settingsTapped(_ sender: Any) {
-        getPresenter()?.settingsTapped()
+        dispatch(UiActions.SettingsTapped())
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        progressView.progress = 0;
+        progressView.isHidden = true
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
     override func viewDidAppear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.progressView.progress = 0;
+        super.viewDidAppear(animated)
+        progressView.progress = 0;
+        progressView.isHidden = true
     }
 
     func showLoading() {
@@ -35,6 +47,4 @@ class StartViewController: BaseNameViewController<StartPresenter>, StartView {
     func showError(msg: String) {
         labelError.text = msg
     }
-    
-    
 }

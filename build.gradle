@@ -13,7 +13,6 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.5.0-rc01'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlinVersion"
-        classpath 'com.google.gms:google-services:4.3.0'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -45,4 +44,8 @@ ext {
     ktorVersion = '1.2.2'
     serializationVersion = '0.11.1'
     multiplatformSettingsVersion = '0.3.2'
+    reduxVersion = '0.2.6'
+    reduxThunkVersion = '0.2.8'
+    reduxPresenterMiddlewareVersion = '0.2.10'
+    reduxReselectVersion = '0.2.8'
 }
