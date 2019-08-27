@@ -1,4 +1,4 @@
-package org.reduxkotlin.namegame.store
+package org.reduxkotlin.namegame.ui
 
 import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
@@ -22,7 +22,6 @@ import androidx.interpolator.view.animation.FastOutSlowInInterpolator
 import org.reduxkotlin.namegame.common.util.Logger
 import org.reduxkotlin.namegame.common.middleware.UiActions
 import org.reduxkotlin.namegame.*
-import org.reduxkotlin.namegame.MainActivity
 import org.reduxkotlin.namegame.dispatch
 import org.reduxkotlin.namegame.onComplete
 import java.util.*

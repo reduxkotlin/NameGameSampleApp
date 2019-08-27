@@ -1,4 +1,4 @@
-package org.reduxkotlin.namegame.store
+package org.reduxkotlin.namegame.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import org.reduxkotlin.namegame.common.middleware.UiActions
 import org.reduxkotlin.namegame.common.ui.GameResultsViewState
 import org.reduxkotlin.namegame.common.ui.GameResultsView
-import org.reduxkotlin.namegame.MainActivity
 import org.reduxkotlin.namegame.R
 import org.reduxkotlin.namegame.dispatch
 import kotlinx.android.synthetic.main.fragment_game_results.*
-import org.reduxkotlin.namegame.store.BaseNameGameViewFragment
 
 class GameResultsFragment : BaseNameGameViewFragment<GameResultsView>(), GameResultsView, MainActivity.IOnBackPressed {
 

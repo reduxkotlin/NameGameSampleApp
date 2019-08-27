@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/startScreen"
-        android:name="org.reduxkotlin.namegame.store.StartFragment"
+        android:name="org.reduxkotlin.namegame.ui.StartFragment"
         android:label="StartFragment"
         tools:layout="@layout/fragment_start" >
         <action
@@ -16,7 +16,7 @@
 
     <fragment
         android:id="@+id/questionScreen"
-        android:name="org.reduxkotlin.namegame.store.QuestionFragment"
+        android:name="org.reduxkotlin.namegame.ui.QuestionFragment"
         android:label="QuestionFragment"
         app:enterAnim="@anim/slide_in_right"
         app:exitAnim="@anim/slide_out_left"
@@ -30,7 +30,7 @@
     </fragment>
     <fragment
         android:id="@+id/resultsFragment"
-        android:name="org.reduxkotlin.namegame.store.GameResultsFragment"
+        android:name="org.reduxkotlin.namegame.ui.GameResultsFragment"
         android:label="ResultsFragment"
         tools:layout="@layout/fragment_game_results">
         <action

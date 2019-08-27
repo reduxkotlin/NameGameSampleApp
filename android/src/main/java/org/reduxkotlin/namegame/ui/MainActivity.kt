@@ -1,4 +1,4 @@
-package org.reduxkotlin.namegame
+package org.reduxkotlin.namegame.ui
 
 import android.os.Bundle
 import android.os.Handler
@@ -11,6 +11,7 @@ import com.bumptech.glide.module.AppGlideModule
 import com.willowtreeapps.hyperion.core.Hyperion
 import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.activity_main.*
+import org.reduxkotlin.namegame.R
 
 
 @GlideModule

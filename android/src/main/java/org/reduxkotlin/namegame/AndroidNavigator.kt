@@ -8,7 +8,7 @@ import androidx.navigation.findNavController
 import org.reduxkotlin.namegame.common.util.Logger
 import org.reduxkotlin.namegame.common.middleware.Navigator
 import org.reduxkotlin.namegame.common.middleware.Screen
-import org.reduxkotlin.namegame.store.SettingsDialogFragment
+import org.reduxkotlin.namegame.ui.SettingsDialogFragment
 import java.lang.Exception
 
 /**

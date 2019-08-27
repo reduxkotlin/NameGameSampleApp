@@ -1,4 +1,4 @@
-package org.reduxkotlin.namegame.store
+package org.reduxkotlin.namegame.ui
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

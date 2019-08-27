@@ -8,7 +8,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import org.reduxkotlin.namegame.GlideRequest
+import org.reduxkotlin.namegame.ui.GlideRequest
 
 val Int.dp: Int
     get() = (this / Resources.getSystem().displayMetrics.density).toInt()

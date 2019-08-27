@@ -1,4 +1,4 @@
-package org.reduxkotlin.namegame.store
+package org.reduxkotlin.namegame.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -12,7 +12,6 @@ import org.reduxkotlin.namegame.common.middleware.UiActions
 //import com.google.firebase.auth.FirebaseAuth
 import org.reduxkotlin.namegame.common.ui.SettingsView
 import org.reduxkotlin.namegame.common.ui.SettingsViewState
-import org.reduxkotlin.namegame.MainActivity
 import org.reduxkotlin.namegame.dispatch
 import kotlinx.android.synthetic.main.fragment_settings.*
 import org.reduxkotlin.PresenterLifecycleObserver
