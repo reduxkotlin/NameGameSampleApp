@@ -1,4 +1,4 @@
-package org.reduxkotlin.namegame.store
+package org.reduxkotlin.namegame.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import org.reduxkotlin.namegame.common.ui.StartView
 import kotlinx.android.synthetic.main.fragment_start.*
 import org.reduxkotlin.namegame.R
 import org.reduxkotlin.namegame.dispatch
-import org.reduxkotlin.namegame.store.BaseNameGameViewFragment
 
 class StartFragment : BaseNameGameViewFragment<StartView>(), StartView {
 

@@ -13,5 +13,5 @@ interface SettingsView: GameBaseView {
 }
 
 val settingsPresenter = presenter<SettingsView> {{
-    withSingleField({ it.settings }) { showSettings(state.settings.toViewState()) }
+    select { it.settings } then { showSettings(state.settings.toViewState()) }
 }}

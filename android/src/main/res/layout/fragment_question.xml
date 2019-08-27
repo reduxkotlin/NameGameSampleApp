@@ -9,7 +9,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
   <TextView
       android:id="@+id/txt_question_title"
