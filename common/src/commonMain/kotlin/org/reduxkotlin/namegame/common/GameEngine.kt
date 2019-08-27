@@ -20,15 +20,13 @@ class GameEngine(navigator: Navigator,
     val vibrateUtil = VibrateUtil(application)
     private val localStorageSettingsRepository by lazy { LocalStorageSettingsRepository(userSettings(application)) }
 
-    val appStore by lazy {
-        createStore(reducer, AppState.INITIAL_STATE,
-                compose(listOf(presenterEnhancer(uiContext),
-                        applyMiddleware(createThunkMiddleware(),
-                                uiMiddleware(networkThunks, timerThunks, uiContext),
-                                navigationMiddleware(navigator),
-                                loggerMiddleware,
-                                settingsMiddleware(localStorageSettingsRepository, networkContext)))))
-    }
+    val appStore = createStore(reducer, AppState.INITIAL_STATE,
+                    compose(listOf(presenterEnhancer(uiContext),
+                            applyMiddleware(createThunkMiddleware(),
+                                    uiMiddleware(networkThunks, timerThunks, uiContext),
+                                    navigationMiddleware(navigator),
+                                    loggerMiddleware,
+                                    settingsMiddleware(localStorageSettingsRepository, networkContext)))))
 
     init {
         CoroutineScope(uiContext).launch {
