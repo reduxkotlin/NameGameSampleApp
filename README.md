@@ -1,3 +1,5 @@
+> ⚠️ **This repository is archived.** This sample is outdated. See `examples/taskflow` in the [redux-kotlin monorepo](https://github.com/reduxkotlin/redux-kotlin) for the current reference app.
+
 # NameGame
 
 __Android Build & Tests__
